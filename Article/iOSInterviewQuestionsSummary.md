@@ -1,6 +1,6 @@
 # 面试题题集一
 
-## 1.简述OC的反射机制
+## 题目一：简述OC的反射机制
 
 反射机制是指类名、方法名、属性名等可以和字符串相互转化（反射），而这些转化是发生在运行时的，所以我们可以用这个机制来动态地获取类、方法或属性，从而动态的创建类对象、调用方法、或给属性赋值、判断类型等。OC的反射机制类似于Java的反射机制 ，这种动态机制可以让OC语言变得更加灵活。OC的反射机制有三个用途：（1）通过类名的字符串来实例化对象;（2）将类名转化为字符串；（3）动态的调用方法；（4）SEL反射；（5）将方法变成字符串
 
@@ -45,9 +45,7 @@ SEL selector = NSSelectorFromString(@"setName:");
 NSString *selectorName1 = NSStringFromSelector(@selector(setName:));
 ```
 
-【拓展一下】
-
-**获取Class类的三种方法**：
+**【拓展一】获取Class类的三种方法**：
 
 * 1)通过字符串来获得Class，此方法用到了反射机制。
 
@@ -66,3 +64,55 @@ NSLog(@"className = %@",[mainVC class]);
 ```
 NSLog(@"className=%@",[HomeViewController class]);
 ```
+
+**【拓展二】检查继承关系的方法**
+
+```
+HomeViewController *testVC = [[HomeViewController alloc]init];
+NSLog(@"[testVC class]=%@",[testVC class]);
+//2.判断对象是否为某个类的实例对象
+NSLog(@"testVC是否为ViewController的实例对象:%d",[testVC isMemberOfClass:HomeViewController.class]);
+//3.判断实例对象是否为某个类及其子类的实例
+NSLog(@"[testVC isKindOfClass:[ViewController class]] = %d",[testVC isKindOfClass:[HomeViewController class]]);
+//4.判断实例对象是否实现了指定的协议
+NSLog(@"判断是否实现了指定协议=%d",[testVC conformsToProtocol:@protocol(UITableViewDelegate)]);
+```
+
+## 题目二：block的本质是什么？block的内存结构是怎样的？一共有几种block？都是什么情况下生成的？
+
+Block本质上是Objective-C实例对象。这是因为Block内部有一个isa指针。更确切地说，block是封装了函数调用以及函数调用环境的OC的对象。一个block实例实际上由以下几部分组成的：
+
+* 1）isa指针
+* 2）flags：用于按bit位表示一些block的附加信息
+* 3）reserved：保留变量
+* 4）invoke：函数指针，指向具体block实现的函数调用地址
+* 5）descriptor：表示该block的附加描述信息，主要是结构体内存的大小(size)以及copy和dispose函数的指针
+* 6）variables：捕获的变量，block能够访问它外部的局部变量，就是因为将这些变量（或变量的地址）复制到了结构体中。
+
+
+在Objective-C语言中，根据存储位置可以分为3种类型的block：
+
+* 1）NSGlobalBlock(_NSConcreteGlobalBlock)   全局静态block（产生条件：**没有访问auto变量**）
+* 2）NSStackBlock(_NSConcreteStackBlock)    保存在栈中的block，当函数返回(超出函数作用域)时会被销毁。(产生条件：MRC下，访问了auto变量)
+* 3）NSMallocBlock(_NSConcreteMallocBlock)  保存在堆中的block，当引用计数为0时会被销毁。(产生条件：NSStackBlock调用了copy方法，就会将block内存搬到堆上，变成了__NSMallocBlock)
+
+这3种类型的Block都继承自NSBlock类型。
+
+【注意】在关闭ARC的情况下，如果访问了auto变量，那么生成的是__NSStackBlock。__NSStackBlock存在一个问题，因为超出作用于后变量已经被系统自动销毁，此时再访问该变量存在安全问题。如果开启ARC，编译器会自动进行copy操作，将__NSStackBlock转变为__NSMallocBlock。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
