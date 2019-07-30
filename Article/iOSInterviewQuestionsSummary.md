@@ -29,9 +29,21 @@ SEL selector = NSSelectorFromString(@"getDataList");
 [[[class alloc] init] performSelector:selector];
 ```
 
-（4）SEL反射
+（4）SEL反射(将字符串转化为方法)
+
+```
+Class className = NSClassFromString(@"HomeViewController");
+HomeViewController *homeVC1 = [[class alloc]init];
+//SEL反射
+SEL selector = NSSelectorFromString(@"setName:");
+[homeVC1 performSelector:selector withObject:@"zhang"];
+```
 
 （5）将方法变成字符串
+
+```
+NSString *selectorName1 = NSStringFromSelector(@selector(setName:));
+```
 
 **获取Class类的三种方法**：
 
