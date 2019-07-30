@@ -45,6 +45,8 @@ SEL selector = NSSelectorFromString(@"setName:");
 NSString *selectorName1 = NSStringFromSelector(@selector(setName:));
 ```
 
+【拓展一下】
+
 **获取Class类的三种方法**：
 
 * 1)通过字符串来获得Class，此方法用到了反射机制。
