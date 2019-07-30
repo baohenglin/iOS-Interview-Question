@@ -100,7 +100,7 @@ Block本质上是Objective-C实例对象。这是因为Block内部有一个isa�
 
 Block是苹果在iOS4开始引入的对C语言的扩展，用来实现匿名函数的特性。Block是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block还可以保存一段代码，在需要的时候调用，目前Block已经广泛应用于iOS开发中，常用于GCD、动画、排序以及各类回调。
 
-【注意】在关闭ARC的情况下，如果访问了auto变量，那么生成的是__NSStackBlock。__NSStackBlock存在一个问题，因为超出作用于后变量已经被系统自动销毁，此时再访问该变量存在安全问题。如果开启ARC，编译器会自动进行copy操作，将__NSStackBlock转变为__NSMallocBlock。
+【注意】在MRC的情况下，如果访问了auto变量，那么生成的是__NSStackBlock。__NSStackBlock存在一个问题，也就是超出作用域后变量就会被系统自动销毁，变量被系统自动销毁后如果再访问该变量那么就会存在安全问题。如果开启了ARC，那么编译器就会自动进行copy操作，将__NSStackBlock转变为__NSMallocBlock。
 
 
 
