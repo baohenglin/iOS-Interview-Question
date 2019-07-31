@@ -94,7 +94,7 @@ Block本质上是Objective-C对象。这是因为Block内部有一个isa指针�
 
 * 1）NSGlobalBlock(_NSConcreteGlobalBlock)   全局静态block（产生条件：**没有访问auto变量**）
 * 2）NSStackBlock(_NSConcreteStackBlock)    保存在栈中的block，当函数返回(超出函数作用域)时会被销毁。(产生条件：**在MRC下，访问了auto变量**)
-* 3）NSMallocBlock(_NSConcreteMallocBlock)  保存在堆中的block，当引用计数为0时会被销毁。(产生条件：**NSStackBlock调用了copy方法，就会将block内存搬到堆上，变成了__NSMallocBlock**)
+* 3）NSMallocBlock(_NSConcreteMallocBlock)  保存在堆中的block，当引用计数为0时会被销毁。(产生条件：**NSStackBlock调用了copy方法，就会将block内存拷贝到堆上，变成了__NSMallocBlock**)
 
 其实，这3种类型的Block都继承自NSBlock类型。
 
@@ -117,7 +117,128 @@ Block是苹果在iOS4开始引入的对C语言的扩展，用来实现匿名函�
 
 在block内修改自动变量的值有两种方式。1）将内存地址指针传递到block中(使用__block来修饰)；2）改变存储方式，可以修改为static静态变量、静态全局变量或全局变量
 
+【扩展 2-3】这三种block是在什么情况下产生的？以及它们之间的区别和联系是什么？
 
+1）从捕获外部变量的角度上来看：
+
+ * _NSConcreteGlobalBlock **没有访问局部变量（自动变量/auto变量）**或只访问了全局变量、静态变量的block为_NSConcreteGlobalBlock，生命周期从创建到应用程序结束。
+ * _NSConcreteStackBlock 访问了auto变量，并且没有强指针引用和copy操作的block都是StackBlock，StackBlock的生命周期由系统控制，一旦返回之后，就被系统销毁了；
+ * _NSConcreteMallocBlock 有强指针引用或 copy修饰的属性 引用的block会被复制到堆中而成为MallocBlock，没有强指针引用即销毁，生命周期由程序员控制
+     
+2)从持有对象的角度上来看：
+
+* _NSConcreteGlobalBlock是不持有对象的
+* _NSConcreteStackBlock也是不持有对象的
+* _NSConcreteMallocBlock是持有对象的。
+
+**【扩展 2-4】什么情况下ARC会自动将Block从栈上拷贝到堆上呢？**
+
+在ARC环境下，编译器会根据情况自动将栈上的block复制(copy)到堆上。一般来说有以下5种情况：
+
+* (1)block作为函数返回值时：
+
+```
+typedef void(^HLBlock) (void);
+//test方法
+HLBlock test()
+{
+    //定义block,
+    int age = 1111;
+    HLBlock block = ^{
+        //block访问了auto变量age，是__NSStackBlock__类型的block，存储在栈上
+        NSLog(@"block作为函数的参数返回值的情况---%d",age);
+    };
+    
+    //block作为函数的返回值
+    return block;
+    //在MRC环境下，由于block访问了auto变量age，存储在栈上，当超出test函数的作用域时，block在栈上的内存会被系统自动回收。那么在test函数外再调用block时就会出问题。这种情况下，就需要手动进行一次copy操作。
+    //在ARC环境下，编译器会自动执行copy操作，将栈上的block拷贝到堆上，由__NSStackBlock__变为__NSMallocBlock__。
+    //return [block copy];
+  
+}
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        HLBlock block = test();
+        //调用block
+        block();
+        NSLog(@"----%@",[block class]);
+        //2019-06-17 10:50:31.038489+0800 Block的copy操作[1003:37627] ----__NSMallocBlock__
+
+    }
+    return 0;
+}
+```
+
+* (2)将block赋值给__strong指针时。
+
+将block赋值给强指针的情况，在ARC环境下，编译器对block自动进行一次copy操作[block copy]，block的类型由__NSStaticBlock__变为了__NSMallocBlock__。代码如下：
+
+```
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        int age = 1110;
+        //将block赋值给强指针的情况
+        HLBlock block = ^{
+            //由于block访问了auto变量，因此是__NSStaticBlock__类型
+            NSLog(@"block：age---%d",age);
+        };
+        block();
+        NSLog(@"----%@",[block class]);
+        //2019-06-17 11:01:11.834323+0800 Block的copy操作[1058:40766] ----__NSMallocBlock__
+       //由以上打印结果可知：将block赋值给强指针时，在ARC环境下，编译器对block自动进行一次copy操作[block copy]，block的类型由__NSStaticBlock__变为了__NSMallocBlock__。
+
+    }
+    return 0;
+}
+```
+
+再对比看一下没有将block赋值给强指针的情况。没有将block赋值给__strong指针时，在ARC环境下编译器不会自动执行copy操作。代码如下：
+
+```
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {        
+        int age = 1110;
+        NSLog(@"----%@",[^{
+            //由于block访问了auto变量，因此是__NSStaticBlock__类型
+            NSLog(@"block：age---%d",age);
+            //2019-06-17 11:13:06.358166+0800 Block的copy操作[1139:44714] ----__NSStackBlock__
+            //由以上打印结果可知：没有将block赋值给强指针时，在ARC环境下编译器不会自动执行copy操作
+        } class]);
+    }
+    return 0;
+}
+```
+
+* (3)block作为Cocoa的API中方法名含有usingBlock的方法的参数时。代码如下：
+
+```
+NSArray *arr1 = @[@"100",@"20",@"31",@"42",@"56"];
+[arr1 enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSLog(@"obj=%@-------idx=%lu",obj,(unsigned long)idx);
+}];
+```
+
+* (4)block作为GCD API的方法参数时。比如GCD的一次性函数或者是延迟执行的函数，执行完block操作之后系统才会对block进行release操作。
+
+GCD的一次性函数，代码如下：
+
+```
+static dispatch_once_t onceToken;
+dispatch_once(&onceToken, ^{
+    
+});
+```
+GCD的延迟执行的函数，代码如下：
+
+```
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),dispatch_get_main_queue(),^{
+     
+});
+```
+
+* (5)手动调用copy
+             
 
 
 
