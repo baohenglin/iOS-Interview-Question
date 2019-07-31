@@ -1,6 +1,6 @@
 # 知识点汇总篇章1
 
-## 知识点一：简述OC的反射机制
+## 知识点一：OC反射机制
 
 反射机制是指类名、方法名、属性名等可以和字符串相互转化（反射），而这些转化是发生在运行时的，所以我们可以用这个机制来动态地获取类、方法或属性，从而动态的创建类对象、调用方法、或给属性赋值、判断类型等。OC的反射机制类似于Java的反射机制 ，这种动态机制可以让OC语言变得更加灵活。OC的反射机制有三个用途：（1）通过类名的字符串来实例化对象;（2）将类名转化为字符串；（3）动态的调用方法；（4）SEL反射；（5）将方法变成字符串
 
@@ -78,7 +78,9 @@ NSLog(@"[testVC isKindOfClass:[ViewController class]] = %d",[testVC isKindOfClas
 NSLog(@"判断是否实现了指定协议=%d",[testVC conformsToProtocol:@protocol(UITableViewDelegate)]);
 ```
 
-## 知识点二：block的本质是什么？block的内存结构是怎样的？一共有几种block？都是什么情况下生成的？
+## 知识点二：Block
+
+**block的本质是什么？block的内存结构是怎样的？一共有几种block？都是什么情况下生成的？**
 
 Block本质上是Objective-C对象。这是因为Block内部有一个isa指针。更确切地说，block是封装了函数调用(函数指针)以及函数调用环境(捕获到的参数)的OC的对象。一个block实例实际上由以下几部分组成的：
 
@@ -399,7 +401,7 @@ HLBlok block = ^{
 ```
 原因：这并不是修改array指针所指向的内存里面的值，而是拿array指针来使用。这与使用赋值符"="不同。所以这种情况下不需要使用__block来修饰array。
 
-## 知识点三：分类(category)和类扩展(extension)
+## 知识点三：分类(category)和类扩展(Extension)
 
 **【扩展 3-1】分类(category)应用场景有哪些？分类有哪些局限性？分类的结构体里面有哪些成员？**
 
