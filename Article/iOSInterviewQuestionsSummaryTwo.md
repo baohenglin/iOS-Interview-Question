@@ -79,13 +79,25 @@ HLPerson.m文件中代码如下：
         _name=name;
         [self didChangeValueForKey:@"name"];
     } 
-    }
+}
 @end
 ```
 
+**【5-5】addObserver:forKeyPath:options:context:各个参数答作用分别是什么？**
 
+```
+[self.person addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"Person Name"];
+```
 
+参数代表的意义：(1)观察者，负责处理监听事件的对象；(2)观察的属性；(3)观察的选项；(4)上下文。
 
+**【5-6】observer中需要实现哪个方法才能获得KVO回调？**
+
+```
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+```
+
+参数代表的意义：(1)观察的属性；(2)观察的对象；(3)change 属性变化字典（新／旧）；(4)上下文，与监听的时候传递的一致,用来区分不同的监听。
 
 
 ## 知识点6：KVC
