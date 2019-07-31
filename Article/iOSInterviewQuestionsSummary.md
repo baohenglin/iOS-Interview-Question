@@ -465,6 +465,44 @@ id objc_getAssociatedObject(id object, const void * key)
 void objc_removeAssociatedObjects(id object)
 ```
 
+例如给HLPerson类的Category分类HLPerson+Test类添加一个_name成员变量和一个_weight成员变量。代码如下：
+
+```
+#import "HLPerson.h"
+@interface HLPerson (Test)
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) int weight;
+@end
+```
+
+```
+#import "HLPerson+Test.h"
+#import <objc/runtime.h>
+@implementation HLPerson (Test)
+
+- (void)setName:(NSString *)name
+{
+    objc_setAssociatedObject(self, @selector(name), name, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+- (NSString *)name
+{
+    // 隐式参数
+    // _cmd == @selector(name)
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setWeight:(int)weight
+{
+    objc_setAssociatedObject(self, @selector(weight), @(weight), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (int)weight
+{
+    // _cmd == @selector(weight)
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+@end
+```
+
 
 
 
