@@ -427,12 +427,14 @@ Category编译之后的底层结构是struct_category_t类型的的结构体，�
 
 【注意】category并没有完全的替换掉原有类的同名方法，category的方法被放置在新方法列表的前面，而原来类的方法被放到后面，在runtime中，遍历方法列表查找时，找到了category的方法后，就会停止遍历，这就是我们平时所说的“覆盖”方法。此外，某个类如果存在两个category，而且这两个Category中存在方法名相同的方法，那么根据buildPhases->Compile Sources里面的从上至下的编译顺序，会调用后参与编译的那个分类的方法。
 
+[分类(category)的实现原理详解](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BCategory%E6%8E%A2%E7%A9%B6.md)
+
 
 **【扩展 3-3】分类(Category)和类扩展(Class Extension)有什么区别？**
 
 分类(Category)是Objective-C 2.0之后增加的语言特性，Category的主要作用是为已经存在的类添加方法。
 
-类扩展（Extension）是category的一个特例，也称为匿名分类（类扩展与分类相比只少了分类的名称）。类扩展的作用是为一个类添加一些额外的私有属性和私有方法。
+类扩展（Extension）是category的一个特例，也称为匿名分类（类扩展与分类相比只少了分类的名称）。类扩展的作用是为一个类添加一些额外的私有属性、成员变量和私有方法。
 
 **不同点：**
 
@@ -440,6 +442,29 @@ Category编译之后的底层结构是struct_category_t类型的的结构体，�
 * (2)在类扩展(Extension)中添加的新方法一定要实现，而分类(category)中没有这种限制
 * (3)类扩展中声明的方法没被实现，编译器会报警告，但是分类(Category)中的方法没被实现编译器是不会有任何警告的（因为类扩展是在编译阶段被添加到类中，而类别是在运行时添加到类中）
 * (4)Class Extension是在编译期决定，Category由运行时决定。也就是说Class extension在编译的时候，它的数据就已经包含在类信息中；而Category（分类）是在运行时，才会将分类数据合并到类信息中（类对象、元类对象中）
+
+**【扩展 3-4】Category能否给类添加成员变量？如果可以,如何给Category添加成员变量？**
+
+默认情况下，由于分类底层结构的限制，不能直接给Category添加成员变量,但是可以间接实现。通过“关联对象”的方式来间接给Category添加成员变量。也就是通过“<objc/runtime.h>”中提供的关联对象的API来实现。“<objc/runtime.h>”中提供的关联对象的API有以下3个：
+
+(1)添加关联对象
+
+```
+void objc_setAssociatedObject(id object, const void * key,id value, objc_AssociationPolicy policy)
+```
+
+(2)获得关联对象
+
+```
+id objc_getAssociatedObject(id object, const void * key)
+```
+
+(3)移除所有的关联对象
+
+```
+void objc_removeAssociatedObjects(id object)
+```
+
 
 
 
