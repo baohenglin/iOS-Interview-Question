@@ -26,5 +26,5 @@
 ## *📖iOS Interview Questions Summary*
 |主题|文章|备注|
 |:---|:--|:---:
-面试题汇总|[《面试题题集一》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/iOSInterviewQuestionsSummary.md)<br>[《面试题题集二》]()<br>|
+知识点汇总|[《知识点汇总篇章一》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/iOSInterviewQuestionsSummary.md)<br>[《知识点汇总篇章二》]()<br>|
 算法|[《算法题题集一》]()<br>|
