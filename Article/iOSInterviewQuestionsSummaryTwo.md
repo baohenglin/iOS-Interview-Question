@@ -113,7 +113,7 @@ KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个k
 
 前两个是用来设置属性值的，后两个是用来获取属性值的。
 
-**【6-2】赋值方法setValue:forKey:的原理是什么？**
+**【6-2】赋值方法setValue:forKey:的实现原理是什么？**
 
 setValue:forKey:底层实现原理如下：
 
@@ -122,4 +122,14 @@ setValue:forKey:底层实现原理如下：
 （2）如果没有找到setKey:和_setKey:方法，那么这个时候会查看accessInstanceVariablesDirectly方法的返回值，如果返回的是NO（也就是不允许直接访问成员变量），那么会调用setValue:forUndefineKey:方法，并抛出异常“NSUnknownKeyException”；
 
 （3）如果accessInstanceVariablesDirectly方法返回的是YES，也就是说可以访问其成员变量，那么就会按照顺序依次查找 _key、_isKey、key、isKey这四个成员变量，如果查找到了，就直接赋值；如果依然没有查到，那么会调用setValue:forUndefineKey:方法，并抛出异常“NSUnknownKeyException”。
+
+**【6-3】取值方法valueForKey:的实现原理是什么？**
+
+valueForKey:方法底层实现原理如下：
+
+（1）首先会按照顺序依次查找getKey:、key、isKey、_key:这四个方法，只要找到这四个方法当中的任何一个就直接调用该方法；
+
+（2）如果没有找到，那么这个时候会查看accessInstanceVariablesDirectly方法的返回值，如果返回的是NO（也就是不允许直接访问成员变量），那么会调用valueforUndefineKey:方法，并抛出异常“NSUnknownKeyException”；
+
+（3）如果accessInstanceVariablesDirectly方法返回的是YES，也就是说可以访问其成员变量，那么就会按照顺序依次查找 _key、_isKey、key、isKey这四个成员变量，如果找到了，就直接取值；如果依然没有找到成员变量，那么会调用valueforUndefineKey方法，并抛出异常“NSUnknownKeyException”。
 
