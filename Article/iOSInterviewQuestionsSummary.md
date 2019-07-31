@@ -509,10 +509,14 @@ Category中有+load方法。load方法在runtime（运行时）加载类、分�
 
 **【扩展 3-6】load方法和initialize方法的区别是什么？它们在category中的调用顺序是怎样的？以及出现继承时它们之间的调用过程是怎样的？**
 
+**load方法和initialize方法的相同点**：
+
+如果父类和子类的load方法或initialize方法都被调用,那么父类的调用一定在子类之前。
+
 **load方法和initialize方法的区别**：
 
 * （1）调用方式不同。load是根据函数地址直接调用，而initialize是通过objc_msgSend调用
-* （2）调用时刻不同。load是在runtime加载类、分类的时候由系统自动调用（每个类的load方法只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次，这是因为有些子类可能没有实现initialize方法，那么在初始化子类时就会调用父类的initialize方法）。
+* （2）调用时刻不同。load是在runtime加载类、分类的时候由系统自动调用（在main函数执行之前被调用而且每个类的load方法只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次，这是因为有些子类可能没有实现initialize方法，那么在初始化子类时就会调用父类的initialize方法）。
 
 **+load方法在Category中的调用顺序如下**：
 
@@ -528,6 +532,48 @@ Category中有+load方法。load方法在runtime（运行时）加载类、分�
 * (3)当有多个Category都实现了initialize方法,会覆盖类中的方法,只执行一个(会执行Compile Sources 列表中最后一个Category 的initialize方法)
 
 
+【注意】: 
+
+load调用时机比较早,当load调用时,其他类可能还没加载完成,运行环境不安全，所以我们应该尽量减少load方法的逻辑。load方法是线程安全的，它使用了锁，我们应该避免线程阻塞在load方法。
+
+在initialize方法收到调用时,运行环境基本健全。 initialize内部也使用了锁，所以是线程安全的。但同时要避免阻塞线程，不要再使用锁。
+
+**+load方法的使用场景**：交换两个方法的实现
+
+```
+//摘自MJRefresh
++ (void)load
+{
+    [self exchangeInstanceMethod1:@selector(reloadData) method2:@selector(mj_reloadData)];
+    [self exchangeInstanceMethod1:@selector(reloadRowsAtIndexPaths:withRowAnimation:) method2:@selector(mj_reloadRowsAtIndexPaths:withRowAnimation:)];
+    [self exchangeInstanceMethod1:@selector(deleteRowsAtIndexPaths:withRowAnimation:) method2:@selector(mj_deleteRowsAtIndexPaths:withRowAnimation:)];
+    [self exchangeInstanceMethod1:@selector(insertRowsAtIndexPaths:withRowAnimation:) method2:@selector(mj_insertRowsAtIndexPaths:withRowAnimation:)];
+    [self exchangeInstanceMethod1:@selector(reloadSections:withRowAnimation:) method2:@selector(mj_reloadSections:withRowAnimation:)];
+    [self exchangeInstanceMethod1:@selector(deleteSections:withRowAnimation:) method2:@selector(mj_deleteSections:withRowAnimation:)];
+    [self exchangeInstanceMethod1:@selector(insertSections:withRowAnimation:) method2:@selector(mj_insertSections:withRowAnimation:)];
+}
+
++ (void)exchangeInstanceMethod1:(SEL)method1 method2:(SEL)method2
+{
+    method_exchangeImplementations(class_getInstanceMethod(self, method1), class_getInstanceMethod(self, method2));
+}
+
+```
+
+**+initialize方法的使用场景**：主要用来对一些不方便在编译期初始化的对象进行赋值。比如NSMutableArray这种类型的实例化依赖于runtime的消息发送，所以显然无法在编译器初始化：
+
+```
+// int类型可以在编译期赋值
+static int someNumber = 0; 
+static NSMutableArray *someArray;
++ (void)initialize {
+    if (self == [Person class]) {
+        // 不方便编译期赋值的对象在这里赋值
+        someArray = [[NSMutableArray alloc] init];
+    }
+}
+
+```
 
 
 
