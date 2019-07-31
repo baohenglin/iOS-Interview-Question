@@ -347,7 +347,39 @@ ARC环境下，可以通过 __weak 修饰符来解决循环引用。__weak是安
 综上所述，优先**推荐使用__weak修饰符**来解决循环引用问题。
 
 
+**【扩展 2-13】MRC环境下解决循环引用问题的方法有哪些？**
 
+MRC环境下，不支持__weak，不能通过__weak来解决循环引用。但是可以通过 __unsafe_unretained 和 __block 来解决MRC环境下的循环引用问题。
+
+* (1)__unsafe_unretained
+
+```
+__unsafe_unretained typeof(self) weakSelf = self;
+self.block = ^{
+	NSLog(@"%p", weakSelf);
+};
+```
+
+* (2)__block
+
+MRC环境下， __block修饰的对象，不会被 __block变量的结构体对象强引用，也就打破了循环引用。
+
+```
+__block id weakSelf = self;
+self.block = ^{
+	NSLog(@"%p",weakSelf);
+};
+```
+
+**【扩展 2-13】ARC环境下 __ unsafe_unretained和__weak的异同点？**
+
+**相同点**：
+
+__ unsafe_unretained和__weak都是弱引用，不会产生强引用。
+
+**不同点**：
+
+__ unsafe_unretained是不安全的，当指针指向的对象销毁时，指针存储的地址值不变，也就是不会自动将指针置为nil，从而产生野指针；__weak是安全的，当指针指向的对象销毁时，会自动将指针置为nil。
 
 
 
