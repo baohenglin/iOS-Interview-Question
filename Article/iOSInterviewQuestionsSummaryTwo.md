@@ -137,6 +137,16 @@ valueForKey:方法底层实现原理如下：
 
 通过KVC修改属性值会触发KVO。即使没有声明属性，只有成员变量，只要accessInstanceVariablesDirectly返回的是YES，允许访问其成员变量，那么不管有没有调用setter方法，通过KVC修改成员变量的值，都能触发KVO。这也说明通过KVC内部实现了willChangeValueForKey:方法和didChangeValueForKey:方法。
 
+**【6-5】KVC和KVO的keyPath一定是属性吗？**
+
+不一定是属性。KVC支持实例变量。KVO只能手动支持实例变量。KVO需要自己在set方法里实现willChangeValueForKey:和didChangeValueForKey:
+此外还要自己实现 +(BOOL)automaticallyNotifiesObserversForKey:(NSString *)key方法手动进行监听。
+
+
+**【6-6】KVC的keyPath中的集合运算符如何使用？**
+
+
+
 
 
 
