@@ -577,33 +577,15 @@ static NSMutableArray *someArray;
 
 
 
+<br />
+<br />
+<br />
 
+**参考链接：**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* [Objective-C +load vs +initialize](http://blog.leichunfeng.com/blog/2015/05/02/objective-c-plus-load-vs-plus-initialize/)
+* [Objective-C Category 的实现原理](http://blog.leichunfeng.com/blog/2015/05/18/objective-c-category-implementation-principle/)
+* [iOS类方法load和initialize详解](https://juejin.im/post/5a31dc40f265da4307034712)
 
 
 
