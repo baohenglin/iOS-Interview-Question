@@ -106,7 +106,7 @@ Block是苹果在iOS4开始引入的对C语言的扩展，用来实现匿名函�
 
 默认情况下，不能修改block捕获的自动变量值。因为block捕获自动变量（局部变量）传递到block变量所指向的结构体内部的是自动变量的值（也就是“值传递”），而不是指向自动变量内存的指针（不是“地址传递”），所以block内部不能改变block捕获的变量。
 
-使用__block修饰的自动变量传递到block变量所指向的结构体内部的是 指向变量内存的指针，故可以在Block内部改变变量值。
+使用__block修饰的自动变量传递到block变量所指向的结构体内部的是 **指向变量内存地址的指针**，故可以在Block内部改变变量值。
 
 此外，block内部可以修改捕获到的静态变量、全局变量和静态全局变量。全局变量和静态全局变量由于作用域是全局，且存储在全局区，供所有函数调用，所以可以在block内被修改；静态变量之所以可以在block内被修改是因为传递给block的是内存的指针。全局变量、静态全局变量和函数参数它们并没有变成Block结构体__main_block_impl_0的成员变量，并不会被Block持有，所以也不会增加retainCount的值。
 
@@ -115,7 +115,7 @@ Block是苹果在iOS4开始引入的对C语言的扩展，用来实现匿名函�
 
 **【扩展 2-2】在block内修改自动变量的值有几种方式？如何修改？**
 
-在block内修改自动变量的值有两种方式。1）将内存地址指针传递到block中(使用__block来修饰)；2）改变存储方式，可以修改为static静态变量、静态全局变量或全局变量
+在block内修改自动变量的值有两种方式。1）将内存地址指针传递到block中，也就是使用__block来修饰局部变量(推荐)；2）改变存储方式，可以修改为static静态变量、静态全局变量或全局变量（不推荐，因为此方法会使变量一直占用内存，不会释放内存）
 
 **【扩展 2-3】这三种block是在什么情况下产生的？以及它们之间的区别和联系是什么？**
 
@@ -279,9 +279,15 @@ Block和代理的**共同点**：
 
 【总结】Block和代理各有优缺点，我们需要根据具体场景，选择合适的回调方式，默认优先使用Block。如果回调函数多余3个，推荐使用代理；如果回调很频繁，次数很多，像UITableView，每次初始化、滑动、点击都会回调，推荐使用代理。
 
-【延伸】通知(NSNotificationCeter)，通知可以实现**一对多**的传值。通知实现步骤：注册监听者(addObserver方法)、发布通知(postNotificationName方法)、销毁监听对象(removeObserver方法)
+【延伸】通知(NSNotificationCeter)，通知可以实现**一对多**的传值。通知实现步骤：注册监听者(addObserver方法)、发布通知(postNotificationName方法)、销毁监听对象(removeObserver方法)。
 
+**【扩展 2-10】block访问对象类型的auto变量时的内存管理原理是怎样的？**
 
+当block内部访问了对象类型的auto变量时，如果block是在栈上（也就是_NSConcreteStackBlock类型的block），那么将不会对auto变量产生强引用。
+
+当block被拷贝到堆上时，那么会自动调用block内部的copy函数(__main_block_copy_0函数)，__main_block_copy_0函数内部会调用_Block_object_assign函数，然后_Block_object_assign函数会根据auto变量的修饰符(__strong、__weak、__unsafe_unretained)做出相应的操作，类似于retain（形成强引用或者弱引用）。
+
+当block从堆中被移除时，会调用block内部的dispose函数(__main_block_dispose_0函数)，__main_block_dispose_0函数内部会调用_Block_object_dispose函数，_Block_object_dispose函数会自动释放引用的auto变量类似于release操作。
 
 
 
