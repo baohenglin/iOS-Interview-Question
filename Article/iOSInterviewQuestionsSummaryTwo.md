@@ -33,5 +33,9 @@
 
 ## 知识点5：KVO
 
+**【5-1】iOS是如何实现对一个对象的KVO的？（KVO的本质或原理是什么？）**
+
+本质上是利用Runtime动态生成一个子类，并且让instance对象的isa指向这个全新的子类，并且这个全新的子类重写了setter方法、class方法、dealloc方法、_isKVOA方法。当修改instance对象的属性时，重写的setter方法会调用Foundation的_NSSetXXXValueAndNotify函数，在_NSSetXXXValueAndNotify函数内部会先调用willChangeValueForKey:方法，然后调用父类原来的setter方法，最后调用didChangeValueForKey:方法，并在didChangeValueForKey方法内部触发监听器（Oberser）的监听方法（observeValueForKeyPath:ofObject:change:context:）。
+
 
 ## 知识点6：KVC
