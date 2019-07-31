@@ -239,6 +239,19 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),di
 
 * (5)手动调用copy
              
+【扩展 2-5】在Block中修饰词__block和__weak的区别？
+
+二者区别如下：
+
+* __block不管是ARC还是MRC模式下都可以使用，可以修饰对象，也可以修饰基本数据类型；
+* __weak只能在ARC模式下使用，且只能修饰对象（如：NSString、NSArray），不能修饰基本数据类型（如int）；
+* __block修饰的对象可以在block被重新赋值，__weak修饰的对象不可以；
+* __block对象在ARC下可能会导致循环引用，MRC模式下可用来解决循环引用问题；
+* __weak只能在ARC模式下使用，用来解决循环引用问题。
+
+
+
+
 
 
 
