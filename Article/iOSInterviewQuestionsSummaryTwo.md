@@ -101,3 +101,14 @@ HLPerson.m文件中代码如下：
 
 
 ## 知识点6：KVC
+
+KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性。
+
+**【6-1】KVC常用的API有哪几个？**
+
+* -(void)setValue:(id)value forKeyPath:(NSString *)keyPath;
+* -(void)setValue:(id)value forKey:(NSString *)key;
+* -(id)valueForKeyPath:(NSString *)keyPath;
+* -(id)valueForKey:(NSString *)key;
+
+前两个是用来设置属性值的，后两个是用来获取属性值的。
