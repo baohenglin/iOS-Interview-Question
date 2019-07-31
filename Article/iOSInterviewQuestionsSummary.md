@@ -512,15 +512,20 @@ Category中有+load方法。load方法在runtime（运行时）加载类、分�
 **load方法和initialize方法的区别**：
 
 * （1）调用方式不同。load是根据函数地址直接调用，而initialize是通过objc_msgSend调用
-* （2）调用时刻不同。load是在runtime加载类、分类的时候调用（只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次）。
+* （2）调用时刻不同。load是在runtime加载类、分类的时候由系统自动调用（每个类的load方法只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次，这是因为有些子类可能没有实现initialize方法，那么在初始化子类时就会调用父类的initialize方法）。
 
 **+load方法在Category中的调用顺序如下**：
 
-先调用类的+load方法，再调用分类的+load方法；先调用父类的+load方法，再调用子类的+load方法；先编译“先参与编译的类”，后编译“后参与编译的类”。
+* (1)先调用类的+load方法，再调用分类的+load方法；
+* (2)先调用父类的+load方法，再调用子类的+load方法；
+* (3)先编译“先参与编译的类”，后编译“后参与编译的类”；
+* (4)当子类未实现load方法时,不会调用父类load方法。
 
 **initialize方法在Category中的调用顺序如下**：
 
-
+* (1)先执行父类的initialize方法再执行子类的initialize；
+* (2)当子类未实现initialize方法时,会调用父类initialize方法,子类实现initialize方法时,会覆盖父类initialize方法;
+* (3)当有多个Category都实现了initialize方法,会覆盖类中的方法,只执行一个(会执行Compile Sources 列表中最后一个Category 的initialize方法)
 
 
 
