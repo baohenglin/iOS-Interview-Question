@@ -503,6 +503,24 @@ void objc_removeAssociatedObjects(id object)
 @end
 ```
 
+**【扩展 3-5】Category中有load方法吗？load方法是什么时候调用的？load方法能继承吗？**
+
+Category中有+load方法。load方法在runtime（运行时）加载类、分类的时候调用。+load方法能继承。而且+load方法一般都由系统自动调用，不手动调用。
+
+**【扩展 3-6】load方法和initialize方法的区别是什么？它们在category中的调用顺序是怎样的？以及出现继承时它们之间的调用过程是怎样的？**
+
+**load方法和initialize方法的区别**：
+
+* （1）调用方式不同。load是根据函数地址直接调用，而initialize是通过objc_msgSend调用
+* （2）调用时刻不同。load是在runtime加载类、分类的时候调用（只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次）。
+
+**+load方法在Category中的调用顺序如下**：
+
+先调用类的+load方法，再调用分类的+load方法；先调用父类的+load方法，再调用子类的+load方法；先编译“先参与编译的类”，后编译“后参与编译的类”。
+
+**initialize方法在Category中的调用顺序如下**：
+
+
 
 
 
