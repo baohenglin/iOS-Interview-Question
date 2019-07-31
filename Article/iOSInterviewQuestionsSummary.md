@@ -249,6 +249,21 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),di
 * __block对象在ARC下可能会导致循环引用，MRC模式下可用来解决循环引用问题；
 * __weak只能在ARC模式下使用，用来解决循环引用问题。
 
+【扩展 2-6】在ARC环境下，为什么使用__weak来修饰Objective-C对象，可以避免循环引用的问题？
+
+因为使用__weak修饰的对象是弱引用，编译器不会执行retain操作，对象的引用计数不会+1，在对象释放的时候__weak会将引用的对象置为nil，不会导致野指针的产生。需要注意的是，在多线程的情况下，除了在Block外使用__weak对对象进行弱引用外，我们还需要在Block内部对弱引用对象进行一次强引用（__strong）,这是因为，仅用__weak修饰的对象，在多线程情况下，可能会被释放，那么这个对象在Block执行的过程中就会变为nil，从而引起崩溃。
+
+【扩展 2-7】在MRC环境下，为什么使用__block来修饰Objective-C对象，可以避免循环引用的问题？
+
+因为当Block存储在堆上时，如果在Block内部引用了外部的对象，会对所引用的对象进行一次retain操作，加上__block可以避免对该对象执行retain操作。
+
+
+
+
+
+
+
+
 
 
 
