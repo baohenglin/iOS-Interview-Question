@@ -45,7 +45,7 @@ SEL selector = NSSelectorFromString(@"setName:");
 NSString *selectorName1 = NSStringFromSelector(@selector(setName:));
 ```
 
-**【拓展一】获取Class类的三种方法**：
+**【拓展 1-1】获取Class类的三种方法**：
 
 * 1)通过字符串来获得Class，此方法用到了反射机制。
 
@@ -65,7 +65,7 @@ NSLog(@"className = %@",[mainVC class]);
 NSLog(@"className=%@",[HomeViewController class]);
 ```
 
-**【拓展二】检查继承关系的方法**
+**【拓展 1-2】检查继承关系的方法**
 
 ```
 HomeViewController *testVC = [[HomeViewController alloc]init];
