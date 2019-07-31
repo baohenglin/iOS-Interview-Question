@@ -371,7 +371,7 @@ self.block = ^{
 };
 ```
 
-**【扩展 2-13】ARC环境下 __ unsafe_unretained和__weak的异同点？**
+**【扩展 2-14】ARC环境下 __ unsafe_unretained和__weak的异同点？**
 
 **相同点**：
 
@@ -381,6 +381,23 @@ __ unsafe_unretained和__weak都是弱引用，不会产生强引用。
 
 __ unsafe_unretained是不安全的，当指针指向的对象销毁时，指针存储的地址值不变，也就是不会自动将指针置为nil，从而产生野指针；__weak是安全的，当指针指向的对象销毁时，会自动将指针置为nil。
 
+**【扩展 2-15】__block的作用是什么?使用时需要注意什么?**
+
+__block可以用于解决block内部无法修改auto变量值的问题。一旦使用 __block，那么编译器会将 __block变量包装成一个对象 ( __Block _byref _变量名 _0)。该对象内部包含isa指针以及与外部auto变量同名且同类型的成员变量。
+
+使用注意点：注意 __block的内存管理问题；再就是在MRC环境下，使用__block修饰的对象类型不会被block强引用。
+
+**【扩展 2-16】在block内部修改NSMutableArray时，需不需要加__block？**
+
+不需要。
+
+```
+NSMutableArray *array = [NSMutableArray array];
+HLBlok block = ^{
+    [array addObject:@"111"];
+};
+```
+原因：这并不是修改array指针所指向的内存里面的值，而是拿array指针来使用。这与使用赋值符"="不同。所以这种情况下不需要使用__block来修饰array。
 
 
 
