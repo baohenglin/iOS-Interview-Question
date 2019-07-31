@@ -289,6 +289,63 @@ Block和代理的**共同点**：
 
 当block从堆中被移除时，会调用block内部的dispose函数(__main_block_dispose_0函数)，__main_block_dispose_0函数内部会调用_Block_object_dispose函数，_Block_object_dispose函数会自动释放引用的auto变量类似于release操作。
 
+**【扩展 2-11】对象类型的auto变量和__block变量的异同？**
+
+**相同点**：
+
+* 当block在栈上时，对它们都不会产生强引用；
+* 当block拷贝到堆上时，都会通过copy函数来处理它们；
+* 当block从堆上移除时，都会通过dispose函数来释放它们。
+
+**不同点**： 不同点主要在于引用方面（强引用还是弱引用）。
+
+* 对于OC对象类型的auto变量来说，如果block是通过弱引用来访问OC对象的话，那么block对OC对象产生的弱引用；如果block是通过强引用来访问OC对象的话，那么block对OC对象产生的是强引用。
+* 对于__block变量来说，block对__block变量直接产生的就是强引用。
+
+**【扩展 2-12】ARC环境下解决循环引用问题的方法有哪些？应该首选哪种？为什么？**
+
+ARC环境下解决循环引用的方法有以下3种：
+
+* (1)__unsafe_unretained（不推荐）
+
+```
+//方法(1)
+__unsafe_unretained typeof(self) weakSelf = self;
+self.block = ^{
+	NSLog(@"%p", weakSelf);
+};
+```
+
+* (2)__block（不推荐）
+
+```
+//方法(2)
+__block id weakSelf = self;
+self.block = ^{
+	NSLog(@"%p",weakSelf);
+	weakSelf = nil;//必须写
+};
+self.block();//必须写
+```
+
+* (3)__weak（推荐）
+
+```
+//方法(3)
+__weak typeof(self) weakSelf = self;
+self.block = ^{
+	NSLog(@"%p", weakSelf);
+};
+```
+
+ARC环境下，可以通过 __ unsafe_unretained 修饰符来解决，但是由于__ unsafe_unretained是不安全的，当指针指向的对象销毁时，指针存储的地址值不变，也就是不会自动将指针置为nil，从而产生野指针；所以**不推荐使用 __unsafe_unretained**。
+
+ARC环境下，也可以通过__block来解决循环引用。缺点是必须要调用block，而且在block内部要将指向对象的指针置为nil。
+
+ARC环境下，可以通过 __weak 修饰符来解决循环引用。__weak是安全的，当指针指向的对象销毁时，会自动将指针置为nil。
+
+综上所述，优先**推荐使用__weak修饰符**来解决循环引用问题。
+
 
 
 
