@@ -509,7 +509,7 @@ void objc_removeAssociatedObjects(id object)
 
 Category中有+load方法。load方法在runtime（运行时）加载类、分类的时候调用。+load方法能继承。而且+load方法一般都由系统自动调用，不手动调用。
 
-**【扩展 3-6】load方法和initialize方法的区别是什么？它们在category中的调用顺序是怎样的？以及出现继承时它们之间的调用过程是怎样的？**
+**【扩展 3-6】load方法和initialize方法的异同点是什么？**
 
 **load方法和initialize方法的相同点**：
 
@@ -519,6 +519,9 @@ Category中有+load方法。load方法在runtime（运行时）加载类、分�
 
 * （1）调用方式不同。load是根据函数地址直接调用，而initialize是通过objc_msgSend调用
 * （2）调用时刻不同。load是在runtime加载类、分类的时候由系统自动调用（在main函数执行之前被调用而且每个类的load方法只会调用1次），而initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次，这是因为有些子类可能没有实现initialize方法，那么在初始化子类时就会调用父类的initialize方法）。
+
+**【扩展 3-7】load方法和initialize方法在category中的调用顺序是怎样的？以及出现继承时它们之间的调用过程是怎样的？**
+
 
 **+load方法在Category中的调用顺序如下**：
 
@@ -539,6 +542,8 @@ Category中有+load方法。load方法在runtime（运行时）加载类、分�
 load调用时机比较早,当load调用时,其他类可能还没加载完成,运行环境不安全，所以我们应该尽量减少load方法的逻辑。load方法是线程安全的，它使用了锁，我们应该避免线程阻塞在load方法。
 
 在initialize方法收到调用时,运行环境基本健全。 initialize内部也使用了锁，所以是线程安全的。但同时要避免阻塞线程，不要再使用锁。
+
+**【扩展 3-8】+load方法的使用场景？**
 
 **+load方法的使用场景**：交换两个方法的实现
 
@@ -561,6 +566,8 @@ load调用时机比较早,当load调用时,其他类可能还没加载完成,运
 }
 
 ```
+
+**【扩展 3-9】+initialize方法的使用场景？**
 
 **+initialize方法的使用场景**：主要用来对一些不方便在编译期初始化的对象进行赋值。比如NSMutableArray这种类型的实例化依赖于runtime的消息发送，所以显然无法在编译器初始化：
 
