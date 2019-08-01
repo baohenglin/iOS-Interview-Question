@@ -444,5 +444,78 @@ RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行�
 
 [RunLoop的底层数据结构](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
 
+## 知识点10 多线程
+
+**【扩展 10-1】简述你对多线程的理解**
+
+**【扩展 10-2】iOS的多线程方案有哪几种？你更倾向于哪一种？**
+
+**【扩展 10-3】用过GCD吗？在项目中具体是如何使用的？**
+
+**【扩展 10-4】GCD的队列类型有哪些？**
+
+**【扩展 10-5】说一下OperationQueue和GCD的区别以及各自的优势？**
+
+**【扩展 10-6】线程安全的处理手段有哪些？**
+
+**【扩展 10-7】OC中的锁你了解哪些？使用以上这些锁需要注意哪些问题？**
+
+**【扩展 10-8】自旋锁和互斥锁的异同？**
+
+**【扩展 10-9】什么情况下使用自旋锁比较好？什么情况下使用互斥锁比较好？**
+
+**【扩展 10-10】任选C/OC/C++其中一种语言，实现自旋锁和互斥锁？**
+
+**【扩展 10-11】CoreData的使用，如何处理多线程问题？**
+
+**【扩展 10-12】使用GCD如何实现这个需求：A、B、C三个任务并发，完成后执行任务D？**
+
+**【扩展 10-13】有哪些场景是NSOperation比GCD更容易实现的？（或是NSOperation优于GCD的几点）**
+
+**【扩展 10-14】NSOperation和GCD的区别？**
+
+**【扩展 10-14】如何用GCD同步若干个异步调用？（比如根据若干个url异步加载多张图片，然后在都下载完成后合成一张整图）**
+
+使用Dispatch Group追加block到Global Group Queue,这些block如果全部执行完毕，就会执行Main Dispatch Queue中的结束处理的block。
+    
+```
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_group_t group = dispatch_group_create();
+dispatch_group_async(group, queue, ^{ //加载图片1 });
+dispatch_group_async(group, queue, ^{ //加载图片2 });
+dispatch_group_async(group, queue, ^{ //加载图片3});
+dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+// 合并图片
+});
+```
+
+**【扩展 10-15】dispatch_barrier_async的作用是什么？**
+
+在并行队列中，为了保持某些任务的顺序，需要等待一些任务完成后才能继续进行，使用 barrier 来等待之前任务完成，避免数据竞争等问题。 dispatch_barrier_async 函数会等待追加到Concurrent Dispatch Queue并行队列中的操作全部执行完之后，然后再执行 dispatch_barrier_async 函数追加的处理，等 dispatch_barrier_async 追加的处理执行结束之后，Concurrent Dispatch Queue才恢复之前的动作继续执行。
+
+注意：使用 dispatch_barrier_async ，该函数只能搭配自定义并行队列 dispatch_queue_t 使用。不能使用： dispatch_get_global_queue ，否则 dispatch_barrier_async 的作用会和 dispatch_async 的作用一模一样。 ）
+
+**【扩展 10-15】如果让你实现 GCD 的线程池，该如何实现？讲一下思路**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
