@@ -184,7 +184,13 @@ NSArray *inventory = @[iPhone5, iPhone5, iPhone5, iPadMini, macBookPro, macBookP
 
 @distinctUnionOfSets:和@distinctUnionOfArrays差不多, 但是它期望的是一个包含着NSSet对象的NSSet，并且会返回一个NSSet对象。因为集合不能包含重复的值，所以它只有distinct操作。
 
+## 知识点7：关联对象
 
+**【扩展 7-1】关联对象的应用场景？**
+
+关联对象的应用场景是：给Category(分类)间接地添加成员变量。
+
+优势：关联对象给Category(分类)间接地添加成员变量，不会影响到原来类对象的内存结构。
 
 
 
