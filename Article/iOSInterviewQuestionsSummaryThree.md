@@ -388,6 +388,50 @@ RunLoop和线程的关系如下：
 * RunLoop会在线程结束时销毁。
 * 主线程的RunLoop已经自动获取（创建），子线程默认没有开启RunLoop。
 
+**【扩展 9-3】程序中添加每3秒响应一次的NSTimer，当拖动tableView时，timer可能无法响应要怎么解决？**
+
+NSTimer在滑动时失效的原因是NSTimer默认是工作在NSDefaultRunLoopMode模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式，所有NSTimer失效。
+
+【注意】[NSTimer scheduledTimerWithTimeInterval: repeats:block:]方法会自动将定时器添加到主线程的NSDefaultRunLoopMode模式下，如果要自定义RunLoop模式的话，可以使用timerWithTimeInterval方法创建定时器对象，并将定时器添加到当前线程的NSRunLoopCommonModes模式下(实际上是将timer定时器添加到了NSRunLoopCommonModes 模式下的CFMutableSetRef _commonModeItems数组中)，这样就能解决timer失效的问题。代码如下：
+
+```
+NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self selector:@selector(completionDelayTimerFired) userInfo:nil repeats:YES];
+
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+```
+
+**【扩展 9-4】RunLoop是怎么响应用户操作的，具体流程是什么样的？**
+
+当用户点击屏幕时，RunLoop内部的Source1会捕捉到该触屏事件，并将该事件包装成事件队列eventQueue交给Source0中进行处理。
+
+**【扩展 9-5】说说RunLoop的几种状态？**
+
+```
+kCFRunLoopEntry = (1UL << 0),   //即将进入RunLoop
+kCFRunLoopBeforeTimers = (1UL << 1),//即将处理Timer
+kCFRunLoopBeforeSources = (1UL << 2),//即将处理Source
+kCFRunLoopBeforeWaiting = (1UL << 5),//即将进入休眠
+kCFRunLoopAfterWaiting = (1UL << 6),//即将从休眠中唤醒
+kCFRunLoopExit = (1UL << 7),//即将退出RunLoop
+```
+
+**【扩展 9-6】RunLoop的mode作用是什么？**
+
+RunLoop常见的mode有2种：kCFRunLoopDefaultMode(NSDefaultRunLoopMode)和UITrackingRunLoopMode。kCFRunLoopDefaultMode是默认模式，通常主线程是在这个模式下运行；UITrackingRunLoopMode用于ScrollView追踪触摸滑动，保证界面滑动时不受其他mode影响。
+
+mode的作用是将不同模式下的Source0/Source1/Timer/Observer隔离开来，互不影响，这样就提高了执行效率和滑动流畅性。
+
+**【扩展 9-7】timer和RunLoop是怎样的关系？**
+
+* 从底层数据结构来看，RunLoop的__CFRunLoop结构体中存储着 CFMutableSetRef _modes,_modes是一个类似数组的集合，其所储存的数据类型是CFRunLoopModeRef, CFRunLoopModeRef结构体中存放着CFMutableArrayRef _timers。此外，如果timer被设置为 kCFRunLoopCommonModes模式，那么timer也将被存放在 __CFRunLoop结构体中的 CFMutableSetRef _commonModeItems数组中。
+* 从RunLoop的运行逻辑来讲，timer会通知Observers结束休眠，唤醒线程来处理timer消息。
+
+**【扩展 9-8】RunLoop内部实现逻辑(实现原理)是怎样的？**
+[RunLoop的运行逻辑](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
+
+
+
+
 
 
 
