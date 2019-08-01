@@ -427,9 +427,18 @@ mode的作用是将不同模式下的Source0/Source1/Timer/Observer隔离开来�
 * 从RunLoop的运行逻辑来讲，timer会通知Observers结束休眠，唤醒线程来处理timer消息。
 
 **【扩展 9-8】RunLoop内部实现逻辑(实现原理)是怎样的？**
+
 [RunLoop的运行逻辑](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
 
+**【扩展 9-8】RunLoop的概念以及作用是什么？**
 
+RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行某些任务。
+
+**作用：**
+
+* 保持程序的持续运行；
+* 处理App中的各种事件（比如触摸事件、定时器事件等）；
+* 节省CPU资源，提高程序性能：有待执行任务时执行任务，不执行任务时休眠。
 
 
 
