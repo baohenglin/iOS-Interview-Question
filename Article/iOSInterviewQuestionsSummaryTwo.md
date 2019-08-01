@@ -144,6 +144,7 @@ valueForKey:方法底层实现原理如下：
 
 
 **【6-6】KVC的keyPath中的集合运算符如何使用？**
+[KVC的keyPath中的集合运算符浅析](https://www.jianshu.com/p/c8198d24ac6f)
 
 KVC的keyPath中的集合运算符会根据其返回值的不同分为以下三种类型：
 
