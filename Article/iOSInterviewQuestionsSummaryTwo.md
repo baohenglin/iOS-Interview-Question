@@ -192,6 +192,71 @@ NSArray *inventory = @[iPhone5, iPhone5, iPhone5, iPadMini, macBookPro, macBookP
 
 优势：关联对象给Category(分类)间接地添加成员变量，不会影响到原来类对象的内存结构。
 
+“<objc/runtime.h>”中提供的关联对象的API有以下3个：
+
+(1)添加关联对象
+
+```
+void objc_setAssociatedObject(id object, const void * key,id value, objc_AssociationPolicy policy)
+```
+
+(2)获得关联对象
+
+```
+id objc_getAssociatedObject(id object, const void * key)
+```
+
+(3)移除所有的关联对象
+
+```
+void objc_removeAssociatedObjects(id object)
+```
+
+例如给HLPerson类的Category分类HLPerson+Test类添加一个_name成员变量和一个_weight成员变量。代码如下：
+
+```
+//HLPerson+Test.h文件
+#import "HLPerson.h"
+@interface HLPerson (Test)
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) int weight;
+@end
+
+//HLPerson+Test.m文件
+#import "HLPerson+Test.h"
+#import <objc/runtime.h>
+@implementation HLPerson (Test)
+
+- (void)setName:(NSString *)name
+{
+    objc_setAssociatedObject(self, @selector(name), name, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+- (NSString *)name
+{
+    // 隐式参数
+    // _cmd == @selector(name)
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setWeight:(int)weight
+{
+    objc_setAssociatedObject(self, @selector(weight), @(weight), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (int)weight
+{
+    // _cmd == @selector(weight)
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+@end
+```
+
+**【扩展 7-2】系统如何管理关联对象？**
+
+系统通过管理一个全局哈希表，通过对象指针地址和传递的固定参数地址来获取关联对象。根据setter传入的参数协议，来管理对象的生命周期。
+
+**【扩展 7-3】关联对象其被释放的时候需要手动将其指针置空么？**
+
+  当对象被释放时，如果设置的关联策略是OBJC_ASSOCIATION_ASSIGN，那么他的关联对象不会减少引用计数，其他的协议都会减少从而释放关联对象。因此不管什么关联策略，对象释放时都无需手动将关联对象置空。
 
 
 
