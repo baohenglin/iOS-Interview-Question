@@ -102,15 +102,17 @@ int         id        SEL       int        float
 
 如果以上3个阶段都无法完成消息调用，那么将调用doesNotRecognizeSelector:方法报错"unrecognized selector sent to instance XXX"。
 
-**【扩展 8-4】什么是Runtime？平时项目中用过么？**
+**【扩展 8-4】什么是Runtime？平时项目中用过么(Runtime应用场景有哪些)？**
 
 OC是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由Runtime来支撑的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了Runtime API进行调用。
 
 **Runtime的应用场景**：
 
-Runtime应用场景1：**间接地给分类(Category)添加成员变量**
+Runtime应用场景1：**间接动态地给分类(Category)添加成员变量**
 
-Runtime应用场景2：**替换(交换)方法实现-Method Swizzling**
+Runtime应用场景2：**动态地交换两个方法的实现-Method Swizzling**
+
+[Method Swizzling](https://nshipster.cn/method-swizzling/)
 
 实际项目中，主要是用来替换系统自带的方法实现。举个例子：
 
@@ -132,12 +134,14 @@ Runtime应用场景2：**替换(交换)方法实现-Method Swizzling**
 @implementation NSMutableDictionary (Extention)
 +(void)load
 {
-	////类簇:NSMutableArray、NSString、NSArray的真正类型是其他类型(比如：__NSArrayM).
-    Class cls = NSClassFromString(@"__NSDictionaryM");
-    Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
-    Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
-    method_exchangeImplementations(method1, method2);
-    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+    	//类簇:NSMutableArray、NSString、NSArray的真正类型是其他类型(比如：__NSArrayM).
+    	Class cls = NSClassFromString(@"__NSDictionaryM");
+    	Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
+    	Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
+    	method_exchangeImplementations(method1, method2);
+    }); 
 }
 - (void)hl_setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key
 {
@@ -148,8 +152,83 @@ Runtime应用场景2：**替换(交换)方法实现-Method Swizzling**
 @end
 ```
 
+Runtime应用场景3：**实现NSCoding的自动归档和解档(一键序列化)**
 
+实现原理：利用runtime提供的函数遍历自身所有属性，并对属性进行encode和decode操作。
 
+```
+//归档
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    // 一层层父类往上查找，对父类的属性执行归解档方法
+    Class c = self.class;
+    while (c &&c != [NSObject class]) {
+        //ivar数量
+        unsigned int outCount = 0;
+        //class_copyIvarList：获取类中的成员变量列表
+        Ivar *ivars = class_copyIvarList([self class], &outCount);
+        for (int i = 0; i < outCount; i++) {
+            //获取ivar
+            Ivar ivar = ivars[i];
+            //获取属性名称
+            //ivar_getName:获取类的成员变量名称
+            NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
+            
+            id value = [self valueForKeyPath:key];
+            //归档
+            [aCoder encodeObject:value forKey:key];
+        }
+        //释放内存，C语言中涉及到copy、new、creat等函数的创建的对象都需要手动释放。
+        free(ivars);
+        c = [c superclass];
+    }
+}
+//解档
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        // 一层层父类往上查找，对父类的属性执行归解档方法
+        Class c = self.class;
+        while (c &&c != [NSObject class]) {
+            unsigned int outCount = 0;
+            //class_copyIvarList：获取类中的成员变量列表
+            Ivar *ivars = class_copyIvarList(c, &outCount);
+            for (int i = 0; i < outCount; i++) {
+                //取出Ivar
+                Ivar ivar = ivars[i];
+                //获取属性名称
+                NSString *key = [NSString stringWithUTF8String:ivar_getName(ivar)];
+                //解档
+                id value = [aDecoder decodeObjectForKey:key];
+                //KVC 设值
+                [self setValue:value forKey:key];
+            }
+            //释放
+            free(ivars);
+            c = [c superclass];
+        }
+    }
+    return self;
+}
+```
+
+Runtime应用场景4：**实现字典转模型的自动转换**
+
+实现原理是利用Runtime遍历所有的属性或者成员变量；利用KVC来设置对应的值。
+
+Runtime应用场景5：**访问私有变量**
+
+OC中没有真正意义上的私有变量和方法，要让成员变量私有，要放在m文件中声明，不对外暴露。如果我们知道这个成员变量的名称，可以通过runtime获取成员变量，再通过getIvar来获取它的值。
+
+```
+//获取一个实例变量信息
+Ivar nameIvar = class_getInstanceVariable([HLPerson class], "_name");
+//设置成员变量的值
+object_setIvar(person, nameIvar, @"BHL");
+//获取成员变量的值
+NSString *name = object_getIvar(person, nameIvar);
+NSLog(@"name=%@",name);//name=BHL
+```
 
 
 
