@@ -104,6 +104,52 @@ int         id        SEL       int        float
 
 **【扩展 8-4】什么是Runtime？平时项目中用过么？**
 
+OC是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由Runtime来支撑的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了Runtime API进行调用。
+
+**Runtime的应用场景**：
+
+Runtime应用场景1：**间接地给分类(Category)添加成员变量**
+
+Runtime应用场景2：**替换(交换)方法实现-Method Swizzling**
+
+实际项目中，主要是用来替换系统自带的方法实现。举个例子：
+
+```
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    NSString *obj = nil;
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"name"] = @"Jack";
+    //当key为nil时，会崩溃。此时就可以利用runtime交换方法的API来处理。
+    dic[obj] = @"111";
+    NSLog(@"%@",dic);
+}
+
+
+#import "NSMutableDictionary+Extention.h"
+#import <objc/runtime.h>
+@implementation NSMutableDictionary (Extention)
++(void)load
+{
+	////类簇:NSMutableArray、NSString、NSArray的真正类型是其他类型(比如：__NSArrayM).
+    Class cls = NSClassFromString(@"__NSDictionaryM");
+    Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
+    Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
+    method_exchangeImplementations(method1, method2);
+    
+}
+- (void)hl_setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key
+{
+    NSLog(@"111");
+    if(key == nil) return;
+    [self hl_setObject:obj forKeyedSubscript:key];
+}
+@end
+```
+
+
+
 
 
 
