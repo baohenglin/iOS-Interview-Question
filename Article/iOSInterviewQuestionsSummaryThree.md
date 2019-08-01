@@ -214,7 +214,9 @@ Runtime应用场景3：**实现NSCoding的自动归档和解档(一键序列化)
 
 Runtime应用场景4：**实现字典转模型的自动转换**
 
-实现原理是利用Runtime遍历所有的属性或者成员变量；利用KVC来设置对应的值。
+实现原理是使用runtime遍历出模型中的所有属性，根据模型中属性,去字典中取出对应的value再利用KVC给模型属性设置对应的值。
+
+字典转模型第三方库：[MJExtension](https://my.oschina.net/wolx/blog/396925)、JSONModel、Mantle等
 
 Runtime应用场景5：**访问私有变量**
 
