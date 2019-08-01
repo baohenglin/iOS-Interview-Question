@@ -244,5 +244,117 @@ IMP和SEL关系：SEL(方法编号)最终会通过Dispatch table表寻找到对�
 
 每一个类对象中都有一个对象方法列表（对象方法缓存）；类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）；方法列表中每个方法结构体中记录着方法的名称,方法实现,以及参数类型，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现；当我们给一个实例对象发送消息时，这条消息会在实例对象的类对象方法列表里查找；当我们给一个类对象发送一条消息时，这条消息会在类的Meta Class对象的方法列表里查找。
 
+**【扩展 8-7】下面代码打印结果是什么？**
+
+```
+@interface HLPerson : NSObject
+@end
+
+@interface HLStudent : HLPerson
+@end
+
+@implementation HLStudent
+- (instancetype)init
+{
+    if (self = [super init]) {
+        NSLog(@"[self class]=%@",[self class]);//HLStudent
+        NSLog(@"[self superclass]=%@",[self superclass]);//HLPerson
+        
+        //objc_msgSendSuper((self,[HLPerson Class]), @selector(run));
+        //[super class]的消息接收者receiver仍然是子类，也就是HLStudent,只不过查找方法的时候是从父类中查找
+        NSLog(@"[super class]=%@",[super class]);//[super class]=HLStudent
+        NSLog(@"[super superclass]=%@",[super superclass]);//[super superclass]=HLPerson
+    }
+    return self;
+}
+@end 
+```
+
+打印结果如下：
+
+```
+2019-06-21 18:14:08.706538+0800 Interviews_Super_SuperClass[17851:1105221] [self class]=HLStudent
+2019-06-21 18:14:08.706728+0800 Interviews_Super_SuperClass[17851:1105221] [self superclass]=HLPerson
+2019-06-21 18:14:08.706864+0800 Interviews_Super_SuperClass[17851:1105221] [super class]=HLStudent
+2019-06-21 18:14:08.706988+0800 Interviews_Super_SuperClass[17851:1105221] [super superclass]=HLPerson
+```
+
+**原因：** 主要是因为消息接收者仍然为子类HLStudent。
+
+**总结：**
+
+```
+ [super message]的底层实现：
+ （1）消息接收者仍然是子类对象；
+ （2）从父类开始查找方法的实现。
+ ```
+ 
+ **【扩展 8-8】下面代码打印结果是什么？**
+ 
+ ```
+ BOOL res1 = [[NSObject class] isKindOfClass:[NSObject class]];
+    BOOL res2 = [[NSObject class] isMemberOfClass:[NSObject class]];//0
+    BOOL res3 = [[HLPerson class] isKindOfClass:[HLPerson class]];//0
+    BOOL res4 = [[HLPerson class] isMemberOfClass:[HLPerson class]];//0
+    BOOL res5 = [[HLPerson class] isKindOfClass:[NSObject class]];//1
+    BOOL res6 = [[HLPerson class] isMemberOfClass:[NSObject class]];//1
+    NSLog(@"res1=%d,res2=%d,res3=%d,res4=%d,res5=%d,res6=%d",res1,res2,res3,res4,res5,res6);
+   
+    
+    HLPerson *person = [[HLPerson alloc]init];
+    BOOL res7 = [person isKindOfClass:[HLPerson class]];//1
+    BOOL res8 = [person isKindOfClass:[NSObject class]];//1
+    
+    BOOL res9 = [person isMemberOfClass:[HLPerson class]];//1
+    BOOL res10 = [person isMemberOfClass:[NSObject class]];//0
+    NSLog(@"res7=%d,res8=%d,res9=%d,res10=%d",res7,res8,res9,res10);
+ ```
+ 
+ 打印结果如下：
+ 
+```
+res1=1,res2=0,res3=0,res4=0,res5=1,res6=0
+res7=1,res8=1,res9=1,res10=0
+```
+
+总结：主要考察isKindOfClass、isMemberOfClass这两个方法对应的对象方法和类方法的区别。需要特别注意的是：NSObject的superclass指针指向NSObject的类对象，也就是基类的superclass指针指向基类的Class对象。这一点比较特殊。
+
+```
+-(BOOL)isMemberOfClass：判断左边对象是否刚好等于右边这种类型
++(BOOL)isMemberOfClass：判断左边对象的Meta-Class对象是否等于右边的对象
+-(BOOL)isKindOfClass：判断左边对象是否是右边这种类型或者右边对象的子类。
++(BOOL)isKindOfClass：判断左边的对象的Meta-Class对象是否是右边对象或者右边对象的子类
+```
+
+**【扩展 8-9】以下代码能不能执行成功？如果可以，打印结果是什么？**
+
+```
+@interface HLPerson : NSObject
+@property (nonatomic, copy) NSString *name;
+- (void)print;
+@end
+
+@implementation HLPerson
+- (void)print {
+	NSLog(@"my name is %@",self.name);
+}
+@end
+
+@implemetation ViewController
+- (void)viewDidLoad{
+	[super viewDidLoad];
+	
+	NSString *string = @"123";
+	id cls = [HLPerson class];
+	void *obj = &cls;
+	[(__bridge id)obj print];
+}
+@end
+```
+
+能执行成功。打印结果是“my name is 123”。
+
+## 知识点9 
+
 
 
