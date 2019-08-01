@@ -276,6 +276,17 @@ OBJC_ASSOCIATION_COPY 其对应的修饰符是copy,atomic
 
 **【扩展 7-6】移除所有关联对象objc_removeAssociatedObjects的底层实现原理？**
 
+**【扩展 7-7】使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？**
+
+在ARC和MRC下均不需要。WWDC2011中指出，被关联的对象在生命周期内要比对象本身释放的晚很多。它们会在被NSObject -dealloc调用的object_dispose()方法中释放。
+
+**对象的内存销毁详细过程**，分四个步骤：
+
+* 1. 最后一次调用 -release，此时实例对象的引用计数变为零，对象正在被销毁，生命周期即将结束。调用 [self dealloc]
+* 2. 继承关系中最底层的子类先调用 -dealloc，然后一层一层的向上，在其父类中再调用-dealloc方法
+* 3. 最后NSObject 调 -dealloc，并调用 Objective-C runtime 中的 object_dispose() 方法
+* 4. 调用 object_dispose()，对 C++ 的实例变量们（iVars）调用 destructors函数，对 ARC 状态下的 实例变量们(iVars)调用 -release方法，并且解除所有使用 runtime Associate方法关联的对象，解除所有 __weak 引用，最后调用 free()。
+
 
 
 
