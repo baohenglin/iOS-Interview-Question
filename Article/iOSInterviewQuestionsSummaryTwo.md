@@ -206,10 +206,20 @@ void objc_setAssociatedObject(id object, const void * key,id value, objc_Associa
 id objc_getAssociatedObject(id object, const void * key)
 ```
 
-(3)移除所有的关联对象
+(3)移除所有的关联对象：用来移除所有的关联对象，因此如果不是想移除所有的，应该用 objc_setAssociatedObject(id object, const void * key,id value, objc_AssociationPolicy policy) 的方式移除某一个关联对象。也就是设置某个关联对象的value为nil，则相当于移除该关联对象。
 
 ```
 void objc_removeAssociatedObjects(id object)
+```
+
+其中关联策略的枚举值有以下几个：
+
+```
+OBJC_ASSOCIATION_ASSIGN 其对应的修饰符是assign
+OBJC_ASSOCIATION_RETAIN_NONATOMIC 其对应的修饰符是strong,nonatomic
+OBJC_ASSOCIATION_COPY_NONATOMIC 对应的修饰符是copy,nonatomic
+OBJC_ASSOCIATION_RETAIN 对应的修饰符是strong,atomic
+OBJC_ASSOCIATION_COPY 其对应的修饰符是copy,atomic
 ```
 
 例如给HLPerson类的Category分类HLPerson+Test类添加一个_name成员变量和一个_weight成员变量。代码如下：
@@ -252,11 +262,21 @@ void objc_removeAssociatedObjects(id object)
 
 **【扩展 7-2】系统如何管理关联对象？**
 
-系统通过管理一个全局哈希表，通过对象指针地址和传递的固定参数地址来获取关联对象。根据setter传入的参数协议，来管理对象的生命周期。
+关联对象并不是存储在被关联对象本身内存中，而是存储在全局统一的AssociationHashMap哈希表中。系统通过管理这个全局哈希表，再通过对象的指针地址和传入的key值经过相应的计算来获取关联对象。根据objc_setAssociatedObject方法传入的关联策略，来对对象进行内存管理。
 
 **【扩展 7-3】关联对象其被释放的时候需要手动将其指针置空么？**
 
   当对象被释放时，如果设置的关联策略是OBJC_ASSOCIATION_ASSIGN，那么他的关联对象不会减少引用计数，其他的协议都会减少从而释放关联对象。因此不管什么关联策略，对象释放时都无需手动将关联对象置空。
+  
+**【扩展 7-4】添加关联对象objc_setAssociatedObject的底层实现原理？**
+
+[objc_setAssociatedObject的底层实现原理](https://github.com/baohenglin/HLBlog/blob/master/Articles/OC%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1%E7%AF%87.md)
+
+**【扩展 7-5】获取关联对象objc_getAssociatedObject的底层实现原理？**
+
+**【扩展 7-6】移除所有关联对象objc_removeAssociatedObjects的底层实现原理？**
+
+
 
 
 
