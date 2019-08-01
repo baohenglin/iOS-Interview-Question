@@ -354,7 +354,40 @@ res7=1,res8=1,res9=1,res10=0
 
 能执行成功。打印结果是“my name is 123”。
 
-## 知识点9 
+## 知识点9 RunLoop
+
+**【扩展 9-1】讲讲RunLoop，项目中用过吗？(RunLoop的应用场景)**
+
+* (1)控制线程生命周期（线程保活）
+
+**线程保活的应用场景**：频繁执行一个任务或者多个串行（非并发）任务，可以采用线程保活的方式。线程保活的方式比传统的“创建线程-销毁线程-再创建线程-再销毁...”更节省CPU资源且更高效。比如AFNetworking中后台网络请求就使用了线程保活这种技术。
+
+[线程保活示例](https://github.com/baohenglin/RunLoopThreadLive)
+
+* (2)解决NSTimer在滑动时停止工作(失效)的问题。
+
+**NSTimer在滑动时失效的原因**是NSTimer默认是工作在NSDefaultRunLoopMode模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式，所有NSTimer失效。
+
+解决方法：
+
+```
+NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self selector:@selector(completionDelayTimerFired) userInfo:nil repeats:YES];
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+```
+
+* (3)监控应用卡顿
+* (4)性能优化
+
+**【扩展 9-2】RunLoop和线程的关系是怎样的？**
+
+RunLoop和线程的关系如下：
+
+* 每条线程都有唯一的一个与之对应的RunLoop对象。
+* RunLoop保存在一个全局的Dictionary里，线程作为key，RunLoop作为value。
+* 线程刚创建时并没有RunLoop对象，RunLoop会在第一次获取该线程时创建与之对应的RunLoop对象。
+* RunLoop会在线程结束时销毁。
+* 主线程的RunLoop已经自动获取（创建），子线程默认没有开启RunLoop。
+
 
 
 
