@@ -145,6 +145,27 @@ valueForKey:方法底层实现原理如下：
 
 **【6-6】KVC的keyPath中的集合运算符如何使用？**
 
+KVC的keyPath中的集合运算符会根据其返回值的不同分为以下三种类型：
+
+* (1)简单的集合运算符：返回的是strings, number, 或者 dates；
+      
+      @count:返回一个值为集合中对象总数的NSNumber对象。
+      @sum:首先把集合中的每个对象都转换为double类型，然后计算其总，最后返回一个值为这个总和的NSNumber对象。
+      @avg:首先把集合中的每个对象都转换为double类型，然后计算其平均值，最后返回一个值为该平均值的NSNumber对象。
+      @max:使用compare:方法来确定最大值。所以为了让其正常工作，集合中所有的对象都必须支持和另一个对象的比较。
+      @min:和@max一样，但是返回的是集合中的最小值。
+      
+ ```
+[products valueForKeyPath:@"@count"]; // 4
+[products valueForKeyPath:@"@sum.price"]; // 3526.00
+[products valueForKeyPath:@"@avg.price"]; // 881.50
+[products valueForKeyPath:@"@max.price"]; // 1699.00
+[products valueForKeyPath:@"@min.launchedOn"]; // June 11, 2012
+ ```
+      
+* (2)对象运算符：返回的是一个数组；
+* (3)数组和集合运算符：返回的是一个数组或者集合。 
+
 
 
 
