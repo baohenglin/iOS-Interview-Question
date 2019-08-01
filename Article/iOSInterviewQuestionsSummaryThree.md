@@ -67,6 +67,19 @@ OC的方法调用是指给方法调用者发送消息，也称为**消息机制*
     return [super forwardingTargetForSelector:aSelector];
 }
 //方法签名：返回值类型、参数类型
+/*
+- (void) test;
+v    16      @     0     :     8
+void         id          SEL
+解释：16表示参数的占用空间大小，id后面跟的0表示从0位开始存储，id占8位空间。SEL后面的8表示从第8位开始存储，SEL同样占8位空间
+*/
+/*
+- (int)testWithAge:(int)age Height:(float)height;
+
+  i    24    @    0    :    8    i    16    f    20
+int         id        SEL       int        float
+解释：参数的总占用空间为 8 + 8 + 4 + 4 = 24，id类型的参数从第0位开始占据8位空间，SEL类型的参数从第8位开始占据8位空间，int类型的参数从第16位开始占据4位空间，float类型的参数从第20位开始占据4位空间。
+*/
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
     if (aSelector == @selector(test)) {
