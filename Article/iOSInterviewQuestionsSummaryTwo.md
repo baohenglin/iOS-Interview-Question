@@ -163,8 +163,25 @@ KVC的keyPath中的集合运算符会根据其返回值的不同分为以下三�
 [products valueForKeyPath:@"@min.launchedOn"]; // June 11, 2012
  ```
       
-* (2)对象运算符：返回的是一个数组；
+* (2)对象运算符：返回的是一个数组；比如现在有一个数组：
+
+```
+NSArray *inventory = @[iPhone5, iPhone5, iPhone5, iPadMini, macBookPro, macBookPro];
+```
+
+@unionOfObjects/ @distinctUnionOfObjects: 返回一个由操作符右边的key path所指定的对象属性组成的数组。其中@distinctUnionOfObjects会对数组去重, 而@unionOfObjects不会。
+
+```
+[inventory valueForKeyPath:@"@unionOfObjects.name"]; // "iPhone 5", "iPhone 5", "iPhone 5", "iPad Mini", "MacBook Pro", "MacBook Pro"
+[inventory valueForKeyPath:@"@distinctUnionOfObjects.name"]; // "iPhone 5", "iPad Mini", "MacBook Pro"
+```
+
+
 * (3)数组和集合运算符：返回的是一个数组或者集合。 
+
+数组和集合操作符跟对象操作符很相似，只不过它是在NSArray和NSSet所组成的集合中工作的。@distinctUnionOfArrays/@unionOfArrays: 返回了一个数组，其中包含这个集合中每个数组对于这个操作符右面指定的key path进行操作之后的值。正如你期望的，distinct版本会移除重复的值。
+
+@distinctUnionOfSets:和@distinctUnionOfArrays差不多, 但是它期望的是一个包含着NSSet对象的NSSet，并且会返回一个NSSet对象。因为集合不能包含重复的值，所以它只有distinct操作。
 
 
 
