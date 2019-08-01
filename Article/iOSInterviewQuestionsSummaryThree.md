@@ -232,5 +232,17 @@ NSString *name = object_getIvar(person, nameIvar);
 NSLog(@"name=%@",name);//name=BHL
 ```
 
+**【扩展 8-5】runtime中，SEL和IMP的区别？**
+
+[SEL和IMP的区别](https://www.jianshu.com/p/02b12e98fc98)
+
+SEL是类成员方法的指针，相当于方法编号;IMP是函数指针，保存了方法的地址。
+
+IMP和SEL关系：SEL(方法编号)最终会通过Dispatch table表寻找到对应的IMP(函数指针)，Dispatch table表存放SEL和IMP的对应。
+
+**【扩展 8-6】runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）**
+
+每一个类对象中都有一个对象方法列表（对象方法缓存）；类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）；方法列表中每个方法结构体中记录着方法的名称,方法实现,以及参数类型，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现；当我们给一个实例对象发送消息时，这条消息会在实例对象的类对象方法列表里查找；当我们给一个类对象发送一条消息时，这条消息会在类的Meta Class对象的方法列表里查找。
+
 
 
