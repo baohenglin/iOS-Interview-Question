@@ -16,3 +16,6 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 【使用建议】:(1)如果只是单纯的private变量，最好声明在implementation里；（2）如果是类的public属性，就用@property写在.h文件里；（3）如果自己内部需要setter和getter来实现一些功能，就在.m文件里用property来声明。
 
+**【扩展 14-3】被weak修饰的对象在被释放的时候会发生什么？是如何实现的？知道sideTable么？里面的结构可以画出来么？**
+
+[参考链接](https://www.jianshu.com/p/10c0f49f4755)
