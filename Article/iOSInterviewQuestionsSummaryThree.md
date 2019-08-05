@@ -450,6 +450,9 @@ RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行�
 
 [RunLoop的底层数据结构](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
 
+**【扩展 9-11】RunLoop的作用是什么？它的内部的工作机制了解么？（最好结合线程和内存管理来说）**
+
+
 ## 知识点10 多线程
 
 **【扩展 10-1】简述你对多线程的理解**
