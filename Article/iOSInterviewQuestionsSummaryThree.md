@@ -326,7 +326,9 @@ res7=1,res8=1,res9=1,res10=0
 +(BOOL)isKindOfClass：判断左边的对象的Meta-Class对象是否是右边对象或者右边对象的子类
 ```
 
-**【扩展 8-9】以下代码能不能执行成功？如果可以，打印结果是什么？**
+**【扩展 8-9】iOS中内省方法有哪些？class方法和objc_getClass方法有什么区别？**
+
+**【扩展 8-10】以下代码能不能执行成功？如果可以，打印结果是什么？**
 
 ```
 @interface HLPerson : NSObject
@@ -353,6 +355,10 @@ res7=1,res8=1,res9=1,res10=0
 ```
 
 能执行成功。打印结果是“my name is 123”。
+
+**【扩展 8-11】在运行时创建的方法objc_allocateClassPair的方法名尾部为什么是pair（成对的意思）？**
+
+
 
 ## 知识点9 RunLoop
 
