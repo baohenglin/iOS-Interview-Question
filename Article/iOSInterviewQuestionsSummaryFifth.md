@@ -20,6 +20,10 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 [参考链接](https://www.jianshu.com/p/10c0f49f4755)
 
+**【扩展 14-4】实现 isEqual 和 hash 方法时要注意什么？**
+
+**【扩展 14-5】property 的常用修饰词有哪些？weak 和 assign 的区别？weak 的实现原理是什么？**
+
 
 ## 知识点15  UI视图
 
