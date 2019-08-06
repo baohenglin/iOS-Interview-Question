@@ -122,6 +122,16 @@ HTTPS=HTTP+SSL/TLS，在HTTP的基础上又加了一层安全加密处理。HTTP
 **【扩展 17-19】介绍几种锁，他们的用途和区别？**
 
 
+## 知识点18 第三方库
+
+**【扩展 18-1】介绍自己用过哪些开源库？**
+
+Masonry 和 SnapKit，AFNetWorking，MKNetworkKit，Alamofire，Mantle，SDWebImage
+
+**【扩展 18-2】读过某个库的源码么？**
+
+**【扩展 18-3】SDWebImage 下载了图片后为什么要解码？**
+
 
 
 
