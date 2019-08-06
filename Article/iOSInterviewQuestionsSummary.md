@@ -405,6 +405,8 @@ HLBlok block = ^{
 
 可以从以下几方面切入：三种 block，栈上的自动复制到堆上，block 的属性修饰符是 copy，循环引用的原理和解决方案。
 
+**【扩展 2-18】KVO、Notification、delegate 各自的优缺点，效率还有使用场景（阿里）**
+
 ## 知识点三：分类(category)和类扩展(Extension)
 
 **【扩展 3-1】分类(category)应用场景有哪些？分类有哪些局限性？分类的结构体里面有哪些成员？**
