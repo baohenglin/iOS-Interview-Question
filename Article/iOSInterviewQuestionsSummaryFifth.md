@@ -27,7 +27,9 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 **【扩展 15-2】说说你对 OC 中 load 方法和 initialize 方法的异同。——主要说一下执行时间，各自用途，没实现子类的方法会不会调用父类的？**
 
+**【扩展 15-3】UIView 生命周期**
 
+**【扩展 15-4】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
 
 
