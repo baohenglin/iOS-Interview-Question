@@ -31,6 +31,8 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 **【扩展 15-4】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
+**【扩展 15-5】细致地讲一下事件传递流程**
+
 
 
 ## 知识点16  计算机网络及网络安全
