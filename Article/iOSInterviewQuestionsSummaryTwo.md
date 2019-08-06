@@ -35,6 +35,9 @@
 
 **【扩展 4-8】class_ro_t和class_rw_t的区别？**
 
+**【扩展 4-9】class A 继承 class B，class B 继承 NSObject。画出完整的类图。**
+
+[参考链接](https://www.jianshu.com/p/e033edeeeb6c)
 
 ## 知识点5：KVO
 
