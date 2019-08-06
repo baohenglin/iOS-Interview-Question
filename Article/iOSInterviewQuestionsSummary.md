@@ -407,6 +407,9 @@ HLBlok block = ^{
 
 **【扩展 2-18】KVO、Notification、delegate 各自的优缺点，效率还有使用场景（阿里）**
 
+**【扩展 2-19】block 为什么会有循环引用？（阿里）**
+
+
 ## 知识点三：分类(category)和类扩展(Extension)
 
 **【扩展 3-1】分类(category)应用场景有哪些？分类有哪些局限性？分类的结构体里面有哪些成员？**
