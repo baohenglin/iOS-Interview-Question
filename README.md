@@ -1,5 +1,5 @@
 <p align='center'>
-<img src='https://static001.geekbang.org/resource/image/89/8f/890bb2e1f9e0f7a027446c35a1cb9d8f.jpg'>
+<img src='https://upload-images.jianshu.io/upload_images/4164292-5b65275152e5bacc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240'>
 </p>
 
 <p align='center'>
