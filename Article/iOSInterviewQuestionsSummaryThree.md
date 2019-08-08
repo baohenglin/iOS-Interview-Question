@@ -525,7 +525,24 @@ iOS的多线程方案有以下这几种：
 
 GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Queue)和并发队列(Concurrent Dispatch Queue)。串行队列是指让任务一个接着一个地执行的队列（一个任务执行完毕后，再执行下一个任务）。并发队列是指可以让多个任务并发(同时)执行（自动开启多个线程同时执行任务）的队列。并发功能只有在异步(dispatch_async)函数下才有效。需要注意的是主队列(dispatch_queue queue = dispatch_get_main_queue();)其实也是串行队列。
 
-**【扩展 10-5】说一下OperationQueue和GCD的区别以及各自的优势？**
+**【扩展 10-5】说一下NSOperation(结合NSOperationQueue使用)和GCD的区别以及各自的优势？**
+
+**NSOperation和GCD的区别：**
+
+* (1)从**底层实现**来看，GCD是基于C语言实现的系统服务，执行和操作简单高效；NSOperation是对GCD更高层次的抽象。如果希望自定义任务，建议使用NSOperation；
+* (2)从**依赖关系方面**来看，NSOperation可以设置两个NSOperation之间的依赖，方便的控制执行顺序；GCD无法直接设置这种依赖关系，不过GCD可以通过dispatch_barrier_async来实现这种效果；
+* (3)**KVO(键值对观察)**，NSOperation可以容易监听判断Operation当前的状态(是否正在执行isExecuteing，是否取消isCancelled，是否已完成isFinished)，对此GCD无法通过KVO进行监听判断；
+* (4)从设置**优先级方面**来看，NSOperation可以设置自身的优先级(但是优先级高的不一定先执行)；GCD只支持FIFO的队列，GCD只能设置队列的优先级，无法在执行的block设置优先级；
+* (5)从**执行效率**方面来看，直接使用GCD效率会更高，NSOperation会多一点开销；
+* (6)从**功能方面**来看，NSOperation可以方便地控制队列的停止/继续，也可以取消队列中所有的操作；而GCD不具备这些功能。
+
+那么什么情况下使用NSOperation，什么情况下使用GCD呢？
+
+**使用NSOperation的情况**：各个操作之间有依赖关系；操作需要取消暂停、并发管理；控制操作之间优先级；限制同时能执行的线程数量，让线程在某时刻停止/继续等。
+
+**使用GCD的情况**：一般简单的多线程操作，都可以使用GCD，简单高效。
+
+从编程原则来说，一般我们需要尽可能的使用高等级、封装完美的API，在必须时才使用底层的API。当需求简单，简洁的GCD或许是个更好的选择，而Operation queue 为我们提供能更多的选择。
 
 
 
