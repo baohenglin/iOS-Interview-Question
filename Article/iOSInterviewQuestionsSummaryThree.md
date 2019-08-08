@@ -328,9 +328,9 @@ res7=1,res8=1,res9=1,res10=0
 
 **【扩展 8-9】iOS中内省方法有哪些？class方法和objc_getClass方法有什么区别？**
 
-内省是指对象在运行时获取其类型的能力。
+内省是指对象在运行时获取对象详细信息的能力。这些详细信息包括对象在继承树上的位置，对象是否遵循了特定的协议以及对象是否可以相应特定的消息等。
 
-OC中内省的方法有四个：
+OC中内省的方法有几个方法：
 
 (1)判断对象类型：
 
@@ -341,6 +341,10 @@ OC中内省的方法有四个：
 
 *  -(BOOL)respondsToSelector: 这是一个实例方法，用来判断该实例对象是否响应某个方法
 *  +(BOOL)instancesRespondToSelector: 这是一个类方法，用来判断类该类的实例对象是否响应某个方法
+
+(3)检查对象是否符合某协议
+
+* -(BOOL)conformsToProtocol:(Protocol *)protocol;
 
 **class方法和objc_getClass方法的区别**
 
