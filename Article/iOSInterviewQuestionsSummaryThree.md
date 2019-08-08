@@ -344,7 +344,7 @@ OC中内省的方法有四个：
 
 **class方法和objc_getClass方法的区别**
 
-* objc_getClass方法：该方法用于获取isa的指向。
+* objc_getClass方法：该方法用于获取isa指针。
 * class方法：实例对象调用class方法，返回的是类对象，类对象调用class方法，返回的是类对象自身。类对象调用objc_getClass方法，得到的是对应的meta class(元类对象)。
 
 
