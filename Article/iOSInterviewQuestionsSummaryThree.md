@@ -334,13 +334,13 @@ OC中内省的方法有四个：
 
 (1)判断对象类型：
 
-* - (BOOL)isKindOfClass: 判断是否是这个类或其子类的实例
-* - (BOOL)isMemberOfClass: 判断是否是这个类的实例
+*  -(BOOL)isKindOfClass: 判断是否是这个类或其子类的实例
+*  -(BOOL)isMemberOfClass: 判断是否是这个类的实例
 
 (2)判断对象/类是否有这个方法：
 
-* - (BOOL)respondsToSelector: 这是一个实例方法，用来判断该实例对象是否响应某个方法
-* + (BOOL)instancesRespondToSelector: 这是一个类方法，用来判断类该类的实例对象是否响应某个方法
+*  -(BOOL)respondsToSelector: 这是一个实例方法，用来判断该实例对象是否响应某个方法
+*  +(BOOL)instancesRespondToSelector: 这是一个类方法，用来判断类该类的实例对象是否响应某个方法
 
 **class方法和objc_getClass方法的区别**
 
