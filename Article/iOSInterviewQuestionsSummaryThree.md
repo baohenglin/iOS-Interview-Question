@@ -529,7 +529,7 @@ GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Que
 
 **NSOperation和GCD的区别：**
 
-* (1)从**底层实现**来看，GCD是基于C语言实现的系统服务，执行和操作简单高效；NSOperation是对GCD更高层次的抽象。如果希望自定义任务，建议使用NSOperation；
+* (1)从**底层实现**来看，GCD是基于C语言实现的系统服务，执行和操作简单高效；NSOperation是对GCD更高层次的抽象。GCG是iOS4.0推出的,主要针对多核CPU 做了优化；NSOperation 是 iOS2.0后推出的,iOS4.0之后重写了NSOperation。
 * (2)从**依赖关系方面**来看，NSOperation可以设置两个NSOperation之间的依赖，方便的控制执行顺序；GCD无法直接设置这种依赖关系，不过GCD可以通过dispatch_barrier_async来实现这种效果；
 * (3)**KVO(键值对观察)**，NSOperation可以容易监听判断Operation当前的状态(是否正在执行isExecuteing，是否取消isCancelled，是否已完成isFinished)，对此GCD无法通过KVO进行监听判断；
 * (4)从设置**优先级方面**来看，NSOperation可以设置自身的优先级(但是优先级高的不一定先执行)；GCD只支持FIFO的队列，GCD只能设置队列的优先级，无法在执行的block设置优先级；
