@@ -548,7 +548,11 @@ GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Que
 
 **【扩展 10-6】线程安全的处理手段有哪些？**
 
+[iOS中的10种线程同步方案](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.md)
+
 **【扩展 10-7】OC中的锁你了解哪些？使用以上这些锁需要注意哪些问题？**
+
+[iOS中的10种线程同步方案](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.md)
 
 **【扩展 10-8】自旋锁和互斥锁的异同？**
 
