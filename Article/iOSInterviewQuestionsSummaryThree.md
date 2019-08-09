@@ -525,7 +525,7 @@ iOS的多线程方案有以下这几种：
 
 GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Queue)和并发队列(Concurrent Dispatch Queue)。串行队列是指让任务一个接着一个地执行的队列（一个任务执行完毕后，再执行下一个任务）。并发队列是指可以让多个任务并发(同时)执行（自动开启多个线程同时执行任务）的队列。并发功能只有在异步(dispatch_async)函数下才有效。需要注意的是主队列(dispatch_queue queue = dispatch_get_main_queue();)其实也是串行队列。
 
-**【扩展 10-5】说一下NSOperation(结合NSOperationQueue使用)和GCD的区别以及各自的优势？**
+**【扩展 10-5】说一下NSOperation(结合NSOperationQueue使用)和GCD的区别以及各自的优势？(阿里)**
 
 **NSOperation和GCD的区别：**
 
@@ -611,7 +611,22 @@ dispatch_group_notify这个方法表示把block(第三个参数)传入队列(第
 
 **【扩展 10-13】有哪些场景是NSOperation比GCD更容易实现的？（或是NSOperation优于GCD的几点）**
 
-**【扩展 10-14】NSOperation和GCD的区别？（阿里）**
+**NSOperation和GCD的区别：**
+
+* (1)从**底层实现**来看，GCD是基于C语言实现的系统服务，执行和操作简单高效；NSOperation是对GCD更高层次的抽象。GCG是iOS4.0推出的,主要针对多核CPU 做了优化；NSOperation 是 iOS2.0后推出的,iOS4.0之后重写了NSOperation。
+* (2)从**依赖关系方面**来看，NSOperation可以设置两个NSOperation之间的依赖，方便的控制执行顺序；GCD无法直接设置这种依赖关系，不过GCD可以通过dispatch_barrier_async来实现这种效果；
+* (3)**KVO(键值对观察)**，NSOperation可以容易监听判断Operation当前的状态(是否正在执行isExecuteing，是否取消isCancelled，是否已完成isFinished)，对此GCD无法通过KVO进行监听判断；
+* (4)从设置**优先级方面**来看，NSOperation可以设置自身的优先级(但是优先级高的不一定先执行)；GCD只支持FIFO的队列，GCD只能设置队列的优先级，无法在执行的block设置优先级；
+* (5)从**执行效率**方面来看，直接使用GCD效率会更高，NSOperation会多一点开销；
+* (6)从**功能方面**来看，NSOperation可以方便地控制队列的停止/继续，也可以取消队列中所有的操作；而GCD不具备这些功能。
+
+那么什么情况下使用NSOperation，什么情况下使用GCD呢？
+
+**使用NSOperation的情况**：各个操作之间有依赖关系；操作需要取消暂停、并发管理；控制操作之间优先级；限制同时能执行的线程数量，让线程在某时刻停止/继续等。
+
+**使用GCD的情况**：一般简单的多线程操作，都可以使用GCD，简单高效。
+
+从编程原则来说，一般我们需要尽可能的使用高等级、封装完美的API，在必须时才使用底层的API。当需求简单，简洁的GCD或许是个更好的选择，而Operation queue 为我们提供了更多的选择。
 
 **【扩展 10-14】如何用GCD同步若干个异步调用？（比如根据若干个url异步加载多张图片，然后在都下载完成后合成一张整图）**
 
@@ -635,6 +650,23 @@ dispatch_group_notify(group, dispatch_get_main_queue(), ^{
 注意：使用 dispatch_barrier_async ，该函数只能搭配自定义并行队列 dispatch_queue_t 使用。不能使用： dispatch_get_global_queue ，否则 dispatch_barrier_async 的作用会和 dispatch_async 的作用一模一样。 ）
 
 **【扩展 10-15】如果让你实现 GCD 的线程池，该如何实现？讲一下思路**
+
+**线程池包含如下几个部分**:
+
+* (1)线程池管理器（ThreadPoolManager）:用于创建并管理线程池，是一个单例；
+* (2)工作线程（WorkThread）: 线程池中线程；
+* (3)任务接口（Task）:每个任务必须实现的接口，以供工作线程调度任务的执行；
+* (4)任务队列:用于存放没有处理的任务。提供一种缓冲机制；
+* (5)corePoolSize核心池的大小:默认情况下，在创建了线程池后，线程池中的线程数为0，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；
+* (6)maximumPoolSize线程池最大线程数:它表示在线程池中最多能创建多少个线程；
+* (7)存活时间keepAliveTime:表示线程没有任务执行时最多保持多久时间会终止。默认情况下，只有当线程池中的线程数大于corePoolSize时，keepAliveTime才会起作用，这是如果一个线程空闲的时间达到keepAliveTime，则会终止直到线程池中的线程数不大于corePoolSize
+
+**具体流程:**
+
+* (1)当通过任务接口向线程池管理器中添加任务时，如果当前线程池管理器中的线程数目小于corePoolSize，则每来一个任务，就会通过线程池管理器创建一个线程去执行这个任务；
+* (2)如果当前线程池中的线程数目大于等于corePoolSize，则每来一个任务，会尝试将其添加到任务缓存队列当中，若添加成功，则该任务会等待空闲线程将其取出去执行；若添加失败（一般来说是任务缓存队列已满），则会尝试创建新的线程去执行这个任务；
+* (3)如果当前线程池中的线程数目达到maximumPoolSize，则会采取任务拒绝策略进行处理；
+* (4)如果线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止，直至线程池中的线程数目不大于corePoolSize。
 
 
 
