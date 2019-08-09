@@ -2,7 +2,7 @@
 
 **【扩展 11-1】介绍下内存的几大区域？** 
 
-![内存布局示意图.png](https://upload-images.jianshu.io/upload_images/4164292-fc1fb4410e7b888c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![内存布局示意图.png](https://upload-images.jianshu.io/upload_images/4164292-910a6915d3906206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * BSS段：用来存储**未初始化的全局变量、静态变量**。一旦全局变量或静态变量被初始化就会被回收，并转存到数据段中。
 * .text区：也称**代码段**，主要是用来**存放代码的二进制文件(用来存储程序的代码/指令)**，程序结束时系统会自动回收存储在代码段中的数据，内存区域较小。
