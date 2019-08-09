@@ -556,10 +556,14 @@ GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Que
 
 **【扩展 10-8】自旋锁和互斥锁的异同？**
 
-自旋锁和互斥锁的区别：
+自旋锁和互斥锁的**相同点**：
 
-* 自旋锁**不是通过休眠使进程阻塞，而是在获取锁之前一直处于忙等(自旋)阻塞状态**。用在以下情况：锁持有的时间短，而且线程并不希望在重新调度上花太多的成本。
-* 互斥锁用于保护临界区，确保同一时间只有一个线程访问数据。对共享资源的访问，先对互斥量进行加锁，如果互斥量已经上锁，调用线程会因为**线程休眠而阻塞**，直到互斥量被解锁。在完成了对共享资源的访问后，要对互斥量进行解锁。
+二者都能保证同一时间只有一个线程访问共享资源。都能保证线程安全。
+
+自旋锁和互斥锁的**不同点**：
+
+* 自旋锁：如果共享数据已经有其他线程加锁了，**不是通过休眠使线程阻塞，而是在获取锁之前一直处于忙等(自旋)阻塞状态，一直占用CPU资源**。一旦被访问的资源被解锁，则等待资源的线程会立即执行。自旋锁的效率高于互斥锁。自旋锁用在以下情况：锁持有的时间短，而且线程并不希望在重新调度上花太多的成本。
+* 互斥锁：如果共享数据已经有其他线程加锁了，线程会**进入休眠状态**等待资源被解锁。一旦被访问的资源被解锁，则等待资源的线程会被唤醒
 
 **【扩展 10-9】什么情况下使用自旋锁比较好？什么情况下使用互斥锁比较好？**
 
@@ -583,6 +587,27 @@ GCD的队列可以分为两大类型，分别是串行队列(Serial Dispatch Que
 **【扩展 10-11】CoreData的使用，如何处理多线程问题？(阿里)**
 
 **【扩展 10-12】使用GCD如何实现这个需求：A、B、C三个任务并发，完成后执行任务D？(阿里)**
+
+使用GCD的 dispatch_group 来实现此需求，代码如下：
+
+```
+dispatch_queue_t dispatchQueue = dispatch_queue_create("bhl.queue.next", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+    dispatch_group_async(dispatchGroup, dispatchQueue, ^{
+        NSLog(@"任务A");
+    });
+    dispatch_group_async(dispatchGroup, dispatchQueue, ^{
+        NSLog(@"任务B");
+    });
+    dispatch_group_async(dispatchGroup, dispatchQueue, ^{
+        NSLog(@"任务C");
+    });
+    dispatch_group_notify(dispatchGroup, dispatchQueue, ^{
+        NSLog(@"任务D");
+    });
+```
+
+dispatch_group_notify这个方法表示把block(第三个参数)传入队列(第二个参数)中去。而且可以保证第三个参数block执行时，group中所有任务已经全部完成。
 
 **【扩展 10-13】有哪些场景是NSOperation比GCD更容易实现的？（或是NSOperation优于GCD的几点）**
 
