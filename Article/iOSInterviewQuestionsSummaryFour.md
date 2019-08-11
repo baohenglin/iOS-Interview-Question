@@ -42,6 +42,12 @@ ARC(Automatic Reference Counting)，自动引用计数，实际就是编译时�
 
 (2)不是自己生成持有的对象会将对象加入autoreleasePool。
 
+* ARC在runtime运行时的优化：
+
+(1)合并对称的引用计数操作。比如将 +1/-1/+1/-1 直接置为 0；
+
+(2)巧妙地跳过某些情况下autorelease机制的调用。比如当返回值被返回之后，紧接着就需要被retain的时候，没有必要进行autorelease+retain，直接什么都不要做就好了。
+
 
 
 **【扩展 11-4】weak指针的实现原理是什么？**
