@@ -54,7 +54,7 @@ ARC(Automatic Reference Counting)，自动引用计数，实际就是编译时�
 
 [weak指针的实现原理参考链接](https://www.jianshu.com/p/3c5e335341e0)
 
-weak指针实现原理参考**《Objective-C高级编程 iOS与OS X多线程和内存管理》一书1.4.2节 __weak修饰符**
+weak指针实现原理参考**《Objective-C高级编程 iOS与OS X多线程和内存管理》一书1.4.2节 weak修饰符** 第67页
 
 Runtime维护了一个weak表(弱引用表)，用于存储指向某个对象的所有weak指针。weak表其实是一个hash表，Key是所指对象的地址，value是weak指针的地址（这个地址的值是所指对象指针的地址）数组。为什么value是数组？因为一个对象可能被多个弱引用指针指向。
 
