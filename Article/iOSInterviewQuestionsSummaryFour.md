@@ -66,6 +66,12 @@ weak 的实现原理可概括三步：
 
 **【扩展 11-5】autorelease对象在什么时机会被调用release？(阿里)** 
 
+在没有手加Autorelease Pool的情况下，Autorelease对象是在当前的runloop迭代结束时释放的(原因是系统在每个runloop迭代中都加入了自动释放池Push和Pop)，而不是“当前作用域大括号结束时释放”。
+
+[Autorelease实现原理](https://blog.sunnyxx.com/2014/10/15/behind-autorelease/)
+
+
+
 **【扩展 11-6】方法里有局部对象，出了方法后会立即释放吗？** 
 
 **【扩展 11-7】造成内存泄漏的原因可能有哪些？** 
