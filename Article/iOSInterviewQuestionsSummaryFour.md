@@ -110,6 +110,27 @@ ARC 是编译器完成的，依靠引用计数，谈谈几个属性修饰符的�
 
 **【扩展 11-13】怎么判断某个 cell 是否显示在屏幕上？(阿里)** 
 
+```
+1.  - (NSArray*)visibleCells;
+//UITableView的方法，这个最直接，返回一个UITableviewcell的数组。
+对于自定制的cell，之后的处理可能稍微繁琐些。
+```
+
+```
+2.- (NSArray*)indexPathsForVisibleRows;
+//UITableview的又一个方法，这个比较好用了，返回一个NSIndexPath的数组,可以直接用indexpath.row去调你的table_related_Array里的数据了。比较方便用于自定制的cell。
+```
+
+```
+3.- (CGRect)rectForRowAtIndexPath:(NSIndexPath*)indexPath;
+CGRect cellR = [myTV rectForRowAtIndexPath:indx];
+if (myTV.contentOffset.y - cellR.origin.y < myCell.frame.size.height || cellR.origin.y - myTV.contentOffset.y >myTV.size.height) {
+//这个时候myCell应该是不在myTV的可视区域了。
+} else {//myCell在可视区域时，业务处理
+}
+//这个方法可以用在代理回调较多的设计中。
+```
+
 **【扩展 11-14】ARC的本质？(阿里)** 
 
 
