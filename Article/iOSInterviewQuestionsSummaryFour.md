@@ -73,7 +73,7 @@ weak 的实现原理可概括三步：
 
 [Autorelease实现原理](https://blog.sunnyxx.com/2014/10/15/behind-autorelease/)
 
-
+[Autorelease底层实现](https://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/)
 
 **【扩展 11-6】方法里有局部对象，出了方法后会立即释放吗？** 
 
