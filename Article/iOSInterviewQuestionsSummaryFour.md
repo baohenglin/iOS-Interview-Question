@@ -52,6 +52,18 @@ ARC(Automatic Reference Counting)，自动引用计数，实际就是编译时�
 
 **【扩展 11-4】weak指针的实现原理是什么？**
 
+[weak指针的实现原理参考链接](https://www.jianshu.com/p/3c5e335341e0)
+
+weak指针实现原理参考**《Objective-C高级编程 iOS与OS X多线程和内存管理》一书1.4.2节 __weak修饰符**
+
+Runtime维护了一个weak表(弱引用表)，用于存储指向某个对象的所有weak指针。weak表其实是一个hash表，Key是所指对象的地址，value是weak指针的地址（这个地址的值是所指对象指针的地址）数组。为什么value是数组？因为一个对象可能被多个弱引用指针指向。
+
+weak 的实现原理可概括三步：
+
+* (1)初始化时：runtime会调用objc_initWeak函数，初始化一个新的weak指针指向对象的地址。
+* (2)添加引用时：objc_initWeak函数会调用 objc_storeWeak() 函数， objc_storeWeak() 的作用是更新指针指向，创建对应的弱引用表。
+* (3)释放时，调用clearDeallocating函数。clearDeallocating函数首先根据"对象地址"获取所有weak指针地址的数组，然后遍历这个数组把其中的数据设为nil，最后把这个entry从weak表中删除，最后清理对象的记录。
+
 **【扩展 11-5】autorelease对象在什么时机会被调用release？(阿里)** 
 
 **【扩展 11-6】方法里有局部对象，出了方法后会立即释放吗？** 
