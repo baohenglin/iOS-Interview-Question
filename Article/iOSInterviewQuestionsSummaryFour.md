@@ -133,6 +133,11 @@ if (myTV.contentOffset.y - cellR.origin.y < myCell.frame.size.height || cellR.or
 
 **【扩展 11-14】ARC的本质？(阿里)** 
 
+ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理内存的本质，更不是GC(垃圾回收)，底层实现依然依赖引用计数，只不过ARC模式下编译器会自动帮我们管理。
+
+* 打开ARC：-fobjc-arc
+* 关闭ARC：-fno-objc-arc
+
 
 
 ## 知识点12 性能优化
