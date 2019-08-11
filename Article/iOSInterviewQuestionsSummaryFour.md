@@ -36,7 +36,11 @@
 
 ARC(Automatic Reference Counting)，自动引用计数，实际就是编译时期自动在已有代码中插入合适的内存管理代码以及在Runtime做一些优化。
 
-* 自动插入合适的内存管理代码:如果是需要自己生成持有的对象，会自动插入Retain代码，并在对象将要释放时插入release代码；不是自己生成持有的对象会将对象加入autoreleasePool。
+* 自动插入合适的内存管理代码：
+
+(1)如果是需要自己生成持有的对象，会自动插入Retain代码，并在对象将要释放时插入release代码；
+
+(2)不是自己生成持有的对象会将对象加入autoreleasePool。
 
 
 
