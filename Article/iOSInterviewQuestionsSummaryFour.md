@@ -92,6 +92,8 @@ weak 的实现原理可概括三步：
 
 **【扩展 11-8】Autoreleasepool所使用的数据结构是什么？AutoreleasePoolPage的结构体了解么？** 
 
+ AutoreleasePool 没有单独的结构，是由若干个 AutoreleasePoolPage 以双链表的形式组成的。(待优化)
+
 **【扩展 11-9】什么情况下需要手动创建@autoreleasepool？** 
 
 **【扩展 11-10】谈谈你对 ARC 的理解。(百度)** 
