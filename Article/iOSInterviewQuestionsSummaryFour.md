@@ -168,6 +168,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-3】列表卡顿的原因可能有哪些？如何来优化？(UITableView的相关优化)**
 
+详见[卡顿原因分析及卡顿解决方法](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
+
 **【扩展 12-4】App启动优化策略？最好结合启动流程来说（main()函数的执行前后都分别说一下，知道多少说多少）** 
 
 详见[3.启动时间优化](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
