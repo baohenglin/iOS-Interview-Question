@@ -194,7 +194,9 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 造成App崩溃的原因有很多，包括以下这些：
 
-* (1)向某个对象发送其无法响应的方法。报错信息"unrecognized selector sent to instance"。可以在写一个方法的时候，判断一下调用者的类型，不符合类型的不让其调用，也可以使用runtime对常见的方法调用做一下错误兼容。比如调用了NSString中不存在的方法而造成崩溃，可以像下面这样解决：
+* (1)向某个对象发送其无法响应的方法。报错信息"unrecognized selector sent to instance"。
+
+**解决方法**：可以在写一个方法的时候，判断一下调用者的类型，不符合类型的不让其调用，也可以使用runtime对常见的方法调用做一下错误兼容。比如调用了NSString中不存在的方法而造成崩溃，可以像下面这样解决：
 
 ```
 @implementation NSString (NSRangeException)
@@ -217,13 +219,16 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 * (2)NSRangeException 异常。该异常是由数组越界或者string访问越界引起的。
 
 **解决方法**：利用runtime的Swizzle Method特性，可以实现从框架层面杜绝这类的崩溃问题，这样做的好处有两点：一是开发人员忘了写判断越界的逻辑，也不会造成app的崩溃；二是不需要修改现有的代码，对现有代码的侵入性降低到最低，不需要添加大量重复的逻辑判断代码。
-* (3)集合类中添加nil对象。NSDictionary插入nil对象会造成崩溃，但是插入NSNull对象是不会造成崩溃的，只要利用runtime的Swizzle Method把nil对象给转换成NSNull对象就可以把该问题给解决了。创建一个NSDictionary的类别，利用runtime的Swizzle Method来替换系统的方法。
-* (4)KVO不合理的移除关联key。
-* (5)SIGSEGV 异常。当去访问没有被开辟的内存或者已经被释放的内存时，就会发生这样的异常。另外，在低内存的时候，也可能会产生这样的异常。我们使用Xcode自带的Leaks工具检测相关的内存泄漏问题。
+* (3)集合类中添加nil对象。NSDictionary插入nil对象会造成崩溃，但是插入NSNull对象是不会造成崩溃的。
+
+**解决方法**：只要利用runtime的Swizzle Method把nil对象给转换成NSNull对象就可以把该问题给解决了。创建一个NSDictionary的类别，利用runtime的Swizzle Method来替换系统的方法。
+* (4)SIGSEGV 异常。当去访问没有被开辟的内存或者已经被释放的内存时，就会发生这样的异常。另外，在低内存的时候，也可能会产生这样的异常。我们使用Xcode自带的Leaks工具检测相关的内存泄漏问题。
 
 **解决方法**：在使用C语言对象的时候，一定要记得在不使用的时候给释放掉，ARC并不能释放掉这块内存。
 
 [示例源码链接](https://github.com/guoshimeihua/RuntimeDemo)
+
+* (5)KVO不合理的移除关联key。
 
 **【扩展 12-8】你知道有哪些情况会导致App卡顿，分别可以用什么方法来避免？** 
 
