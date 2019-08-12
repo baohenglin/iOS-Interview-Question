@@ -144,6 +144,22 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-1】你在项目中是怎么优化内存的？** 
 
+* (1)采用ARC来管理内存。ARC除了可以避免内存泄露外，ARC还有助于提高程序性能；
+* (2)在正确的地方使用reuseIdentifier；
+* (3)当View设置为透明的时候，一般把apaque设为NO，减小开销，对内存有好处；
+* (4)避免庞大的XIB：当你加载一个XIB的时候所有内容都被放在了内存里，包括任何图片。如果有一个不会即刻用到View，就存在内存资源的浪费。
+* (5)不要阻塞主线程。大部分阻塞主线程的情形是你的app 在做一些牵涉到读写外部资源的I/O操作，比如存储或者网络。
+* (6)在ImageViews中调整图片大小。如果在UIImageVIew中显示一个来自bundle的图片，你应保证图片的大小和UIImageVIew的大小相同。因为在运行中缩放图片是很耗资源的，特别是UIImageVIew嵌套在UIScrollVIew中的情况下。 如果图片是在远端服务器加载的你不能控制图片的大小，你可以在下载完成后，最好用background thread，缩放一次，然后在UIImageView中使用缩放后的图片。
+* (7)选择正确的collection。比如NSArray、NSDictionary、NSSet等
+* (8)打开gzip压缩。减小文档的方式就是在服务端和你的app中打开gzip。这对于文字这种能有高压缩率的数据来说会有更显著的效用。另外，iOS已经在NSURLSession 中默认支持了gzip压缩，当然AFNetWorking这些框架也是支持的。
+* (9)重用和延迟加载。
+* (10)Cache 缓存。缓存那些不大可能改变但经常使用的东西。 我们缓存什么呢？远端服务器的响应，图片，甚至计算结果，比如UItableView的行高。
+* (11)处理内存警告。一旦系统内存过低，iOS会通知所有运行中app。如果你的app收到了内存警告，它就需要尽可能释放更多的内存。最佳的方式是移除缓存。 幸运的是，UIKit的提供了集中收集内存警告的方法：1）在appdelegate中使用applicationDidReceiveMemoryWarning：的方法； 2）在你自定义UIViewController的子类中覆盖didReceiveMemoryWarning； 3）注册并接受 UIApplicationDidReceiveMemoryWarningNotification的通知，一旦接受到通知你就需要释放任何不必要的内存使用。
+* (12)重用大开销对象。一些objects的初始化很慢，比如NSDateFormatter 和NSCalendar。然而你又不可避免的使用它们，比如从JSON和XML中解析数据。想要避免使用这个对象的瓶颈你就需要重用它们，可以通过添加属性到你的class里或者创建静态变量来实现。
+* (13)优化TableView。为了保证TableVIew有更好的滚动性能，可以采取以下措施： （1）正确使用ruseIdentifier来重用cells。（2）采用懒加载即延迟加载的方式加载cell上的控件。（3）当TableView滑动的时候不加载（这个我会在接下的文章中写具体的代码实现）（4）缓存cell的高度。在呈现cell前，把cell的高度计算好缓存起来，避免每次加载cell的时候都要计算。（5）尽量使用不透明的UI控件（6）使用drawRect绘制。
+* (14)使用Autorelease Pool。当有大量临时变量的时候，需要手动创建@autoreleasepool，这样可以避免内存峰值过高。
+* (15)选择是否缓存图片。常见的从bundle中加载图片的方式有两种，一个是imageNamed，另一个时imageWithContentOfFile。既然有两种方式那它们之间有什么差别呢？先说第一种方式他的优点是当加载是它会缓存图片。相反imageWithContentOfFile的仅仅加载图片。如果你加载一个大的图片而且仅仅使用一次的话就没必要缓存图片。
+
 **【扩展 12-2】性能优化从哪些方面来着手？**
 
 **【扩展 12-3】列表卡顿的原因可能有哪些？如何来优化？(UITableView的相关优化)**
