@@ -188,6 +188,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-6】App无痕埋点的思路了解么？你认为理想的无痕埋点系统应该具备哪些特点？** 
 
+[无侵入的埋点方案如何实现？](https://time.geekbang.org/column/article/87925)
+
 **【扩展 12-7】你知道有哪些情况会导致App崩溃，分别可以用什么方法拦截并化解？** 
 
 造成App崩溃的原因有很多，包括以下这些：
@@ -224,6 +226,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 [示例源码链接](https://github.com/guoshimeihua/RuntimeDemo)
 
 **【扩展 12-8】你知道有哪些情况会导致App卡顿，分别可以用什么方法来避免？** 
+
+[卡顿原因分析及卡顿解决方法](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
 
 **【扩展 12-9】如何对 UITableView 调优？(百度)** 
 
