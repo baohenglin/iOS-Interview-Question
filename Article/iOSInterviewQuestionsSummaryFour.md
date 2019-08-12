@@ -170,11 +170,19 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 详见[卡顿原因分析及卡顿解决方法](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
 
+[iOS保持界面流畅的技巧](https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/)
+
 **【扩展 12-4】App启动优化策略？最好结合启动流程来说（main()函数的执行前后都分别说一下，知道多少说多少）** 
 
 详见[3.启动时间优化](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
 
 **【扩展 12-5】AppDelegate如何瘦身？** 
+
+[AppDelegate瘦身指南](https://juejin.im/entry/5b2a101cf265da597236c295)
+
+* (1)FRDModuleManager。FRDModuleManager是豆瓣开源的轻量级模块管理工具。它通过减小AppDelegate的代码量来把很多职责拆分至各个模块中去，这样 AppDelegate 会变得容易维护。
+* (2)利用Category（分类）将不同的逻辑代码分布到其他文件中以减少APPDelegate的代码行数。
+* (3)JLRoutes。可以很方便的处理不同URL Scheme以及解析它们的参数，并通过回调block来处理URL对应的操作。我们可以通过定义URL的规则来定制我们的页面跳转或其他逻辑。
 
 
 
@@ -186,7 +194,11 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-9】如何对 UITableView 调优？(百度)** 
 
-一方面是通过 instruments 检查影响性能的地方，另一方面是估算高度并在 runloop 空闲时缓存。
+**思路**：一方面是通过 instruments 检查影响性能的地方，另一方面是估算高度并在 runloop 空闲时缓存。
+
+详见[卡顿原因分析及卡顿解决方法](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
+
+[iOS保持界面流畅的技巧](https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/)
 
 **【扩展 12-10】如何监测以及定位卡顿？有哪些方案？**
 
