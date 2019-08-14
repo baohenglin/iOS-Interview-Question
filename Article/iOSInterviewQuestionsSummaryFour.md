@@ -246,6 +246,13 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-11】具体如何通过RunLoop来监控卡顿？**
 
+⭐️⭐️⭐️⭐️⭐️
+
+
+[iOS实时卡顿监控](http://www.tanhao.me/code/151113.html/)
+
+[如何利用 RunLoop 原理去监控卡顿？](https://time.geekbang.org/column/article/89494)
+
 **【扩展 12-12】如何对安装包进行瘦身？**
 
 详见[4.安装包瘦身](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
