@@ -45,6 +45,8 @@
 
 Masonry 和 SnapKit，AFNetWorking，MKNetworkKit，Alamofire，Mantle，SDWebImage
 
+JSON转Model的框架：YYModel、Mantle。
+
 **【扩展 18-2】读过某个库的源码么？**
 
 **【扩展 18-3】SDWebImage 下载了图片后为什么要解码？**
