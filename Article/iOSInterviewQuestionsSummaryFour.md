@@ -262,13 +262,55 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 13-1】讲讲MVC、MVVM、MVP区别和联系，以及你在项目里具体是怎么使用的？**
 
+[浅析MVC、MVP、MVVM](https://github.com/baohenglin/HLBlog/blob/master/Articles/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1-MVC%E3%80%81MVP%E3%80%81MVVM%E8%AF%A6%E8%A7%A3.md)
+
+[MVC、MVP、MVVM详解](https://draveness.me/mvx)
+
 **【扩展 13-2】用过哪些设计模式？**
 
+[23种设计模式和6大设计原则](https://juejin.im/entry/58e45768ac502e4957a22909)
+
 **【扩展 13-3】一般开始一个项目，你的架构是如何思考的？** 
+
+[iOS应用架构现状分析](http://mrpeak.cn/blog/ios-arch/)
+
+[今日头条：iOS 架构设计杂谈](https://juejin.im/post/5b2b1a73e51d4558b27782c0)
+
 
 **【扩展 13-4】说一下简单工厂模式、工厂模式和抽象工厂模式？** 
 
 **【扩展 13-5】iOS 系统框架里使用了哪些设计模式？至少说6个** 
+
+* 单例模式。在Cocoa框架中大量使用单例模式，如：
+
+```
+[NSNotificationCenter defaultcenter]
+[UIApplication sharedApplication]
+[NSUserDefaults standardUserDefaults]
+```
+* MVC
+* 观察者模式。单例模式中的通知中心，就是典型的观察者模式：
+
+```
+// 移除观察者
+[[NSNotificationCenter defaultCenter] removeObserver:self name:@"saveMessage" object:nil];
+// 添加观察者
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveMessage) name:@"saveMessage" object:nil];
+// 派发通知
+[[NSNotificationCenter defaultCenter] postNotificationName:@"postData" object:saveImageArray];
+```
+
+* 责任链模式。Cocoa中对触摸事件的处理就是使用的责任链模式。UIView，UIApplication，UIViewController都直接或间接地继承自UIResponder类。事件的响应者链是一系列连接在一起的UIResponder对象，事件在响应者链中向上传递，直到找到处理它的响应者。
+* 委托模式。UITableViewDelegate中的各种方法，实际上是UITableView委托的实现。
+* 中介者模式。
+* 工厂模式。NSFoundation框架中的。大量的objective-c对象都采用了这种模式。比如NSString的stringWith系列：
+
+```
++ stringWithCharacters:length:
++ stringWithString:
++ stringWithCString:encoding:
++ stringWithUTF8String:
+```
 
 **【扩展 13-6】谈谈对单例模式的理解（定义、优缺点），有几种实现方式？** 
 
@@ -304,6 +346,10 @@ MVC 的 C 太臃肿，可以和 V 合并，变成 MVVM 中的 V，而 VM 用来�
 **【扩展 13-17】如何设计图片缓存？(阿里)**
 
 **【扩展 13-18】有没有自己设计过网络控件？(阿里)**
+
+**【扩展 13-19】谈谈对组件化的理解**
+
+[iOS应用架构谈 组件化方案](https://casatwy.com/iOS-Modulization.html)
 
 
 
