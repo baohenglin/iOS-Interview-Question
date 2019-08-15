@@ -417,6 +417,7 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 经典MVC示意图如下：
 
+
 ![经典MVC示意图.png](https://upload-images.jianshu.io/upload_images/4164292-cce4c649d2e05e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 **MVC各个模块之间通信过程**分析：
