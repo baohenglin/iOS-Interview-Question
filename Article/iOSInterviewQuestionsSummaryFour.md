@@ -351,6 +351,9 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 }
 ```
 
+[dispatch_once实现单例的原理分析](https://juejin.im/post/5b15020a5188257d4f0d7c53)
+
+
 **方式（2）**：直接**使用@synchronized**来保证线程安全。
 
 ```
@@ -382,6 +385,15 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
      return _instance;
 }
 ```
+
+**iOS 系统中使用的单例类**：
+
+* UIApplication
+* NSNotificationCenter
+* NSFileManager
+* NSUserDefaults
+* NSURLCache
+* NSHTTPCookieStorage
 
 **【扩展 13-7】设计模式是为了解决什么问题的？**
 
