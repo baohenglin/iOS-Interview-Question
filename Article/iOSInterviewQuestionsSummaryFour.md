@@ -335,7 +335,53 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 * 需要频繁实例化然后销毁的对象。 
 * 创建对象时耗时过多或者耗资源过多，但又经常用到的对象。也就是说如果一个类创建的时候非常的耗费资源或影响性能，那么此对象可以设置为单例以节约资源和提高性能。
 
+**实现方式有以下几种：**
 
+**方式（1）**：通过**GCD的dispatch_once**来实现单例，同样可以在保证线程安全的前提下来实现单例(推荐)
+
+```
++(instancetype)sharedSingleton{
+     static id _instance = nil;
+     static dispatch_once_t onceToken;
+     dispatch_once(&onceToken, ^{
+     //下面这个函数在整个程序运行期间只会执行一次，保证了线程安全。
+     _instance = [[self alloc] init];
+     });
+     return _instance;
+}
+```
+
+**方式（2）**：直接**使用@synchronized**来保证线程安全。
+
+```
++(instancetype)sharedSingleton{
+     static id _instance = nil;
+     //在@synchronized大括号中的代码，在同一时间内，只能有一个对象访问。
+     @synchronized (self){
+       if(_instance == nil){
+       _instance = [[self alloc] init];
+       }
+     }
+     return _instance;
+}
+```
+
+**方式（3）**：使用**同步锁NSLock**
+
+```
++(instancetype)sharedSingleton {
+     static id _instance = nil;
+     NSLock *lock = [[NSLock alloc]init];
+     //关闭线程锁
+     [lock lock];
+     if (_instance == nil) {
+     _instance = [[self allock]init];
+     }
+     //开启线程锁
+     [lock unlock];
+     return _instance;
+}
+```
 
 **【扩展 13-7】设计模式是为了解决什么问题的？**
 
