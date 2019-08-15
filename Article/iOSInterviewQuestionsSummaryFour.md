@@ -409,6 +409,25 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 13-11】MVC 具有什么样的优势，各个模块之间怎么通信，比如点击 Button 后 怎么通知 Model？**
 
+**MVC优势**：
+
+* 低耦合性。
+* 利于组件可重用。
+* 可维护性强。
+
+经典MVC示意图如下：
+
+![经典MVC示意图.png](https://upload-images.jianshu.io/upload_images/4164292-cce4c649d2e05e71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+**MVC各个模块之间通信过程**分析：
+
+* Controller 访问 Model：可以直接单向通信。Controller 需要将 Model 呈现给用户，因此需要知道模型的一切，还需要有同 Model 完全通信的能力，并且能任意使用 Model 的公共 API。
+* Model 访问 Controller：由于Model 是独立于 UI 存在的，因此无法直接与 Controller 通信，但是当 Model 本身信息发生了改变的时候，会通过Notification & KVO & Block等方式进行间接通信。
+* Controller 访问 View：可以直接单向通信。Controller 通过 View 来布局用户界面。
+* View 访问 Controller：通过间接方式来进行通信。View通过Target-action、delegate、dataSource等方法与Controller间接通信。
+* Model 和 View：二者完全互相隔离，不能直接通信。View 通过 Controller 获取 Model 数据。
+
+
 
 
 **【扩展 13-11】你觉得框架和设计模式的区别是什么？**
