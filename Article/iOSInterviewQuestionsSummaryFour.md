@@ -428,7 +428,19 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 * View 访问 Controller：通过间接方式来进行通信。View通过Target-action、delegate、dataSource等方法与Controller间接通信。
 * Model 和 View：二者完全互相隔离，不能直接通信。View 通过 Controller 获取 Model 数据。
 
+**点击 Button 后通知 Model的过程**：
 
+首先来分析一下向View上的Button添加点击事件的代码：
+
+```
+[self.currentBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+```
+
+* self 指目标对象为当前对象，即当前的ViewController；
+* action 指的是向目标对象发送消息的方法名；
+* UIControlEventTouchUpInside表示方法调用时机，即单击时。
+
+由上可知，当点击Button时，当前View上的self.currentBtn会向目标对象ViewController发送一条消息，即objc_msgSend(self,@selector(btnClick)),此时就会触发btnClick方法，通过在btnClick方法内调用Model的相关API进而更新数据模型model中的数据。
 
 
 **【扩展 13-11】你觉得框架和设计模式的区别是什么？**
