@@ -35,13 +35,14 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 * alloc：创建对象，分配空间
 * init(initWithNibName)：初始化对象，初始化数据
-* loadView
-* viewDidLoad
+* loadView：在视图控制器创建view属性时调用此方法
+* viewDidLoad：加载view
 * viewWillAppear：视图即将出现
 * viewDidAppear：视图已经出现
 * viewWillDisappear：视图即将消失
 * viewDidDisappear：视图已经消失
 * dealloc：视图被销毁
+* didReceiveMemoryWarning：接收到内存警告时会被调用
 
 
 
