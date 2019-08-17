@@ -33,6 +33,19 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 **【扩展 15-3】UIView 生命周期**
 
+* alloc：创建对象，分配空间
+* init(initWithNibName)：初始化对象，初始化数据
+* loadView
+* viewDidLoad
+* viewWillAppear：视图即将出现
+* viewDidAppear：视图已经出现
+* viewWillDisappear：视图即将消失
+* viewDidDisappear：视图已经消失
+* dealloc：视图被销毁
+
+
+
+
 **【扩展 15-4】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
 A页面跳转到B页面有2个方法,push和present。
