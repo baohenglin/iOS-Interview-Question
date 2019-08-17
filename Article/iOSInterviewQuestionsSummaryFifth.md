@@ -35,6 +35,11 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 **【扩展 15-4】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
+A页面跳转到B页面有2个方法,push和present。
+
+**push**：先执行A页面的viewWillDisappear和viewDidDisappear,然后执行B页面的viewWillAppear和viewDidAppear.
+**present**：先执行A页面的viewWillDisappear,随后执行B页面的viewWillAppear和viewDidAppear,最后执行A页面的viewDidDisappear.
+
 **【扩展 15-5】细致地讲一下事件传递流程**
 
 **【扩展 15-6】谈一下对三种布局方式 frame、Auto Layout 以及 UIStackView的理解**
