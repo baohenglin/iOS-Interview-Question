@@ -56,7 +56,12 @@ A页面跳转到B页面有2个方法,push和present。
 
 **【扩展 15-5】细致地讲一下事件传递流程**
 
-事件传递流程如下：
+**事件传递流程**如下：
+
+事件的传递是自上到下的顺序，即 UIApplication->window->处理该触摸事件最合适的 view。
+
+当点击屏幕时会产生一个触摸事件，消息循环(runloop)会接收到该触摸事件放到消息队列中，接下来UIApplication会从消息队列中取出触摸事件并将其分发下去。首先传给UIWindow，UIWindow会使用hitTest:withEvent:方法查找到此次触摸事件初始点所在的视图，找到这个视图之后他就会调用视图的touchesBegan:withEvent:方法来处理事件。
+
 
 
 
