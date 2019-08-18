@@ -62,7 +62,9 @@ A页面跳转到B页面有2个方法,push和present。
 
 当点击屏幕时会产生一个触摸事件，消息循环(runloop)会接收到该触摸事件放到消息队列中，接下来UIApplication会从消息队列中取出触摸事件并将其分发下去。首先传给UIWindow，UIWindow会使用hitTest:withEvent:方法查找到此次触摸事件初始点所在的视图，找到这个视图之后他就会调用视图的touchesBegan:withEvent:方法来处理事件。
 
+[iOS事件传递与响应机制](https://juejin.im/entry/58451fff61ff4b006c36eba6)
 
+[iOS UI事件传递与响应者链](https://www.jianshu.com/p/1a4570895df5)
 
 
 **【扩展 15-6】谈一下对三种布局方式 frame、Auto Layout 以及 UIStackView的理解**
