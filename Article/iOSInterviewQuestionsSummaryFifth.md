@@ -83,6 +83,26 @@ APP内置Server IP列表，该列表可以在App启动服务中下发更新。Ap
 
 Server IP列表有权重机制的，DNS解析返回的IP很明显具有最高的权重，每次从Server IP列表中取IP会取权重最高的IP。列表中IP权重也是动态更新的，根据连接或者服务的成功失败来动态调整，这样即使DNS解析失败，用户在使用一段时间后也会选取到适合的Server IP。
 
+* (2)网络质量检测（根据网络质量来改变策略）
+
+根据用户是在2G/3G/4G/Wi-Fi的网络环境来设置不同的超时参数，以及网络服务的并发数量。比如在环境比较差的情况下:
+
+✅将并发数设置为一个，改成串行；
+✅动态设置超时时间；
+✅throttle 进行节流。AFNetworking中的throttle方法
+
+```
+- (void)throttleBandwidthWithPacketSize:(NSUInteger)numberOfBytes 
+```
+
+✅管道化连接。如果服务器不支持管线化的话，那么响应就会乱序。所以服务器要支持。 AFNetworking中通过HTTPShouldUsePipelining属性来设置，默认为NO。
+
+* (3)减少数据传输量：选择合适的数据格式进行传输，比如使用Protocol Buffer数等，使用WebP图片格式。
+* (4)提供网络服务重发机制：当第一次网络请求失败的时候，自动尝试再次重发
+* (5)使用HTTP缓存。
+
+[iOS网络层详解和优化](http://www.cocoachina.com/articles/22608)
+
 **【扩展 16-2】TCP为什么要三次握手，四次挥手？三次挥手不行吗？**
 
 **【扩展 16-3】对称加密和非对称加密的区别？分别有哪些算法来实现这两种加密？**
