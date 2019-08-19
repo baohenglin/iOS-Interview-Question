@@ -160,9 +160,33 @@ HTTPS通过数字证书来验证双方身份。数字证书主要包含的信息
 
 同样，客户端发送数据时，通过公钥加密报文摘要，服务器用私钥解密，用同样的方法校验数据的完整性。
 
-
+[HTTPS身份真实性校验与数据完整性校验](https://www.jianshu.com/p/fb6035dbaf8b)
 
 **【扩展 16-6】如何使用Charles抓HTTPS的包？其中的原理和流程是什么？**
+
+[使用Charles进行HTTPS抓包](https://www.jianshu.com/p/7a88617ce80b)
+
+**Charles抓HTTPS包的原理**：
+
+Charles作为一个“中间人代理”，也就是将自己设置成系统的网络访问代理服务器。当浏览器和服务器通信时，Charles接收服务器的证书，但动态生成一张证书发送给浏览器，也就是说Charles作为中间代理在浏览器和服务器之间通信，所以通信的数据可以被Charles拦截并解密。由于Charles更改了证书，浏览器校验不通过会给出安全警告，所以必须安装Charles的证书后才能进行正常访问。
+
+HTTPS抓包的原理简单来说就是Charles作为“中间人代理”，拿到了 服务器证书公钥 和 HTTPS连接的对称密钥，前提是客户端选择信任并安装Charles的CA证书，否则客户端就会“报警”并中止连接。
+
+**Charles抓HTTPS包的流程**：
+
+![Charles抓取HTTPS包的流程示意图.png](https://upload-images.jianshu.io/upload_images/4164292-b94b70db5cfeed41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+* (1)客户端向服务器发起HTTPS请求
+* (2)Charles拦截客户端的请求，伪装成客户端向服务器进行请求
+* (3)服务器向“客户端”（实际上是Charles）返回服务器的CA证书
+* (4)Charles拦截服务器的响应，获取服务器证书公钥，然后自己制作一张证书，将服务器证书替换后发送给客户端。（这一步，Charles拿到了服务器证书的公钥）
+* (5)客户端接收到“服务器”（实际上是Charles）的证书后，生成一个对称密钥，用Charles的公钥加密，发送给“服务器”（Charles）
+* (6)Charles拦截客户端的响应，用自己的私钥解密对称密钥，然后用服务器证书公钥加密，发送给服务器。（这一步，Charles拿到了对称密钥）
+* (7)服务器用自己的私钥解密对称密钥，向“客户端”（Charles）发送响应
+* (8)Charles拦截服务器的响应，替换成自己的证书后发送给客户端
+* (9)至此，连接建立，Charles获取了服务器证书的公钥，也获取了客户端与服务器协商的对称密钥，之后就可以解密或者修改加密的报文了。
+
+[浅谈Charles抓取HTTPS原理](https://www.jianshu.com/p/405f9d76f8c4)
 
 **【扩展 16-7】如何使用Charles抓HTTPS的包？其中的原理和流程是什么？**
 
