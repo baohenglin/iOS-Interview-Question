@@ -69,6 +69,8 @@ A页面跳转到B页面有2个方法,push和present。
 
 **【扩展 15-6】谈一下对三种布局方式 frame、Auto Layout 以及 UIStackView的理解**
 
+[iOS9 UIStackView 简介](https://swift.gg/2016/03/31/ios9-uistackview-guide-swift/)
+
 
 
 ## 知识点16  计算机网络及网络安全
