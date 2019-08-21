@@ -60,6 +60,25 @@
 
 **【扩展 19-3】Swift 和 OC，各自的优缺点有哪些？**
 
+**Swift的优点**：
+
+* 语法更简洁；
+* Swift 语言支持函数式编程，而OC只有引入ReactiveCocoa这个库才可支持函数式编程；
+* Swift语言更安全。它是类型安全的语言。
+* Swift开源
+* Swift可跨平台
+* Swift代码更少，简洁的语法，可以省去大量冗余代码。
+* Swift速度更快，运算性能更高。
+
+**Swift的缺点**：
+
+* 第三方库的支持不够多；
+* 版本不够稳定；
+* App体积变大；
+* 上线方式改变。不能使用application Loader上传包文件，会提示你丢失了swift support files，应该使用xcode直接上传。
+
+
+
 **【扩展 19-4】用 Alamofire 比直接使用 URLSession，优势是什么？**
 
 
