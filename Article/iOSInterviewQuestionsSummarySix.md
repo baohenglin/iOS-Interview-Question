@@ -122,9 +122,11 @@ const:被它修饰的变量,是只读的变量。
 * Program Header Table:描述了ELF文件该如何被操作系统映射到进程的虚拟空间。
 * Segment 1: 目标文件中可读可执行的section的集合，如.text，.init等
 * Segment 2: 目标文件中可读可写的section的集合。如.data，.bss等
-* Section Header Table optional:ELF Header中描述的节区头描述表的起始位置，文件包含了多少个节，这个数组就有多少个成员，每个成员描述了对应一个节区的名字，偏移地址，虚拟地址，  可读写信息等。
+* Section Header Table optional:ELF Header中描述的节区头描述表的起始位置，文件包含了多少个节，这个数组就有多少个成员，每个成员描述了对应一个节区的名字，偏移地址，虚拟地址，可读写信息等。
 
 **【扩展 17-11】它是怎么装载进内存的，为什么要分段，分页，页错误是什么？**
+
+[参考第6题](https://www.jianshu.com/p/b2ff3117faf1)
 
 **【扩展 17-12】进程的内存格局是怎样的？（堆、栈、全局/静态区，代码区，常量区）**
 
