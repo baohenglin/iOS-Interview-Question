@@ -29,6 +29,8 @@
 
 **【扩展 17-3】内存的几大区域，各自的职能分别是什么？**
 
+参考[【扩展 11-1】介绍下内存的几大区域？](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/iOSInterviewQuestionsSummaryFour.md)
+
 **【扩展 17-4】static和const有什么区别？**
 
 **【扩展 17-5】了解内联函数么？**
