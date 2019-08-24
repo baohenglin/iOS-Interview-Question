@@ -255,7 +255,7 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 [RunLoop的应用场景（四）- App卡顿监测](http://hl1987.com/2018/04/27/RunLoop%E6%80%BB%E7%BB%93%EF%BC%9ARunLoop%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%88%E5%9B%9B%EF%BC%89App%E5%8D%A1%E9%A1%BF%E7%9B%91%E6%B5%8B/)
 
-[微信读书iOS性能优化总结](https://github.com/baohenglin/iOS-Interview-Question/edit/master/Article/iOSInterviewQuestionsSummaryFour.md)
+[微信读书iOS性能优化总结](https://wereadteam.github.io/2016/05/03/WeRead-Performance/)
 
 [iOS卡顿检测](https://allluckly.cn/%E6%8A%95%E7%A8%BF/tougao73)
 
