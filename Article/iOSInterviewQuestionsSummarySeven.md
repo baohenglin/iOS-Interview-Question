@@ -81,6 +81,54 @@
 
 **【扩展 19-4】用 Alamofire 比直接使用 URLSession，优势是什么？**
 
+**【扩展 19-5】Swift中mutating关键字的作用及使用场景**
+
+在Swift中，包含三种类型(type): structure,enumeration,class。其中structure和enumeration是值类型(value type),class是引⽤用类型(reference type)。但是与Objective-C不同的是，structure和enumeration也可以拥有方法(method)， 其中方法可以为实例方法(instance method)，也可以为类方法(type method)，实例方法是和类型的一个实例绑定的。
+
+使用 mutating 关键字修饰方法是为了能在方法中修改 struct 或是 enum 的变量。
+
+场景1：在结构体的实例方法里面修改属性：
+
+```
+struct Persion {
+var name = ""
+mutating func modify(name:String) {
+self.name = name }
+}
+```
+
+场景2：在协议里面，如果继承了协议的结构体或枚举类型想要改变属性值，则必须使用mutating修饰。
+
+```
+protocol Persionprotocol {
+var name : String {get}
+mutating func modify(name:String)
+}
+
+struct Persion : Persionprotocol {
+var name = ""
+mutating func modify(name:String) {
+self.name = name }
+}
+```
+
+场景3：在枚举中直接修改self属性
+
+```
+enum Switch {
+  case On, Off
+  mutating func operatorTion() { 
+      switch self {
+      case .On:
+        self = .Off 
+      default:
+        self = .On 
+      }
+  } 
+}
+var a = Switch.On a.operatorTion()
+print(a)
+```
 
 ## 知识点20 开放性问题
 
