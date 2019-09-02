@@ -49,7 +49,9 @@ Runtime对注册的类，会进行布局。对于weak对象会放入一个hash�
 * (3)在dealloc中，调用了_objc_rootDealloc函数；
 * (4)在_objc_rootDealloc中，调用了object_dispose函数；
 * (5)调用objc_destructInstance；
-* (6)最后调用objc_clear_deallocating，其详细过程如下：
+* (6)最后调用objc_clear_deallocating。
+
+objc_clear_deallocating函数内部具体实现如下：
 
 * ✅a.从weak表中获取废弃对象的地址为键值的记录；
 * ✅b.将包含在记录中的所有附有 weak 修饰符变量的地址置为nil；
