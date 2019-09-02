@@ -24,6 +24,14 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 **【扩展 14-5】property 的常用修饰词有哪些？weak 和 assign 的区别？weak 的实现原理是什么？**
 
+**【扩展 14-6】如何令自己所写的对象具有拷贝功能？**
+
+如果想让⾃己的类具备copy方法，并返回不可变类型，必须遵循NSCopying协议，并且实现 - (id)copyWithZone:(NSZone *)zone方法。
+
+如果想让⾃己的类具备mutableCopy方法，并且返回可变类型，必须遵守 NSMutableCopying协议，并实现 - (id)mutableCopyWithZone:(nullable NSZone *)zone方法。
+
+注意:再此说的copy对应不可变类型和mutableCopy对应可变类型⽅方法，都是遵从系统规则⽽已。如果你想实现⾃己的规则，也是可以的。
+
 
 ## 知识点15  UI视图
 
