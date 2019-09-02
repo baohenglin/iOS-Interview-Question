@@ -20,6 +20,8 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 
 [参考链接](https://www.jianshu.com/p/10c0f49f4755)
 
+[weak原理](http://cloverkim.com/ios_weak-principle.html)
+
 **【扩展 14-4】实现 isEqual 和 hash 方法时要注意什么？**
 
 **【扩展 14-5】property 的常用修饰词有哪些？weak 和 assign 的区别？weak 的实现原理是什么？**
@@ -31,6 +33,27 @@ atomic表示原子操作，系统会为setter方法加锁，具体适用@synchro
 如果想让⾃己的类具备mutableCopy方法，并且返回可变类型，必须遵守 NSMutableCopying协议，并实现 - (id)mutableCopyWithZone:(nullable NSZone *)zone方法。
 
 注意:再此说的copy对应不可变类型和mutableCopy对应可变类型⽅方法，都是遵从系统规则⽽已。如果你想实现⾃己的规则，也是可以的。
+
+**【扩展 14-7】谈谈对weak属性的理解**
+
+释放时，会调用clearDeallocating函数。clearDeallocating函数首先根据对象地址获取所有weak指针地址的数组，然后遍历这个数组并把其中的数据设置为nil，最后把这个entry(条目)从weak表中删除，最后清理对象的记录。
+
+**追问问题1：weak修饰的属性，为什么对象释放后会自动置为nil**？
+
+Runtime对注册的类，会进行布局。对于weak对象会放入一个hash表中。用weak指向的对象内存地址作为key，当此对象的引用计数为0时会dealloc，假如weak指向的对象内存地址是a，那么就会以a为键，在这个weak表中搜索，找到所有以a为键的weak对象，从而设置为nil。
+
+**追问问题2：当weak引用指向的对象被释放时，又是如何去处理weak指针的呢？**
+
+* (1)调用objc_release
+* (2)因为对象的引用计数为0，所以执行dealloc；
+* (3)在dealloc中，调用了_objc_rootDealloc函数；
+* (4)在_objc_rootDealloc中，调用了object_dispose函数；
+* (5)调用objc_destructInstance；
+* (6)最后调用objc_clear_deallocating，其详细过程如下：
+✅a.从weak表中获取废弃对象的地址为键值的记录；
+✅b.将包含在记录中的所有附有 weak 修饰符变量的地址置为nil；
+✅c.将weak表中该记录删除；
+✅d.从引用计数表中删除以废弃对象的地址为键值的记录。
 
 
 ## 知识点15  UI视图
