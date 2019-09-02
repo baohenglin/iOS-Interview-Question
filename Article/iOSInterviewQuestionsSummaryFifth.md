@@ -148,6 +148,9 @@ A页面跳转到B页面有2个方法,push和present。
 [iOS9 UIStackView 简介](https://swift.gg/2016/03/31/ios9-uistackview-guide-swift/)
 
 
+**【扩展 15-7】UIView和CALayer是什么关系？**
+
+[UIView和CALayer的区别和联系](https://blog.csdn.net/liushuo19920327/article/details/77851062)
 
 ## 知识点16  计算机网络及网络安全
 
