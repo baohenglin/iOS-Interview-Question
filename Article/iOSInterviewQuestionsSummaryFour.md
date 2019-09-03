@@ -176,6 +176,16 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 详见[3.启动时间优化](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)
 
+**【类似问题】执行main()函数之前经历了怎样的过程？**
+
+* 1)dyld 开始将程序二进制文件初始化；
+* 2)交由ImageLoader 读取 image，其中包含了我们的类，方法等各种符号 (Class、Protocol 、Selector、 IMP)
+* 3)由于runtime 向dyld 绑定了了回调，当image加载到内存后，dyld会通知runtime进行处理
+* 4)runtime 接⼿后调⽤map_images做解析和处理
+* 5)接下来load_images 调⽤call_load_methods方法，遍历所有加载进来的 Class，按继承层次依次调用Class的+load和其他Category的+load方法
+* 6)⾄此 所有的信息都被加载到内存中
+* 7)最后dyld调用真正的main函数
+
 **【扩展 12-5】AppDelegate如何瘦身？** 
 
 [AppDelegate瘦身指南](https://juejin.im/entry/5b2a101cf265da597236c295)
