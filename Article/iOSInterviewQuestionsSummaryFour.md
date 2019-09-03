@@ -178,6 +178,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【类似问题】执行main()函数之前经历了怎样的过程？**
 
+[iOS 程序 main 函数之前发生了什么](https://blog.sunnyxx.com/2014/08/30/objc-pre-main/)
+
 * 1)dyld 开始将程序二进制文件初始化；
 * 2)交由ImageLoader 读取 image，其中包含了我们的类，方法等各种符号 (Class、Protocol 、Selector、 IMP)
 * 3)由于runtime 向dyld 绑定了了回调，当image加载到内存后，dyld会通知runtime进行处理
