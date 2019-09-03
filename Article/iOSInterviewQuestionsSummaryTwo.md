@@ -39,6 +39,27 @@
 
 [参考链接](https://www.jianshu.com/p/e033edeeeb6c)
 
+**【扩展 4-10】下面的代码输出什么？**
+
+```
+@implementation Son : Father - (id)init
+{
+        self = [super init];
+        if (self) {
+                NSLog(@"%@", NSStringFromClass([self class]));
+                NSLog(@"%@", NSStringFromClass([super class]));
+        }
+        return self;
+}
+@end
+```
+答案：都输出Son。
+
+[[self class]和[super class]的区别](https://blog.csdn.net/loving_ios/article/details/49884599)
+
+[类似问题：Runtime相关知识(4)](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8BRuntime%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.md)
+
+
 ## 知识点5：KVO
 
 **【5-1】iOS是如何实现对一个对象的KVO的？（KVO的本质或原理是什么？）**
