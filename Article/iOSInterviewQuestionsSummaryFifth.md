@@ -72,6 +72,10 @@ objc_clear_deallocating函数内部具体实现如下：
 
 例如当属性类型为NSString时，由于传递给Setter方法的新值有可能指向一个NSMutableString类的实例，这个类是NSString的子类，此时若是不copy字符串，那么设置完属性值之后，字符串的值就可能在对象不知情的情况下遭人更改。为了防止这种错误，故使用copy修饰。
 
+**【扩展 14-10】浅拷贝和深拷贝**
+
+[copy和MutableCopy](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%88%86%E6%9E%90.md)
+
 ## 知识点15  UI视图
 
 **【扩展 15-1】哪些场景可以触发离屏渲染？（知道多少说多少）**
