@@ -417,6 +417,51 @@ HLBlok block = ^{
 
 **【扩展 2-19】block 为什么会有循环引用？（阿里）**
 
+**【扩展 2-20】使用系统的某些block api（如UIView的block版本写动画时），是否也要考虑循环引用问题？**
+
+系统的某些block api中，UIView的block版本写动画时不需要考虑，但是也有一些api需要考虑循环引用问题。
+
+所谓“循环引用”是指双向的强引用。所以那些“单向的强引用”（block强引用self）不会产生循环引用问题。比如：
+
+```
+//(1)
+[UIView animateWithDuration:duration animations:^{ 
+	[self.superview layoutIfNeeded];	
+}];
+//(2)
+[[NSOperationQueue mainQueue] addOperationWithBlock:^{ 
+	self.someProperty = xyz; 
+}];
+//(3)
+[[NSNotificationCenter defaultCenter] addObserverForName:@"someNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * notification) {
+	self.someProperty = xyz; 
+}];
+```
+
+以上三种情况只是block强引用self，即单向强引用，不会产生循环引用问题。
+
+但是如果你使用一些参数中可能含有 ivar 的系统 api ，如 GCD 、 NSNotificationCenter就要⼩心一点:比如GCD 内部如果引⽤了 self，⽽且 GCD 的 其他参数是 ivar，则要考虑到循环引用问题。比如下面两种情况：
+
+```
+//情况1
+__weak __typeof__(self) weakSelf = self;
+dispatch_group_async(_operationsGroup, _operationsQueue, ^ {
+	__typeof__(self) strongSelf = weakSelf; 
+	[strongSelf doSomething];
+	[strongSelf doSomethingElse];
+});
+//情况2
+__weak __typeof__(self) weakSelf = self;
+_observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"testKey"
+								object:nil queue:nil
+								usingBlock:^(NSNotification *note) { 
+	__typeof__(self) strongSelf = weakSelf;
+	[strongSelf dismissModalViewControllerAnimated:YES]; 
+}];
+//self --> _observer --> block --> self 显然这也是⼀一个循环引用。
+```
+
+检测代码中是否存在循环引用问题，可使⽤ Facebook 开源的一个检测工具 FBRetainCycleDetector 。
 
 ## 知识点三：分类(category)和类扩展(Extension)
 
