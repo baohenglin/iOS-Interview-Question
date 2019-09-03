@@ -264,7 +264,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),di
 
 block本身可以像对象那样被retain，和release。但是，block在创建的时候，它的内存是分配在栈(stack)上，而不是在堆(heap)上。他本身的作于域是属于创建时候的作用域，一旦在创建时候的作用域之外调用block将导致程序崩溃。使用retain也可以，但是block的retain行为默认是用copy的行为实现的，因为block变量默认是声明为栈变量的，为了能够在block的声明域之外使用，就必须要把block从栈(stack)拷贝（copy）到堆(heap)，所以说为了block属性声明和实际的操作一致，最好声明为copy。此外，通过copy操作来保证block被拷贝到堆上也是为了开发者可以控制block的生命周期，并对该block进行内存管理。
 
-**【扩展 2-9】Block、代理的联系和区别？**
+**【扩展 2-9】Block与代理的联系和区别？**
 
 Block和代理的**共同点**：
 
@@ -279,9 +279,17 @@ Block和代理的**共同点**：
 * 3）从安全性方面来说，Block更容易造成循环引用，解决的方法是使用__weak关键词修饰变量构成若引用。
 * 4）从代码维护成本角度来说，代理的代码比较分散，调用和实现分别写在不同的类中。而Block是一种轻量级的回调，能够直接访问上下文，代码比较紧凑，方便阅读，易于维护。
 
-【总结】Block和代理各有优缺点，我们需要根据具体场景，选择合适的回调方式，默认优先使用Block。如果回调函数多余3个，推荐使用代理；如果回调很频繁，次数很多，像UITableView，每次初始化、滑动、点击都会回调，推荐使用代理。
+【总结】Block和代理各有优缺点，我们需要根据具体场景，选择合适的回调方式。默认优先使用Block（简单回调和异步线程中推荐使用Block）。如果回调函数多于3个(即公共接口比较多时)，推荐使用代理；如果回调很频繁，次数很多，像UITableView，每次初始化、滑动、点击都会回调，推荐使用代理。
 
-【延伸】通知(NSNotificationCeter)，通知可以实现**一对多**的传值。通知实现步骤：注册监听者(addObserver方法)、发布通知(postNotificationName方法)、销毁监听对象(removeObserver方法)。
+【延伸1】通知(NSNotificationCeter)，通知可以实现**一对多**的传值。通知实现步骤：注册监听者(addObserver方法)、发布通知(postNotificationName方法)、销毁监听对象(removeObserver方法)。
+
+【延伸2】为什么代理要使用weak来修饰？
+
+答：因为使用weak可以打破循环引用。
+
+【延伸3】代理的delegate和dataSource有什么区别？
+
+答：delegate是一个类委托另一个类实现某些方法，协议里面的方法主要是与操作相关的。dataSource的作用主要是一个类通过dataSource将数据发送给需要接受委托的类，协议里面的方法主要是和数据内容有关的。
 
 **【扩展 2-10】block访问对象类型的auto变量时的内存管理原理是怎样的？**
 
