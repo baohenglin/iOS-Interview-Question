@@ -146,17 +146,22 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 ## 知识点12 性能优化
 
-**【扩展 12-1】你在项目中是怎么优化内存的？** 
+**【扩展 12-1】你在项目中是怎么进行内存优化（性能优化）的？** 
 
 [优化内存](https://www.jianshu.com/p/8462b7559e48)
 
-* (1)采用ARC来管理内存。ARC除了可以避免内存泄露外，ARC还有助于提高程序性能；
-* (2)在正确的地方使用reuseIdentifier；
-* (3)当View设置为透明的时候，一般把apaque设为NO，减小开销，对内存有好处；
+* (1)采用ARC(Automatic Reference Counting，自动引用计数)来管理内存。ARC除了可以避免内存泄露外，ARC还有助于提高程序性能；
+* (2)在正确的地方使用reuseIdentifier；如果不使用reuseIdentifier的话，每显示一行table view就不得不设置全新的cell。这对性能的影响可是相当大的。⾃iOS6起，除了UICollectionView的cells和补充views，你也应该在header和footer views中使用reuseIdentifiers。
+* (3)尽量把View设置为完全不透明。如果有透明的Views，应该把opaque(不透明)属性设置为YES，这样可以减小开销，对内存有好处。opaque属性给渲染系统提供了了一个如何处理这个view的提示。如果设为 YES， 渲染系统就认为这个view是完全不透明的，这使得渲染系统优化一些渲染过程进而提高性能。如果设置为NO，渲染系统正常地和其它内容组成这个View。opaque属性的默认值是 YES。
+
+在相对比较静止的画面中，设置这个属性不会有太⼤影响。然而当这个view嵌在 scroll view里边，或者是一个复杂动画的一部分，不设置opaque这个属性的话会在很⼤大程度上影响app的性能。只要一个视图不透明度小于1，就会导致blending操作在iOS的图形处理器（GPU）中进行混合像素颜色的计算。blending主要是指混合像素颜色的计算。比如当我们把两个图层叠加在一起时，如果第一个图层有透明效果，那么最终像素颜色的计算需要将第二个图层也考虑进来。这一过程即为Blending。
+
+**为什么Blending会导致性能的损失呢？**因为一个图层如果是完全不透明的，那么系统会直接显示该图层的颜色；而如果图层是带透明效果的，那么就会进行更多的计算，需要把下面的图层也考虑进来，进行混合颜色色值的计算。
+
 * (4)避免庞大的XIB：当你加载一个XIB的时候所有内容都被放在了内存里，包括任何图片。如果有一个不会即刻用到View，就存在内存资源的浪费。
 * (5)不要阻塞主线程。大部分阻塞主线程的情形是你的app 在做一些牵涉到读写外部资源的I/O操作，比如存储或者网络。
 * (6)在ImageViews中调整图片大小。如果在UIImageVIew中显示一个来自bundle的图片，你应保证图片的大小和UIImageVIew的大小相同。因为在运行中缩放图片是很耗资源的，特别是UIImageVIew嵌套在UIScrollVIew中的情况下。 如果图片是在远端服务器加载的你不能控制图片的大小，你可以在下载完成后，最好用background thread，缩放一次，然后在UIImageView中使用缩放后的图片。
-* (7)选择正确的collection。比如NSArray、NSDictionary、NSSet等
+* (7)选择正确的collection(集合)。比如NSArray、NSDictionary、NSSet等。Arrays是有序的一组值，使用index来查找很快，使用value 查找很慢， 插入/删除很慢；Dictionaries用来存储键值对，⽤键来查找比较快；Sets是无序的一组值。⽤值来查找很快，插入/删除很快。
 * (8)打开gzip压缩。减小文档的方式就是在服务端和你的app中打开gzip。这对于文字这种能有高压缩率的数据来说会有更显著的效用。另外，iOS已经在NSURLSession 中默认支持了gzip压缩，当然AFNetWorking这些框架也是支持的。
 * (9)重用和延迟加载。
 * (10)Cache 缓存。缓存那些不大可能改变但经常使用的东西。 我们缓存什么呢？远端服务器的响应，图片，甚至计算结果，比如UItableView的行高。
