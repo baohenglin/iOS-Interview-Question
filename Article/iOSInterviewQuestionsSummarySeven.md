@@ -130,6 +130,53 @@ var a = Switch.On a.operatorTion()
 print(a)
 ```
 
+**【扩展 19-6】Swift 下的如何使用 KVC?**
+
+* 步骤1: 继承NSObject；
+
+```
+class Animal1 : NSObject {
+  var name = "Animal1" 
+}
+```
+* 步骤2：在⽅法前添加@objc，然后再执行如下代码：
+
+```
+Animal1().setValue("Dog", forKey: "name")
+```
+
+**【扩展 19-7】Swift有哪些模式匹配?**
+
+* 通配符模式(Wildcard Pattern)：如果你在 Swift 编码中使⽤了 _ 通配符，就可以表示你使⽤了通配符模式。
+
+```
+for _ in 0...10 {
+  print("hello") 
+}
+```
+
+* 标识符模式(Identifier Pattern)：
+
+```
+let i = 1 // i 就是⼀一个标识符模式
+```
+
+* 值绑定模式(Value-Binding Pattern)：值绑定在 if 语句和 switch 语句中用的较多。⽐如 if let 和 case let, 还有可能是 case var。 let 和 var 分别对应绑定为常量和 变量。
+
+```
+if let v = str {
+  // 使⽤用v这个常量量做什什么事 (use v to do something) 
+  //print("hello")
+}
+```
+
+* 元组模式(Tuple Pattern)
+* 可选模式
+* 枚举⽤用例例模式(Enumeration Case Pattern)
+* 类型转换模式(Type-Casting Pattern)
+* 表达式模式
+
+
 ## 知识点20 开放性问题
 
 **【扩展 20-1】哪一个项目技术点最能体现自己的技术实力？具体讲一下。**
