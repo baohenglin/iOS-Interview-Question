@@ -67,9 +67,13 @@ weak 的实现原理可概括三步：
 * (2)添加引用时：objc_initWeak函数会调用 objc_storeWeak() 函数， objc_storeWeak() 的作用是更新指针指向，创建对应的弱引用表。
 * (3)释放时，调用clearDeallocating函数。clearDeallocating函数首先根据"对象地址"获取所有weak指针地址的数组，然后遍历这个数组把其中的数据设为nil，最后把这个entry从weak表中删除，最后清理对象的记录。
 
-**【扩展 11-5】autorelease对象在什么时机会被调用release？(阿里)** 
+**【扩展 11-5】autorelease对象在什么时机会被调用release？(比如在一个vc的viewDidLoad中创建)(阿里)** 
 
-在没有手加Autorelease Pool的情况下，Autorelease对象是在当前的runloop迭代结束时释放的(原因是系统在每个runloop迭代中都加入了自动释放池Push和Pop)，而不是“当前作用域大括号结束时释放”。
+* 手动添加AutoreleasePool的情况下，对象会在当前作用域大括号结束时释放。
+
+* 在没有手加Autorelease Pool的情况下，Autorelease对象是在当前的runloop迭代结束时释放的(Autorelease对象出了作⽤域之后，会被添加到最近一次创建的自动释放池中，并会在当前的runloop迭代结束时释放)。
+
+如果在一个vc的viewDidLoad中创建一个 Autorelease对象，那么该对象会在 viewDidAppear ⽅法执行前就被销毁了。
 
 [Autorelease实现原理](https://blog.sunnyxx.com/2014/10/15/behind-autorelease/)
 
