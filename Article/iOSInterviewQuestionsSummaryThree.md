@@ -490,7 +490,17 @@ RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行�
 
 **【扩展 9-12】RunLoop 的基本概念，它是怎么休眠的？(阿里)**
 
+**【扩展 9-13】程序中添加了每3秒响应一次的NSTimer，当拖动tableView或者scrollView时，timer可能无法响应要怎么解决？**
 
+NSTimer在滑动时失效的原因是NSTimer默认是工作在NSDefaultRunLoopMode(kCFRunLoopDefaultMode)模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式(切换成UITrackingRunLoopMode模式是为了保证滑动的流畅)，导致NSTimer失效。
+
+【注意】[NSTimer scheduledTimerWithTimeInterval: repeats:block:]方法会自动将定时器添加到主线程的NSDefaultRunLoopMode模式下，如果要自定义RunLoop模式的话，可以使用timerWithTimeInterval方法创建定时器对象，并将定时器添加到当前线程的**NSRunLoopCommonModes模式**下(实际上是将timer定时器添加到了NSRunLoopCommonModes 模式下的CFMutableSetRef _commonModeItems数组中)，这样就能解决timer失效的问题。代码如下：
+
+```
+NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self selector:@selector(completionDelayTimerFired) userInfo:nil repeats:YES];
+
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+```
 
 ## 知识点10 多线程
 
