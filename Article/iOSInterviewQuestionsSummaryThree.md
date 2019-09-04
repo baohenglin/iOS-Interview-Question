@@ -482,6 +482,12 @@ RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行�
 * 处理App中的各种事件（比如触摸事件、定时器事件等）；
 * 节省CPU资源，提高程序性能：有待执行任务时执行任务，不执行任务时休眠。
 
+RunLoop是一种让线程能随时处理事件但不退出的机制。RunLoop实际上是一个对象，这个对象管理者其需要处理的事件和消息，并提供了一个入口函数来执行Event Loop的逻辑。线程执行了这个函数后，就会一直处于这个函数内部“接收消息->等待消息->处理消息”的循环中，直到这个循环结束(比如传入quit消息)，函数返回。RunLoop机制会使线程在没有消息需要处理的时候休眠，在有消息到来时，线程立刻被唤醒。这样有效节约了系统资源。
+
+OS X和iOS系统中，提供了两个对象：CFRunLoopRef和NSRunLoop。其中CFRunLoopRef 是在 CoreFoundation 框架内的，它提供了纯C函数的 API，所有这些 API 都是线程安全的。NSRunLoop 是基于 CFRunLoopRef 的封装，提供了面向对象的 API，但是这些 API 不是线程安全的。
+
+线程和 RunLoop 之间是⼀一对应的，其关系是保存在一个全局的 Dictionary 里。线程刚创建时并没有 RunLoop，如果你不主动获取，那它一直都不会有。RunLoop 的创建是发生在第一次获取时，RunLoop 的销毁是发生在线程结束时。你只能在一个线程的内部获取其 RunLoop(主线程除外)。
+
 **【扩展 9-10】RunLoop的底层数据结构是怎样的？**
 
 [RunLoop的底层数据结构](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
