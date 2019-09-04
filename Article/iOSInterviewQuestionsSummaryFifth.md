@@ -130,30 +130,14 @@ objc_clear_deallocating函数内部具体实现如下：
 *	如果子类没有实现+initialize，会调用父类的+initialize（所以父类的+initialize可能会被调用多次）；
 *	如果分类实现了+initialize，就覆盖类本身的+initialize调用。
 
-**【扩展 15-3】UIView 生命周期**
-
-* alloc：创建对象，分配空间
-* init(initWithNibName)：初始化对象，初始化数据
-* loadView：在视图控制器创建view属性时调用此方法
-* viewDidLoad：加载view
-* viewWillAppear：视图即将出现
-* viewDidAppear：视图已经出现
-* viewWillDisappear：视图即将消失
-* viewDidDisappear：视图已经消失
-* dealloc：视图被销毁
-* didReceiveMemoryWarning：接收到内存警告时会被调用
-
-
-
-
-**【扩展 15-4】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
+**【扩展 15-3】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
 A页面跳转到B页面有2个方法,push和present。
 
 **push**：先执行A页面的viewWillDisappear和viewDidDisappear,然后执行B页面的viewWillAppear和viewDidAppear.
 **present**：先执行A页面的viewWillDisappear,随后执行B页面的viewWillAppear和viewDidAppear,最后执行A页面的viewDidDisappear.
 
-**【扩展 15-5】细致地讲一下事件传递流程**
+**【扩展 15-4】细致地讲一下事件传递流程**
 
 **事件传递流程**如下：
 
@@ -166,14 +150,116 @@ A页面跳转到B页面有2个方法,push和present。
 [iOS UI事件传递与响应者链](https://www.jianshu.com/p/1a4570895df5)
 
 
-**【扩展 15-6】谈一下对三种布局方式 frame、Auto Layout 以及 UIStackView的理解**
+**【扩展 15-5】谈一下对三种布局方式 frame、Auto Layout 以及 UIStackView的理解**
 
 [iOS9 UIStackView 简介](https://swift.gg/2016/03/31/ios9-uistackview-guide-swift/)
 
 
-**【扩展 15-7】UIView和CALayer是什么关系？**
+**【扩展 15-6】UIView和CALayer是什么关系？**
 
 [UIView和CALayer的区别和联系](https://blog.csdn.net/liushuo19920327/article/details/77851062)
+
+**【扩展 15-7】UIView 生命周期**
+
+* alloc：创建对象，分配空间
+* init(initWithNibName)：初始化对象，初始化数据
+* loadView：在视图控制器创建view属性时调用此方法
+* viewDidLoad：视图控制器的view被加载完成
+* viewWillAppear：视图即将出现
+* viewDidAppear：视图已经出现
+* viewWillDisappear：视图即将消失
+* viewDidDisappear：视图已经消失
+* dealloc：视图被销毁
+* didReceiveMemoryWarning：接收到内存警告时会被调用
+
+**【扩展 15-8】UIViewController 的生命周期**
+
+按照执行顺序依次是：
+
+* initialize：类的初始化方法
+
+```
++ (void)initialize;
+```
+* initWithNibName：通过xib来初始化控制器
+
+```
+//通过xib来初始化控制器
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+```
+
+* init：对象初始化方法
+
+```
+// 对象初始化方法
+- (instancetype)init;
+```
+* initWithCoder：从归档初始化
+
+```
+// 从归档初始化
+- (instancetype)initWithCoder:(NSCoder *)coder;
+```
+
+* awakeFromNib：nib文件被加载时，会发送一个awakeFromNib的消息到nib文件中的每个对象。
+
+```
+-(void)awakeFromNib;
+```
+* loadView：视图控制器开始加载view属性时调用此方法
+
+```
+//加载视图:当访问UIViewController的view属性时，view如果此时是nil，那么VC会自动调用loadView方法来初始化一个UIView并赋值给view属性。此方法用在初始化关键view，需要注意的是，在view初始化之前，不能先调用view的getter方法，否则将导致死循环（除非先调用了[super loadView];）如果没有重载loadView方法，则UIViewController会从nib或StoryBoard中查找默认的loadView，默认的loadView会返回一个空白的UIView对象。
+-(void)loadView;
+```
+* viewDidLoad：视图控制器的view被加载完成
+
+```
+- (void)viewDidLoad;
+```
+* viewWillAppear：视图控制器的view即将显示在window上
+
+```
+-(void)viewWillAppear:(BOOL)animated;
+```
+* updateViewConstraints：视图控制器的view开始更新AutoLayout约束。
+* viewWillLayoutSubviews：视图控制器的view 将要布局子视图。
+
+```
+-(void)viewWillLayoutSubviews;
+```
+* viewDidLayoutSubviews：视图控制器的view 已经布局子视图。
+
+```
+-(void)viewDidLayoutSubviews;
+```
+* viewDidAppear：视图控制器的view已经显示在window上。
+
+```
+-(void)viewDidAppear:(BOOL)animated;
+```
+* viewWillDisappear：视图控制器的view将要从window上消失。
+
+```
+-(void)viewWillDisappear:(BOOL)animated;
+```
+* viewDidDisappear：视图控制器的view已经从window上消失。
+
+```
+-(void)viewDidDisappear:(BOOL)animated;
+```
+* didReceiveMemoryWarning：接收到内存警告时会被调用
+
+```
+- (void)didReceiveMemoryWarning;
+```
+
+* dealloc：视图被销毁
+
+```
+-(void)dealloc;
+```
+
 
 ## 知识点16  计算机网络及网络安全
 
