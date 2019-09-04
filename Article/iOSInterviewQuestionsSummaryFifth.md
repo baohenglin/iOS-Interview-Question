@@ -161,18 +161,42 @@ A页面跳转到B页面有2个方法,push和present。
 
 **【扩展 15-7】UIView 生命周期**
 
-* alloc：创建对象，分配空间
-* init(initWithNibName)：初始化对象，初始化数据
-* loadView：在视图控制器创建view属性时调用此方法
-* viewDidLoad：视图控制器的view被加载完成
-* viewWillAppear：视图即将出现
-* viewDidAppear：视图已经出现
-* viewWillDisappear：视图即将消失
-* viewDidDisappear：视图已经消失
-* dealloc：视图被销毁
-* didReceiveMemoryWarning：接收到内存警告时会被调用
+[UIView 生命周期](https://blog.csdn.net/Bolted_snail/article/details/98960564#UIView_95)
+
+```
+//构造方法,初始化时调用,不会调用init方法
+- (instancetype)initWithFrame:(CGRect)frame;
+//添加子控件时调用。添加视图调用addSubview方法会触发didAddSubview
+- (void)didAddSubview:(UIView *)subview ;
+//构造方法,内部会调用initWithFrame方法。不会调用initWithCoder和awakeFromNib方法;
+- (instancetype)init;
+//xib归档初始化视图后调用,如果xib中添加了子控件会在didAddSubview方法调用后调用。xib归档创建视图会触发initWithCoder和awakeFromNib方法,不再调用init和initWithFrame方法;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+//唤醒xib,可以布局子控件
+- (void)awakeFromNib;
+//父视图将要更改为指定的父视图,当前视图被添加到父视图时调用
+- (void)willMoveToSuperview:(UIView *)newSuperview;
+//父视图已更改
+- (void)didMoveToSuperview;
+//其窗口对象将要更改
+- (void)willMoveToWindow:(UIWindow *)newWindow;
+//窗口对象已经更改
+- (void)didMoveToWindow;
+//布局子控件
+- (void)layoutSubviews;
+//绘制视图
+- (void)drawRect:(CGRect)rect;
+//从父控件中移除
+- (void)removeFromSuperview;
+//销毁
+- (void)dealloc;
+//将要移除子控件
+- (void)willRemoveSubview:(UIView *)subview;
+```
 
 **【扩展 15-8】UIViewController 的生命周期**
+
+[UIViewController 生命周期](https://blog.csdn.net/Bolted_snail/article/details/98960564#UIView_95)
 
 按照执行顺序依次是：
 
@@ -220,6 +244,8 @@ A页面跳转到B页面有2个方法,push和present。
 * viewWillAppear：视图控制器的view即将显示在window上
 
 ```
+// 将要展示:,在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与试图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。
+
 -(void)viewWillAppear:(BOOL)animated;
 ```
 * updateViewConstraints：视图控制器的view开始更新AutoLayout约束。
