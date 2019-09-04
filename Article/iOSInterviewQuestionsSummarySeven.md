@@ -207,6 +207,9 @@ if let v = str {
 
 * 如何监测和定位并解决卡顿？
 * 如何优化TableView列表？
+
+[TableView优化具体措施](https://www.jianshu.com/p/dbcf3665fad8)
+
 * 如何监控并优化App的启动速度？
 * 如何实现无侵入埋点？
 * 如何全面监控各种崩溃？
