@@ -200,89 +200,38 @@ A页面跳转到B页面有2个方法,push和present。
 
 按照执行顺序依次是：
 
-* initialize：类的初始化方法
-
 ```
+//类的初始化方法
 + (void)initialize;
-```
-* initWithNibName：通过xib来初始化控制器
-
-```
 //通过xib来初始化控制器
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
-```
-
-* init：对象初始化方法
-
-```
 // 对象初始化方法
 - (instancetype)init;
-```
-* initWithCoder：从归档初始化
-
-```
 // 从归档初始化
 - (instancetype)initWithCoder:(NSCoder *)coder;
-```
-
-* awakeFromNib：nib文件被加载时，会发送一个awakeFromNib的消息到nib文件中的每个对象。
-
-```
+//nib文件被加载时，会发送一个awakeFromNib的消息到nib文件中的每个对象。
 -(void)awakeFromNib;
-```
-* loadView：视图控制器开始加载view属性时调用此方法
-
-```
-//加载视图:当访问UIViewController的view属性时，view如果此时是nil，那么VC会自动调用loadView方法来初始化一个UIView并赋值给view属性。此方法用在初始化关键view，需要注意的是，在view初始化之前，不能先调用view的getter方法，否则将导致死循环（除非先调用了[super loadView];）如果没有重载loadView方法，则UIViewController会从nib或StoryBoard中查找默认的loadView，默认的loadView会返回一个空白的UIView对象。
+//视图控制器开始加载view属性时调用此方法。当访问UIViewController的view属性时，view如果此时是nil，那么VC会自动调用loadView方法来初始化一个UIView并赋值给view属性。此方法用在初始化关键view，需要注意的是，在view初始化之前，不能先调用view的getter方法，否则将导致死循环（除非先调用了[super loadView];）如果没有重载loadView方法，则UIViewController会从nib或StoryBoard中查找默认的loadView，默认的loadView会返回一个空白的UIView对象。
 -(void)loadView;
-```
-* viewDidLoad：视图控制器的view被加载完成
-
-```
+//视图控制器的view被加载完成
 - (void)viewDidLoad;
-```
-* viewWillAppear：视图控制器的view即将显示在window上
-
-```
-// 将要展示:,在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与试图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。
-
+//视图控制器的view即将显示在window上。在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与试图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。
 -(void)viewWillAppear:(BOOL)animated;
-```
-* updateViewConstraints：视图控制器的view开始更新AutoLayout约束。
-* viewWillLayoutSubviews：视图控制器的view 将要布局子视图。
-
-```
+//视图控制器的view开始更新AutoLayout约束。
+updateViewConstraints：
+//视图控制器的view 将要布局子视图。
 -(void)viewWillLayoutSubviews;
-```
-* viewDidLayoutSubviews：视图控制器的view 已经布局子视图。
-
-```
+//视图控制器的view 已经布局子视图。
 -(void)viewDidLayoutSubviews;
-```
-* viewDidAppear：视图控制器的view已经显示在window上。
-
-```
+//视图控制器的view已经显示在window上。
 -(void)viewDidAppear:(BOOL)animated;
-```
-* viewWillDisappear：视图控制器的view将要从window上消失。
-
-```
+//视图控制器的view将要从window上消失。
 -(void)viewWillDisappear:(BOOL)animated;
-```
-* viewDidDisappear：视图控制器的view已经从window上消失。
-
-```
+//视图控制器的view已经从window上消失。
 -(void)viewDidDisappear:(BOOL)animated;
-```
-* didReceiveMemoryWarning：接收到内存警告时会被调用
-
-```
+//接收到内存警告时会被调用
 - (void)didReceiveMemoryWarning;
-```
-
-* dealloc：视图被销毁
-
-```
+//视图被销毁
 -(void)dealloc;
 ```
 
