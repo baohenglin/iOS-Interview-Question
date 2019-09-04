@@ -263,6 +263,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 [iOS保持界面流畅的技巧](https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/)
 
+[UITableView优化](https://www.jianshu.com/p/dbcf3665fad8)
+
 **【扩展 12-10】如何监测以及定位卡顿？有哪些方案？**
 
 **【扩展 12-11】具体如何通过RunLoop来监控卡顿？**
