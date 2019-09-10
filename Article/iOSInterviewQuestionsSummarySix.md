@@ -272,6 +272,23 @@ const:被它修饰的变量,是只读的变量。
 * framework中用到了NSClassFromString，但是转换出来的class一直为nil。**解决⽅法**:在主工程的【Other Linker Flags】需要添加参数【-ObjC]即可。
 * 如果Xcode找不到框架的头文件，你可能是忘记将它们声明为public了。**解决⽅法**: 进入target的Build Phases页，展开Copy Headers项，把需要public的头⽂件从 Project或Private部分拖拽到Public部分。
 
+**【扩展 17-21】id和instancetype的异同?**
+
+instancetype的作用是**使那些非关联返回类型的方法返回所在类的类型**。
+
+**相同点**：二者都可以作为方法的返回类型。
+
+**不同点**：
+
+* (1)instancetype可以返回和方法所在类相同类型的对象，id只能返回未知类型的对象；
+* (2)instancetype只能作为返回值，不能像id那样作为参数。
+
+```
+- (void)setValue:(id)value
+{
+    //do something
+}
+```
 
 
 
