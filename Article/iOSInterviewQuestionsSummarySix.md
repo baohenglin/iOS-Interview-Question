@@ -274,6 +274,8 @@ const:被它修饰的变量,是只读的变量。
 
 **【扩展 17-21】id和instancetype的异同?**
 
+[id和instancetype的异同](https://blog.csdn.net/wzzvictory/article/details/16994913)
+
 instancetype的作用是**使那些非关联返回类型的方法返回所在类的类型**。
 
 **相同点**：二者都可以作为方法的返回类型。
