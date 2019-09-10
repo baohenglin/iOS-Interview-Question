@@ -65,6 +65,12 @@ id是一个 objc_object结构体指针，定义是 typedef struct objc_object * 
 
 NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject里面的方法，否则要做强制类型转换。此外，需要注意的是，不是所有的OC对象都是NSObject的子类，还有一些继承自NSProxy。因此NSObject * 可指向的类型是id可指向类型的子集。
 
+**【4-12】NSProxy和NSObject的区别？**
+
+相同点：NSObject和NSProxy都是Foundation框架中的基类，且均遵守NSObject协议。
+
+不同点：NSProxy一般用来作为消息转发的代理类(因为NSProxy是一个抽象类，自身能够处理的方法极少(仅<NSObject>接口中定义的部分方法))。
+
 
 ## 知识点5：KVO
 
