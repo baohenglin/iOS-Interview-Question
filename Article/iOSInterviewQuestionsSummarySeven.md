@@ -93,6 +93,8 @@ APNS是苹果提供的远程推送的服务，APP开发此功能之后，⽤户�
 
 **Swift和OC的区别**
 
+[Swift和OC的区别](https://www.cnblogs.com/wangyf-iOS/p/6568266.html)
+
 * swift是静态类型语言，OC是动态类型语言;
 * swift注重面向协议编程、函数式编程、面向对象编程，OC注重面向对象编程;
 * swift没有地址/指针的概念。swift注重值类型，OC注重指针和引用；
