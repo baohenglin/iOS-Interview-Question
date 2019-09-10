@@ -237,6 +237,10 @@ updateViewConstraints：
 -(void)dealloc;
 ```
 
+**【扩展 15-9】UITableView和UICollection的异同**
+
+[UITableView和UICollection的异同](https://www.jianshu.com/p/66190e352faa)
+
 
 ## 知识点16  计算机网络及网络安全
 
