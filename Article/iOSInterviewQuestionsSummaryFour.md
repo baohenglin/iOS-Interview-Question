@@ -292,6 +292,12 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 使用**Instruments工具**。在进行iOS App性能分析时，首先考虑借助Instruments这个利器来定位和分析性能问题。比如要查看程序中哪些部分最耗时，可以使用Time Profiler，要查看内存是否泄漏，可以使用Leaks；借助 Energy Log来进行耗电检测；借助 Network来进行流量检测；借助Instruments的Core Animation来进行离屏渲染、图层混合等GPU耗时监测。
 
+**【扩展 12-14】imageNamed和imageWithContextOfFile的区别？哪个性能高？**
+
+* 1.用imageNamed的方式加载时，图片使用完毕后缓存到内存中，内存消耗多，加载速度快。即使生成的对象被 autoReleasePool释放了，这份缓存也不释放，如果图像比较大，或者图像比较多，用这种方式会消耗很大的内存。imageNamed采用了缓存机制，如果缓存中已加载了图片，那么直接从缓存读取就可以了，不必每次都去读文件了，效率会更高。 
+* 2.imageWithContextOfFile加载图片是不会缓存的，加载速度慢。
+* 3.大量使用imageNamed方式会在不需要缓存的地方额外增加开销CPU的时间.当应用程序需要加载一张比较大的图片并且使用一次性，那么其实是没有必要去缓存这个图片的，用imageWithContentsOfFile是最为经济的方式,这样不会因为UIImage元素较多情况下，占用过多CPU资源.
+
 ## 知识点13 设计模式与架构
 
 **【扩展 13-1】讲讲MVC、MVVM、MVP区别和联系，以及你在项目里具体是怎么使用的？**
