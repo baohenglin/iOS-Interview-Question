@@ -76,8 +76,8 @@ APNS是苹果提供的远程推送的服务，APP开发此功能之后，⽤户�
 **Swift的优点**：
 
 * 语法更简洁；
-* Swift 语言支持函数式编程，而OC只有引入ReactiveCocoa这个库才可支持函数式编程；
-* Swift语言更安全。它是类型安全的语言。
+* Swift 语言支持函数式编程、面向协议编程、面向对象编程，而OC只有引入ReactiveCocoa这个库才可支持函数式编程；
+* Swift更注重安全；OC注重灵活；
 * Swift开源
 * Swift可跨平台
 * Swift代码更少，简洁的语法，可以省去大量冗余代码。
@@ -90,6 +90,13 @@ APNS是苹果提供的远程推送的服务，APP开发此功能之后，⽤户�
 * App体积变大；
 * 上线方式改变。不能使用application Loader上传包文件，会提示你丢失了swift support files，应该使用xcode直接上传。
 
+
+**Swift和OC的区别**
+
+* swift是静态类型语言，OC是动态类型语言;
+* swift注重面向协议编程、函数式编程、面向对象编程，OC注重面向对象编程;
+* swift没有地址/指针的概念。swift注重值类型，OC注重指针和引用；
+* swift注重安全，OC注重灵活；
 
 
 **【扩展 19-4】用 Alamofire 比直接使用 URLSession，优势是什么？**
