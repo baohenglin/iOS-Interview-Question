@@ -70,6 +70,14 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 相同点：NSObject和NSProxy都是Foundation框架中的基类，且均遵守NSObject协议。
 
 不同点：NSProxy一般用来作为消息转发的代理类(因为NSProxy是一个抽象类，自身能够处理的方法极少(仅<NSObject>接口中定义的部分方法))。
+        
+
+**【4-13】nil、Nil、null、NSNull的区别？**
+
+[nil、Nil、null、NSNull的区别](https://blog.csdn.net/wzzvictory/article/details/18413519)
+
+[nil、Nil、null、NSNull的区别](https://www.jianshu.com/p/2b44e1c346e7)
+
 
 
 ## 知识点5：KVO
