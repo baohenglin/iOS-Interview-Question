@@ -265,6 +265,31 @@ modifying the layout or calling any layout-related callbacks.
 
 使用此方法可强制视图立即更新其布局。 使用“自动布局”时，布局引擎会根据需要更新视图的位置，以满足约束的更改。 使用以根视图接收消息的视图，此方法从根开始布局视图子树。 如果没有待处理的布局更新，则此方法退出而不修改布局或调用任何与布局相关的回调。
 
+**【扩展 15-11】layoutSubViews & drawRects**
+
+layoutSubViews在以下情况下会被调用(视图位置变化时触发)：
+
+* 1. init初始化不会触发layoutSubViews
+* 2. addSubView会触发layoutSubViews
+* 3. 设置view的Frame会触发layoutSubviews,当然前提是frame的值设置前后发生了变化。
+* 4. 滚动UIScrollView会触发layoutSubviews。
+* 5. 旋转UIScreen会触发父视图上的layoutSubviews事件。
+* 6. 改变一个UIView大小的时候也会触发父View上的layoutSubviews事件。
+* 7. 直接调用setLayoutSubviews方法会触发layoutSubViews。
+
+drawRects方法是用来绘图的。drawRects方法在以下情况下会被调用：
+
+* 1. 如果在UIView初始化时没有设置Rect大小，将直接导致drawRect不被自动调用。drawRect调用是在loadView、ViewDidLoad两个方法之后，ViewWillAppear和ViewDidAppear之间。
+* 2. 该方法在调用sizeToFit后被调用，所以可以先调用sizeToFit计算出size，然后系统自动调用drawRect：方法。
+* 3. 通过设置contentMode属性值为UIViewContentModeRedraw，那么将在每次设置或更改frame时自动调用drawRect。
+* 4. 直接调用setNeedsDisplay或者setNeedsDisplayInRect:触发drawRect:，但是前提条件是rect不能为0。
+
+**drawRect方法使用注意点**：
+
+* 1.若使用UIView绘图，只能在drawRect:方法中获取相应的contextRef并绘图。在其他方法中获取到的ref不能用于画图。
+* 2.drawRect:方法不能手动显示调用，必须通过调用setNeedsDisplay或者setNeedsDisplayInRect，让系统自动调用该方法。
+* 3.若使用CALayer绘图，只能在drawInContext:中（类似于drawRect）绘制，或者在delegate中相应方法绘制。同样也是调用setNeedDisplay方法间接调用以上方法。
+* 4.若要实时画图，不能使用gestureRecognizer，只能使用touchbegan等方法来调用setNeedsDisplay实时刷新屏幕。
 
 
 ## 知识点16  计算机网络及网络安全
