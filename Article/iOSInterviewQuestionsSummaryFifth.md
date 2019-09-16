@@ -256,7 +256,11 @@ updateViewConstraints：
 苹果文档有关layoutIfNeeded方法的描述如下：
 
 ```
-Use this method to force the view to update its layout immediately. When using Auto Layout, the layout engine updates the position of views as needed to satisfy changes in constraints. Using the view that receives the message as the root view, this method lays out the view subtree starting at the root. If no layout updates are pending, this method exits without modifying the layout or calling any layout-related callbacks.
+Use this method to force the view to update its layout immediately. When using Auto Layout, 
+the layout engine updates the position of views as needed to satisfy changes in constraints. 
+Using the view that receives the message as the root view, this method lays out the view 
+subtree starting at the root. If no layout updates are pending, this method exits without 
+modifying the layout or calling any layout-related callbacks.
 ```
 
 使用此方法可强制视图立即更新其布局。 使用“自动布局”时，布局引擎会根据需要更新视图的位置，以满足约束的更改。 使用以根视图接收消息的视图，此方法从根开始布局视图子树。 如果没有待处理的布局更新，则此方法退出而不修改布局或调用任何与布局相关的回调。
