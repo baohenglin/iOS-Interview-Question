@@ -251,6 +251,16 @@ updateViewConstraints：
 * (2)setNeedsDisplay方法的作用是将接收器的整个边界矩形标记为需要重绘。可以使用setNeedsDisplay或setNeedsDisplayInRect：来通知系统某视图内容需要重绘。此方法(setNeedsDisplay)记录请求并立即返回。在下一个绘制周期之前，视图实际上不会重绘，此时所有无效视图都会更新。只有在视图的内容或外观发生更改时，才应使用此方法请求重绘视图。如果只是更改视图的几何图形，则通常不会重绘视图。而是根据视图的contentMode属性中的值调整其现有内容。通过避免重绘未更改的内容的需要，重新显示现有内容可以提高性能。
 * (3)setNeedsLayout的作用是使接收器的当前布局无效并在下一个更新周期触发布局更新。如果要调整视图子视图的布局，请在应用程序的主线程上调用此方法。此方法记录请求并立即返回。由于此方法不强制立即更新，而是等待下一个更新周期，因此可以在更新任何视图之前使用它来使多个视图的布局无效。此行为允许您将所有布局更新合并到一个更新周期，这通常会提高性能。
 
+【延伸1】- (void)layoutIfNeeded;方法的作用：如果布局更新处于待处理状态，则立即布局子视图。
+
+苹果文档有关layoutIfNeeded方法的描述如下：
+
+```
+Use this method to force the view to update its layout immediately. When using Auto Layout, the layout engine updates the position of views as needed to satisfy changes in constraints. Using the view that receives the message as the root view, this method lays out the view subtree starting at the root. If no layout updates are pending, this method exits without modifying the layout or calling any layout-related callbacks.
+```
+
+使用此方法可强制视图立即更新其布局。 使用“自动布局”时，布局引擎会根据需要更新视图的位置，以满足约束的更改。 使用以根视图接收消息的视图，此方法从根开始布局视图子树。 如果没有待处理的布局更新，则此方法退出而不修改布局或调用任何与布局相关的回调。
+
 
 
 ## 知识点16  计算机网络及网络安全
