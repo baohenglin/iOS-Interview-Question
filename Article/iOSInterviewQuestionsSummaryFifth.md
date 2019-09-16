@@ -241,6 +241,17 @@ updateViewConstraints：
 
 [UITableView和UICollection的异同](https://www.jianshu.com/p/66190e352faa)
 
+**【扩展 15-10】UIView的setNeedsDisplay和setNeedsLayout方法的异同？**
+
+**相同点**：setNeedsDisplay和setNeedsLayout这两个方法都是异步执行的。
+
+**不同点**：
+
+* (1)setNeedsDisplay会自动调用drawRect方法实现View的绘制。而setNeedsLayout则调用layoutSubView来实现view中subView的重新布局。(这样设计的目的是为了避免重复调用造成的资源浪费。)
+* (2)setNeedsDisplay方法的作用是将接收器的整个边界矩形标记为需要重绘。可以使用setNeedsDisplay或setNeedsDisplayInRect：来通知系统某视图内容需要重绘。此方法(setNeedsDisplay)记录请求并立即返回。在下一个绘制周期之前，视图实际上不会重绘，此时所有无效视图都会更新。只有在视图的内容或外观发生更改时，才应使用此方法请求重绘视图。如果只是更改视图的几何图形，则通常不会重绘视图。而是根据视图的contentMode属性中的值调整其现有内容。通过避免重绘未更改的内容的需要，重新显示现有内容可以提高性能。
+* (3)setNeedsLayout的作用是使接收器的当前布局无效并在下一个更新周期触发布局更新。如果要调整视图子视图的布局，请在应用程序的主线程上调用此方法。此方法记录请求并立即返回。由于此方法不强制立即更新，而是等待下一个更新周期，因此可以在更新任何视图之前使用它来使多个视图的布局无效。此行为允许您将所有布局更新合并到一个更新周期，这通常会提高性能。
+
+
 
 ## 知识点16  计算机网络及网络安全
 
