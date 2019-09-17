@@ -295,6 +295,10 @@ drawRects方法是用来绘图的。drawRects方法在以下情况下会被调�
 
 [iOS 加载视图控制器的三种方式](https://www.jianshu.com/p/636600daf1e2)
 
+**【扩展 15-12】创建视图UIView有哪几种方式？**
+
+[控制器View的六种创建方式](https://blog.csdn.net/imkata/article/details/78759977)
+
 ## 知识点16  计算机网络及网络安全
 
 **【扩展 16-1】App网络层有哪些优化策略？**
