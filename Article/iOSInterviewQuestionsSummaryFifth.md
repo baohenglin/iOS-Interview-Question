@@ -217,7 +217,7 @@ A页面跳转到B页面有2个方法,push和present。
 -(void)loadView;
 //视图控制器的view被加载完成
 - (void)viewDidLoad;
-//视图控制器的view即将显示在window上。在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与试图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。
+//视图控制器的view即将显示在window上。在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与视图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。实现该方法时确保调用[super viewWillAppear:]
 -(void)viewWillAppear:(BOOL)animated;
 //视图控制器的view开始更新AutoLayout约束。
 updateViewConstraints：
@@ -225,7 +225,7 @@ updateViewConstraints：
 -(void)viewWillLayoutSubviews;
 //视图控制器的view 已经布局子视图。
 -(void)viewDidLayoutSubviews;
-//视图控制器的view已经显示在window上。
+//视图控制器的view已经显示在window上。实现该方法时确保调用[super viewDidAppear:]
 -(void)viewDidAppear:(BOOL)animated;
 //视图控制器的view将要从window上消失。
 -(void)viewWillDisappear:(BOOL)animated;
@@ -233,9 +233,18 @@ updateViewConstraints：
 -(void)viewDidDisappear:(BOOL)animated;
 //接收到内存警告时会被调用
 - (void)didReceiveMemoryWarning;
+//视图即将被释放时调用。已经被废弃
+- (void)viewWillUnload;
+//视图被释放时调用。已经被废弃
+- (void)viewDidUnload;
 //视图被销毁
 -(void)dealloc;
 ```
+
+【延伸】App的生命周期
+
+[App的生命周期](https://www.jianshu.com/p/ecd4917ce407)
+
 
 **【扩展 15-9】UITableView和UICollection的异同**
 
@@ -295,9 +304,15 @@ drawRects方法是用来绘图的。drawRects方法在以下情况下会被调�
 
 [iOS 加载视图控制器的三种方式](https://www.jianshu.com/p/636600daf1e2)
 
-**【扩展 15-12】创建视图UIView有哪几种方式？**
+**【扩展 15-13】创建视图UIView有哪几种方式？**
 
 [控制器View的六种创建方式](https://blog.csdn.net/imkata/article/details/78759977)
+
+**【扩展 15-14】xib文件的构成分别是哪3个图标？都具有什么功能？**
+
+* File's Owner：它表示从磁盘加载nib文件的对象。
+* First Responder：表示用户当前正在与之交互的对象。
+* View：显示用户界面；完成用户交互；是UIView类或其子类。
 
 ## 知识点16  计算机网络及网络安全
 
