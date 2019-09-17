@@ -291,6 +291,9 @@ drawRects方法是用来绘图的。drawRects方法在以下情况下会被调�
 * 3.若使用CALayer绘图，只能在drawInContext:中（类似于drawRect）绘制，或者在delegate中相应方法绘制。同样也是调用setNeedDisplay方法间接调用以上方法。
 * 4.若要实时画图，不能使用gestureRecognizer，只能使用touchbegan等方法来调用setNeedsDisplay实时刷新屏幕。
 
+**【扩展 15-12】创建视图控制器有哪几种方式？**
+
+[iOS 加载视图控制器的三种方式](https://www.jianshu.com/p/636600daf1e2)
 
 ## 知识点16  计算机网络及网络安全
 
