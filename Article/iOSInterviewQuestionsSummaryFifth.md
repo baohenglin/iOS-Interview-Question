@@ -314,6 +314,18 @@ drawRects方法是用来绘图的。drawRects方法在以下情况下会被调�
 * First Responder：表示用户当前正在与之交互的对象。
 * View：显示用户界面；完成用户交互；是UIView类或其子类。
 
+**【扩展 15-15】Cocoa Touch提供了哪几种Core Animation过渡类型？**
+
+[几种动画过渡效果](https://www.cnblogs.com/huangzs/p/10617254.html)
+
+过渡动画通过type设置不同的动画效果，CATransition有多种过渡效果，但其实Apple官方的SDK只提供了四种：
+
+* fade：淡出效果，默认
+* moveIn：覆盖原图
+* push：推出
+* reveal：底部显示出来
+
+
 ## 知识点16  计算机网络及网络安全
 
 **【扩展 16-1】App网络层有哪些优化策略？**
