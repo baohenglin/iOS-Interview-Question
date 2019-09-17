@@ -267,7 +267,7 @@ NSCache与可变集合有几点不同：
 * 2.NSCache是线程安全的，我们可以在不同的线程中添加、删除和查询缓存中的对象，而不需要锁定缓存区域。
 * 3.不像NSMutableDictionary对象，一个缓存对象不会拷贝key对象。
 
-知识点23  其他问题
+## 知识点23  其他问题
 
 **【扩展 23-1】CPU和GPU**
 
@@ -294,6 +294,31 @@ GPU：图形处理器(Graphic Processing Unit)。一个专门的图形核心处�
 **【扩展 23-6】什么是沙盒模型？哪些操作是属于私有api范畴？**
 
 [沙盒模型](https://www.jianshu.com/p/b3043067b1cf)
+
+**【扩展 23-7】iPhone OS主要提供了几种播放音频的方法？**
+
+* SystemSound Services
+* AVAudioPlayer类
+* Audio Queue Services
+* OpenAL
+
+**【扩展 23-8】使用AVAudioPlayer类调用哪个框架？使用步骤是什么？**
+
+调用AVFoundation.framework框架。
+
+步骤：（1）配置AVAudioPlayer对象；（2）实现AVAudioPlayer类的委托方法；（3）监控AVAudioPlayer类的对象；（4）监控音量水平；（5）回放进度和拖拽播放。
+
+**【扩展 23-8】有哪几种手势通知方法？请手写方法名**
+
+```
+-(void)touchesBegan:(NSSet)touchedwithEvent:(UIEvent)event;
+-(void)touchesMoved:(NSSet)touched withEvent:(UIEvent)event;
+-(void)touchesEnded:(NSSet)touchedwithEvent:(UIEvent)event;
+-(void)touchesCanceled:(NSSet)touchedwithEvent:(UIEvent)event;
+
+```
+
+
 
 
 
