@@ -171,13 +171,41 @@ A页面跳转到B页面有2个方法,push和present。
 **push**：先执行A页面的viewWillDisappear和viewDidDisappear,然后执行B页面的viewWillAppear和viewDidAppear.
 **present**：先执行A页面的viewWillDisappear,随后执行B页面的viewWillAppear和viewDidAppear,最后执行A页面的viewDidDisappear.
 
-**【扩展 15-4】细致地讲一下事件传递流程**
+**⭐️⭐️⭐️⭐️⭐️【扩展 15-4】细致地讲一下事件传递流程**
 
 **事件传递流程**如下：
 
 事件的传递是自上到下的顺序，即 UIApplication->window->处理该触摸事件最合适的 view。
 
-当点击屏幕时会产生一个触摸事件，消息循环(runloop)会接收到该触摸事件放到消息队列中，接下来UIApplication会从消息队列中取出触摸事件并将其分发下去。首先传给UIWindow，UIWindow会使用hitTest:withEvent:方法查找到此次触摸事件初始点所在的视图，找到这个视图之后他就会调用视图的touchesBegan:withEvent:方法来处理事件。
+当点击屏幕时，压力转为电信号，iOS系统将产生UIEvent对象，记录事件产生的时间和类型，然后系统的消息循环(runloop)会将接收到的触摸事件加入到一个由UIApplication管理的事件消息队列中，接下来UIApplication会从消息队列中取出触摸事件并将其分发下去。首先传给UIWindow，UIWindow会使用hitTest:withEvent:方法在视图层次结构中查找到一个最合适的视图来处理此次触摸事件，找到这个视图之后他就会调用视图的touchesBegan:withEvent:方法来处理事件。这些touches方法默认是将事件沿着响应者链条向上传递，将事件交给上一个响应者进行处理。一般事件的传递是从父控件传递到子控件的。如果父控件接收不到该触摸事件，那么子控件就不可能接收到触摸事件。
+
+```
+- (UIView * )hitTest:(CGPoint)point withEvent:(UIEvent * )event;
+```
+
+**UIView不能接收触摸事件的三种情况**：
+
+* (1)用户交互权限关闭：userInteractionEnabled = NO;
+* (2)隐藏：hidden = YES;
+* (3)透明：alpha = 0.0~0.01
+
+**响应者链条：**由很多响应者对象（继承自UIResponder的对象）一起组合起来的链条称之为响应者链条。一般默认的做法是控件将事件沿着响应者链条向上传递，将事件交给上一个响应者进行处理。那么如何判断当前响应者的上一个响应者是谁呢？有以下两个规则：
+
+* (1)判断当前view是否是控制器的View，如果是控制器的View，上一个响应者就是控制器。
+* (2)如果不是控制器的View，那么上一个响应者就是父控件。
+
+当有view能够处理触摸事件后，开始响应事件。系统会调用view的以下方法：
+
+```
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+```
+
+可以多对象共同响应事件。只需要在以上方法中调用super方法。
+
+UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控件 –> 控件调用 touches 方法 –> 判断是否实现 touches方法 –> 没有实现默认会将事件传递给上一个响应者 –> 找到上一个响应者 –> 找不到方法作废。
 
 [iOS事件传递与响应机制](https://juejin.im/entry/58451fff61ff4b006c36eba6)
 
