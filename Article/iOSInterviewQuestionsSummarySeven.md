@@ -315,7 +315,20 @@ GPU：图形处理器(Graphic Processing Unit)。一个专门的图形核心处�
 -(void)touchesMoved:(NSSet)touched withEvent:(UIEvent)event;
 -(void)touchesEnded:(NSSet)touchedwithEvent:(UIEvent)event;
 -(void)touchesCanceled:(NSSet)touchedwithEvent:(UIEvent)event;
+```
 
+**【扩展 23-9】用预处理指令#define声明一个常数，用以表明1年终有多少秒（忽略闰年问题）**
+
+```
+#define SECONDS_PER_YEAR (60 * 60 * 24 * 365)UL
+```
+
+预处理指令不能以分号结尾；注意括号的使用；由于该表达式会使一个16位的整型数溢出（最高位表示正负，范围是-2的15次方~2的15次方），故需要使用无符号长整型(UL)。
+
+**【扩展 23-10】写一个标准宏MIN，这个宏输入两个参数并返回较小的一个**
+
+```
+#define MIN(A,B)  ((A) <= (B) ? (A) : (B))
 ```
 
 
