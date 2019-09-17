@@ -78,6 +78,10 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 
 [nil、Nil、null、NSNull的区别](https://www.jianshu.com/p/2b44e1c346e7)
 
+**【4-14】OC的多态特性**
+
+[多态特性](https://www.cnblogs.com/wendingding/p/3705428.html)
+
 
 
 ## 知识点5：KVO
