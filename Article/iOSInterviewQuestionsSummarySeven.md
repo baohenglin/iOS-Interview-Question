@@ -398,6 +398,14 @@ Objective-C没有多继承。可以通过Protocol委托代理来实现多继承�
 
 **@class的作用**：告知编译器某个类的声明，当执行时，才去查看类的实现文件，可以解决头文件的相互包含的问题。
 
+**【扩展23-10】NSInteger和int的区别**
+
+NSIteger也是基本数据类型，并不是NSNumber的子类，也不是NSObject的子类。NSInteger是基本数据类型int或者long的别名（NSInteger的定义是 typedef long NSInteger），NSInteger与int的区别在于，NSInteger会根据系统是32位还是64位来决定本身是int还是long。
+
+**【扩展23-11】id声明的对象有什么特性？**
+
+id声明的对象具有运行时的特性，即可以指向任意类型的Objective-C的对象。
+
 
 
 
