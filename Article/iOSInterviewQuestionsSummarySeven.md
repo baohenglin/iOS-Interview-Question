@@ -339,6 +339,29 @@ GPU：图形处理器(Graphic Processing Unit)。一个专门的图形核心处�
 
 [谓词(NSPredicate)的使用](https://www.jianshu.com/p/88be28860cde)
 
+**【扩展 23-4】什么是简便构造方法？**
+
+构造方法就是初始化对象的方法。构造方法主要用于在对象创建时为对象的成员变量或属性赋值。简便构造方法一般由CocoaTouch框架提供，如NSNumber的下列简便构造方法：
+
+```
++ (NSNumber *)numberWithChar:(char)value;
++ (NSNumber *)numberWithUnsignedChar:(unsigned char)value;
++ (NSNumber *)numberWithShort:(short)value;
++ (NSNumber *)numberWithUnsignedShort:(unsigned short)value;
++ (NSNumber *)numberWithInt:(int)value;
++ (NSNumber *)numberWithUnsignedInt:(unsigned int)value;
++ (NSNumber *)numberWithLong:(long)value;
++ (NSNumber *)numberWithUnsignedLong:(unsigned long)value;
++ (NSNumber *)numberWithLongLong:(long long)value;
++ (NSNumber *)numberWithUnsignedLongLong:(unsigned long long)value;
++ (NSNumber *)numberWithFloat:(float)value;
++ (NSNumber *)numberWithDouble:(double)value;
++ (NSNumber *)numberWithBool:(BOOL)value;
++ (NSNumber *)numberWithInteger:(NSInteger)value
+```
+
+Foundation下大部分类均有简便构造方法，我们可以通过简便构造方法，获得系统给我们创建好的对象，并且不需要手动释放。
+
 
 
 
