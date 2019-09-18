@@ -363,6 +363,10 @@ GPU：图形处理器(Graphic Processing Unit)。一个专门的图形核心处�
 Foundation下大部分类均有简便构造方法，我们可以通过简便构造方法，获得系统给我们创建好的对象，并且不需要手动释放。
 
 
+**【扩展 23-5】如何使用Xcode设计通用应用(iPhone/iPad)？**
+
+使用MVC模式设计应用，其中Model层完全脱离界面，即在Model层，其可以运行在任何设备上。在Controller层，根据iPhone与iPad（独有UISplitViewController）的不同特点选择不同的ViewController对象。在View层，可根据产品需求来设计，其中以xib文件设计时，将其设置为universal。
+
 
 
 
