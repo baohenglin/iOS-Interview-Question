@@ -139,6 +139,10 @@ int const * a const;
 }
 ```
 
+**【扩展14-15】原子(atomic)和非原子(nonatomic)属性有什么区别？**
+
+[atomic和nonatomic属性的区别](https://www.jianshu.com/p/63b15067351c)
+
 
 ## 知识点15  UI视图
 
