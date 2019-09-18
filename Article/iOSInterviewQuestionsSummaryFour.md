@@ -541,8 +541,6 @@ MVC 的 C 太臃肿，可以和 V 合并，变成 MVVM 中的 V，而 VM 用来�
 图片缓存组件由HLImageView、HLImageManager、HLImageCache、HLImageLoader、HLImageProcessor五大部分组成，它们分别负责图片显示，请求管理，缓存，数据加载，数据处理。
 
 
-
-
 **【扩展 13-18】有没有自己设计过网络控件？(阿里)**(待优化)
 
 [交互设计](https://merlinwu330387414.wordpress.com/2018/02/02/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1-%E6%8E%A7%E4%BB%B6%E8%AE%BE%E8%AE%A1/)
@@ -550,6 +548,10 @@ MVC 的 C 太臃肿，可以和 V 合并，变成 MVVM 中的 V，而 VM 用来�
 **【扩展 13-19】谈谈对组件化的理解**
 
 [iOS应用架构谈 组件化方案](https://casatwy.com/iOS-Modulization.html)
+
+**【扩展13-20】常见的设计模式有哪些？**
+
+常见的设计模式包括：MVC模式、MVVM模式、MVP模式、单例模式、观察者模式、工厂模式、代理模式、策略模式、适配器模式、模板模式、外观模式、创建模式等。
 
 
 
