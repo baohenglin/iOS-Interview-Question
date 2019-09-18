@@ -367,6 +367,11 @@ Foundation下大部分类均有简便构造方法，我们可以通过简便构�
 
 使用MVC模式设计应用，其中Model层完全脱离界面，即在Model层，其可以运行在任何设备上。在Controller层，根据iPhone与iPad（独有UISplitViewController）的不同特点选择不同的ViewController对象。在View层，可根据产品需求来设计，其中以xib文件设计时，将其设置为universal。
 
+**【扩展 23-6】Objective-C有多继承吗？如果没有的话用什么代替？**
+
+Objective-C没有多继承。可以通过Protocol委托代理来实现多继承。
+
+
 
 
 
