@@ -121,6 +121,24 @@ int const * a const;
 * 一个中断服务子程序中会访问到的非自动变量（Non-automatic variables）
 * 多线程应用中被几个任务共享的变量。
 
+**【扩展14-14】写一个setter方法用于完成@property(nonatomic,retain)NSString * name，写一个setter方法用于完成@property(nonatomic,copy)NSString * name**
+
+```
+- (void)setName:(NSString *)str {
+	if(_name != str) {
+		[_name release];
+		_name = [str retain];
+	}
+}
+
+- (void)setName:(NSString *)str {
+	if(_name != str) {
+		[_name release];
+		_name = [str copy];
+	}
+}
+```
+
 
 ## 知识点15  UI视图
 
