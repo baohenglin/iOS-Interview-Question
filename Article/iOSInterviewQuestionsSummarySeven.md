@@ -375,6 +375,43 @@ Objective-C没有多继承。可以通过Protocol委托代理来实现多继承�
 
 [C和OC混用](https://blog.csdn.net/yuanyuan1314521/article/details/51455166)
 
+**【扩展 23-8】iOS的核心框架和核心机制有哪些？**
+
+**iOS核心框架**：CoreAnimation、CoreGraphics、CoreLocation、AVFoundation、Foundation
+
+**iOS核心机制**：
+
+* UITableView重用机制
+* 内存管理；自动释放池、ARC
+* RunLoop
+* Runtime
+* Block的定义、特性、内存区域、如何实现
+* Responder Chain
+* NSOperation
+* GCD
+
+**【扩展 23-9】#import 和 #include 有什么区别？#import<> 和 #import"" 有什么区别？@class有什么作用？**
+
+**#import 和 #include 的区别**：#import是Objective-C导入头文件的关键字，#include是C/C++导入头文件的关键字。使用#import的话，头文件只会自动导入一次，不会重复导入，相当于#include和#pragma once。
+
+**#import<> 和 #import"" 的区别**：#import<>用来包含系统的头文件，#import""用来包含开发者自定义头文件。
+
+**@class的作用**：告知编译器某个类的声明，当执行时，才去查看类的实现文件，可以解决头文件的相互包含的问题。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
