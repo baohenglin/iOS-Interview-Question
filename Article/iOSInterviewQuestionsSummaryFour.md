@@ -294,9 +294,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 **【扩展 12-13】如何定位和分析项目中影响性能的地方？**
 
-Xcode -> Open Developer Tool -> Instrument
 
-使用**Instruments工具**。在进行iOS App性能分析时，首先考虑借助Instruments这个利器来定位和分析性能问题。比如：
+使用**Instruments工具**(Xcode -> Open Developer Tool -> Instrument)。在进行iOS App性能分析时，首先考虑借助Instruments这个利器来定位和分析性能问题。比如：
 
 * **Time Profiler**：要查看程序中哪些部分最耗时，可以使用Time Profiler
 * **Leaks**：要查看内存是否泄漏，可以使用Leaks；
