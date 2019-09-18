@@ -386,6 +386,13 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 * 需要频繁实例化然后销毁的对象。 
 * 创建对象时耗时过多或者耗资源过多，但又经常用到的对象。也就是说如果一个类创建的时候非常的耗费资源或影响性能，那么此对象可以设置为单例以节约资源和提高性能。
 
+**实现单例的步骤：**
+
+* 步骤1：为单例对象创建一个静态实例并初始化为nil
+* 步骤2：判断声明的静态实例是否为nil，为nil的话则创建并初始化该静态实例，并返回一个本类的实例。
+* 步骤3：重写allocWithZone方法，用来确保直接调用alloc和init试图获得一个新实例时不产生一个新实例
+* 步骤4：适当实现allocWithZone、copyWithZone、mutableCopyWithZone等方法。
+
 **实现方式有以下几种：**
 
 **方式（1）**：通过**GCD的dispatch_once**来实现单例，同样可以在保证线程安全的前提下来实现单例(推荐)
@@ -409,13 +416,16 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 
 ```
 +(instancetype)sharedSingleton{
+     //步骤1：为单例对象创建一个静态实例并初始化为nil
      static id _instance = nil;
      //在@synchronized大括号中的代码，在同一时间内，只能有一个对象访问。
      @synchronized (self){
+     //步骤2：判断声明的静态实例是否为nil，为nil的话则创建并初始化该静态实例，并返回一个本类的实例
        if(_instance == nil){
        _instance = [[self alloc] init];
        }
      }
+     //
      return _instance;
 }
 ```
@@ -435,6 +445,32 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
      [lock unlock];
      return _instance;
 }
+```
+
+完整代码：
+
+```
+#import “HomeManager.h”
+@implementation HomeManager
+static HomeManager *_instance = nil;
++ (instancetype) sharedInstance {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+     _instance =[ [super allocWithZone:NULL]init];
+  });
+  return _instance;
+}
+
++ (instancetype) allocWithZone:(struct _NSZone *)zone {
+  return [HoneManager sharedInstance];
+}
+- (id) copyWithZone:(NSZone *)zone {
+  return [HomeManager sharedInstance];
+}
+- (id) mutableCopyWithZone:(NSZone *)zone {
+  return [HomeManager sharedInstance];
+}
+@end
 ```
 
 **iOS 系统中使用的单例类**：
