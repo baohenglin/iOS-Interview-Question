@@ -403,7 +403,15 @@ bounds指的是该view在本身坐标系统中的位置和大小。（参考点�
 
 延时加载是指只在用到的时候才去初始化。这样做可以避免内存占用率过高。
 
+**【扩展15-19】UIView的动画效果有哪些？**
 
+```
+[UIView animateWithDuration: delay: options: animations: completion:^(BOOL finished) {}];
+//转场动画一般使用这个方法。该方法效果是插入一面视图，移除一面视图，期间可以使用一些转场动画效果。
+[UIView transitionFromView: toView: duration: options: completion:^(BOOL finished) {}];
+```
+
+[UIView的动画效果](https://www.cnblogs.com/xiaobajiu/p/4084747.html)
 
 
 ## 知识点16  计算机网络及网络安全
