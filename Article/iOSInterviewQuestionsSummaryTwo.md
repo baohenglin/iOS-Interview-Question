@@ -162,7 +162,7 @@ HLPerson.m文件中代码如下：
 
 ## 知识点6：KVC
 
-KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性。
+KVC的全称是Key-Value Coding，俗称“键值编码”，它是一种可以直接通过字符串的名字(key)来访问类的某个属性的机制。KVC支持类对象和内建基本数据类型。
 
 **【6-1】KVC常用的API有哪几个？**
 
@@ -172,6 +172,8 @@ KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个k
 * -(id)valueForKey:(NSString *)key;
 
 前两个是用来设置属性值的，后两个是用来获取属性值的。
+
+valueForUndefinedKey：它的默认实现是抛出异常，可以重写这个函数来进行错误处理。
 
 **【6-2】赋值方法setValue:forKey:的实现原理是什么？**
 
