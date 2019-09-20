@@ -164,6 +164,10 @@ HLPerson.m文件中代码如下：
 
 [iOS使用KVO设置键值观察依赖键](https://www.jianshu.com/p/22513f8fad8a)
 
+**【5-10】KVO监听数组元素的变化**
+
+[KVO监听数组元素的变化](https://www.jianshu.com/p/31fd5c8fe595)
+
 ## 知识点6：KVC
 
 KVC的全称是Key-Value Coding，俗称“键值编码”，它是一种可以直接通过字符串的名字(key)来访问类的某个属性的机制。KVC支持类对象和内建基本数据类型。
