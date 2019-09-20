@@ -173,7 +173,9 @@ KVC的全称是Key-Value Coding，俗称“键值编码”，它是一种可以�
 
 前两个是用来设置属性值的，后两个是用来获取属性值的。
 
-valueForUndefinedKey：它的默认实现是抛出异常，可以重写这个函数来进行错误处理。
+valueForUndefinedKey: 它的默认实现是抛出异常，可以重写这个函数来进行错误处理。
+
+setValue: forUndefinedKey:
 
 **【6-2】赋值方法setValue:forKey:的实现原理是什么？**
 
