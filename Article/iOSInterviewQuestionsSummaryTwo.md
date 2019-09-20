@@ -152,6 +152,13 @@ HLPerson.m文件中代码如下：
 
 参数代表的意义：(1)观察的属性；(2)观察的对象；(3)change 属性变化字典（新／旧）；(4)上下文，与监听的时候传递的一致,用来区分不同的监听。
 
+**【5-7】从设计模式角度分析代理、通知和KVO的区别？iOS SDK提供的framework使用了哪些设计模式，为什么使用？有哪些优点和缺点？**
+
+
+
+**【5-8】KVO、NSNotification、delegate和block的区别？**
+
+[KVO，NSNotification，delegate及block区别](https://www.jianshu.com/p/59e34b91f0a8)
 
 ## 知识点6：KVC
 
