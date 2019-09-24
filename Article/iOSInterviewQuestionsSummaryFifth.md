@@ -441,7 +441,7 @@ bounds指的是该view在本身坐标系统中的位置和大小。（参考点�
 
 [UIView的动画效果](https://www.cnblogs.com/xiaobajiu/p/4084747.html)
 
-**【扩展16-19】Auto Layout的生命周期**
+**【扩展15-20】Auto Layout的生命周期**
 
 Auto Layout拥有一套 Layout Engine 引擎，由它来主导页面的布局。App启动后，主线程的 RunLoop 会一直处于监听状态，当约束发生变化后会触发 Deffered Layout Pass(延迟布局传递)，在里面做容错处理（约束丢失等情况）并把view标识为dirty状态，然后 RunLoop再次进入监听阶段。当下一次刷新屏幕动作来临（或者是调用 layoutIfNeeded）时，Layout Engine会从上到下调用 LayoutSubviews()，通过 Cassowary算法计算各个子视图的位置，算出来之后将子视图的frame从 Layout Engine拷贝出来，接下来的绘制、渲染过程就跟手写frame是一样的了。所以，使用 Auto Layout和手写布局的区别，就是多了布局上的这个计算过程。
 
