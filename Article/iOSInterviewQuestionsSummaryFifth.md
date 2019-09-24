@@ -443,7 +443,17 @@ bounds指的是该view在本身坐标系统中的位置和大小。（参考点�
 
 **【扩展15-20】Auto Layout的生命周期**
 
-Auto Layout拥有一套 Layout Engine 引擎，由它来主导页面的布局。App启动后，主线程的 RunLoop 会一直处于监听状态，当约束发生变化后会触发 Deffered Layout Pass(延迟布局传递)，在里面做容错处理（约束丢失等情况）并把view标识为dirty状态，然后 RunLoop再次进入监听阶段。当下一次刷新屏幕动作来临（或者是调用 layoutIfNeeded）时，Layout Engine会从上到下调用 LayoutSubviews()，通过 Cassowary算法计算各个子视图的位置，算出来之后将子视图的frame从 Layout Engine拷贝出来，接下来的绘制、渲染过程就跟手写frame是一样的了。所以，使用 Auto Layout和手写布局的区别，就是多了布局上的这个计算过程。
+Auto Layout拥有一套运行时的 Layout Engine 引擎，由它来统一管理布局的创建、更新和销毁。App启动后，主线程的 RunLoop 会一直处于监听状态。每个视图在得到自己的布局之前，Layout Engine会将视图、约束、优先级、固定大小通过计算转换成最终的大小和位置。当约束发生变化后会触发 Deffered Layout Pass(延迟布局传递)，在里面做容错处理（约束丢失等情况）并把view标识为dirty状态，然后 RunLoop再次进入监听阶段。当下一次刷新屏幕动作来临（或者是调用 layoutIfNeeded）时，Layout Engine会从上到下调用 LayoutSubviews()，通过 Cassowary算法计算各个子视图的位置，算出来之后将子视图的frame从 Layout Engine 拷贝出来，接下来的绘制、渲染过程就跟手写frame是一样的了。所以，使用 Auto Layout和手写布局的区别，就是多了布局上的这个计算过程。
+
+**【扩展15-21】Auto Layout的性能问题**
+
+Auto Layout在iOS 12得到了优化。优化后的性能已经基本和手写布局一样可以达到性能随着视图嵌套的数量呈现线性增长了。而在此之前的 Auto Layout，视图嵌套的数量对性能的影响是呈指数级增长的。
+
+实际上，iOS 12 之前，很多约束变化时都会重新创建一个计算引擎 NSISEnginer 将约束关系重新添加进来，然后重新计算。这样，当涉及的约束关系变多时，就会导致新的计算引擎需要重新计算，从而计算量呈指数级增加。总的来说，iOS12的 Auto Layout 更多地利用了 Cassowary 算法的界面更新策略，使其真正完成了高效的界面线性策略计算。
+
+iOS12使得 Auto Layout具有了和手写布局几乎相同的高性能后，我们就可以放心的使用 Auto Layout了。使用 Auto Layout一定要注意多使用 Compression Resistance Priority 和 Hugging Priority，利用优先级的设置，让布局更加灵活，代码更少，更易于维护。
+
+
 
 ## 知识点16  计算机网络及网络安全
 
