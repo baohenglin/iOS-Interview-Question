@@ -71,9 +71,9 @@ weak 的实现原理可概括三步：
 
 * 手动添加AutoreleasePool的情况下，对象会在当前作用域大括号结束时释放。
 
-* 在没有手加Autorelease Pool的情况下，Autorelease对象是在当前的runloop迭代结束时释放的(Autorelease对象出了作⽤域之后，会被添加到最近一次创建的自动释放池中，并会在当前的runloop迭代结束时释放)。
+* 在没有手加Autorelease Pool的情况下，Autorelease对象是在当前的runloop迭代结束时释放的(Autorelease对象出了作⽤域之后，会被添加到最近一次创建的自动释放池中，并会在当前的runloop迭代结束时释放)。
 
-如果在一个vc的viewDidLoad中创建一个 Autorelease对象，那么该对象会在 viewDidAppear ⽅法执行前就被销毁了。
+如果在一个vc的viewDidLoad中创建一个 Autorelease对象，那么该对象会在 viewDidAppear ⽅法执行前就被销毁了。
 
 [Autorelease实现原理](https://blog.sunnyxx.com/2014/10/15/behind-autorelease/)
 
@@ -155,12 +155,12 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 [优化内存](https://www.jianshu.com/p/8462b7559e48)
 
 * (1)采用ARC(Automatic Reference Counting，自动引用计数)来管理内存。ARC除了可以避免内存泄露外，ARC还有助于提高程序性能；
-* (2)在正确的地方使用reuseIdentifier；如果不使用reuseIdentifier的话，每显示一行table view就不得不设置全新的cell。这对性能的影响可是相当大的。⾃iOS6起，除了UICollectionView的cells和补充views，你也应该在header和footer views中使用reuseIdentifiers。
-* (3)尽量把View设置为完全不透明。如果有透明的Views，应该把opaque(不透明)属性设置为YES，这样可以减小开销，对内存有好处。opaque属性给渲染系统提供了了一个如何处理这个view的提示。如果设为 YES， 渲染系统就认为这个view是完全不透明的，这使得渲染系统优化一些渲染过程进而提高性能。如果设置为NO，渲染系统正常地和其它内容组成这个View。opaque属性的默认值是 YES。
+* (2)在正确的地方使用reuseIdentifier；如果不使用reuseIdentifier的话，每显示一行table view就不得不设置全新的cell。这对性能的影响可是相当大的。⾃iOS6起，除了UICollectionView的cells和补充views，你也应该在header和footer views中使用reuseIdentifiers。
+* (3)尽量把View设置为完全不透明。如果有透明的Views，应该把opaque(不透明)属性设置为YES，这样可以减小开销，对内存有好处。opaque属性给渲染系统提供了了一个如何处理这个view的提示。如果设为 YES， 渲染系统就认为这个view是完全不透明的，这使得渲染系统优化一些渲染过程进而提高性能。如果设置为NO，渲染系统正常地和其它内容组成这个View。opaque属性的默认值是 YES。
 
-在相对比较静止的画面中，设置这个属性不会有太⼤影响。然而当这个view嵌在 scroll view里边，或者是一个复杂动画的一部分，不设置opaque这个属性的话会在很⼤大程度上影响app的性能。只要一个视图不透明度小于1，就会导致blending操作在iOS的图形处理器（GPU）中进行混合像素颜色的计算。blending主要是指混合像素颜色的计算。比如当我们把两个图层叠加在一起时，如果第一个图层有透明效果，那么最终像素颜色的计算需要将第二个图层也考虑进来。这一过程即为Blending。
+在相对比较静止的画面中，设置这个属性不会有太⼤影响。然而当这个view嵌在 scroll view里边，或者是一个复杂动画的一部分，不设置opaque这个属性的话会在很⼤大程度上影响app的性能。只要一个视图不透明度小于1，就会导致blending操作在iOS的图形处理器（GPU）中进行混合像素颜色的计算。blending主要是指混合像素颜色的计算。比如当我们把两个图层叠加在一起时，如果第一个图层有透明效果，那么最终像素颜色的计算需要将第二个图层也考虑进来。这一过程即为Blending。
 
-**为什么Blending会导致性能的损失呢？**因为一个图层如果是完全不透明的，那么系统会直接显示该图层的颜色；而如果图层是带透明效果的，那么就会进行更多的计算，需要把下面的图层也考虑进来，进行混合颜色色值的计算。
+**为什么Blending会导致性能的损失呢**？因为一个图层如果是完全不透明的，那么系统会直接显示该图层的颜色；而如果图层是带透明效果的，那么就会进行更多的计算，需要把下面的图层也考虑进来，进行混合颜色色值的计算。
 
 * (4)避免庞大的XIB：当你加载一个XIB的时候所有内容都被放在了内存里，包括任何图片。如果有一个不会即刻用到View，就存在内存资源的浪费。
 * (5)不要阻塞主线程。大部分阻塞主线程的情形是你的app 在做一些牵涉到读写外部资源的I/O操作，比如存储或者网络。
@@ -194,8 +194,8 @@ ARC是编译器的特性，它并没有改变OC采用引用计数技术来管理
 [iOS 程序 main 函数之前发生了什么](https://blog.sunnyxx.com/2014/08/30/objc-pre-main/)
 
 * 1)dyld 开始将程序二进制文件初始化；
-* 2)交由ImageLoader 读取 image，其中包含了我们的类，方法等各种符号 (Class、Protocol 、Selector、 IMP)
-* 3)由于runtime 向dyld 绑定了了回调，当image加载到内存后，dyld会通知runtime进行处理
+* 2)交由ImageLoader 读取 image，其中包含了我们的类，方法等各种符号 (Class、Protocol 、Selector、 IMP)
+* 3)由于runtime 向dyld 绑定了了回调，当image加载到内存后，dyld会通知runtime进行处理
 * 4)runtime 接⼿后调⽤map_images做解析和处理
 * 5)接下来load_images 调⽤call_load_methods方法，遍历所有加载进来的 Class，按继承层次依次调用Class的+load和其他Category的+load方法
 * 6)⾄此 所有的信息都被加载到内存中
