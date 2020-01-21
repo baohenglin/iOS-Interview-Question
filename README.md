@@ -8,7 +8,7 @@
 |UI视图|[《知识点1 UI视图》]()<br>[《知识点2 事件传递机制》]()<br>[《知识点3 UI绘制原理》]()<br>[《知识点4 流式页面的性能优化》]()<br>[《知识点5 离屏渲染》]()<br>|
 |内存管理|[《知识点1 内存管理》]()<br>[《知识点2 常用修饰符详解》]()<br>|
 |Block|[《知识点1 Block详解》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Block%E8%AF%A6%E8%A7%A3.md)<br>|
-|Runtime|[《知识点1 Runtime》]()<br>|
+|Runtime|[《知识点1 Runtime》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Runtime.md)<br>|
 |RunLoop|[《知识点1 RunLoop》]()<br>|
 |多线程|[《知识点1 多线程》]()<br>|
 |性能优化|[《知识点1 性能优化》]()<br>|
