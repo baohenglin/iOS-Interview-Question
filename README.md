@@ -11,7 +11,7 @@
 |Runtime|[《知识点1 Runtime》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Runtime.md)<br>|
 |RunLoop|[《知识点1 RunLoop》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/RunLoop.md)<br>|
 |多线程|[《知识点1 多线程》]()<br>|
-|性能优化|[《知识点1 性能优化》]()<br>|
+|性能优化|[《知识点1 性能优化》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)<br>|
 |网络|[《知识点1 计算机网络》]()<br>|
 |设计模式|[《知识点1 设计模式》]()<br>|
 |架构设计|[《知识点1 架构设计》]()<br>|
