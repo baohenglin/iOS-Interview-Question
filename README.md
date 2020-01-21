@@ -13,7 +13,7 @@
 |多线程|[《知识点1 多线程》]()<br>|
 |性能优化|[《知识点1 性能优化》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md)<br>|
 |网络|[《知识点1 计算机网络》]()<br>|
-|设计模式|[《知识点1 设计模式》]()<br>|
+|设计模式|[《知识点1 设计模式》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)<br>|
 |架构设计|[《知识点1 架构设计》]()<br>|
 |第三方库|[《知识点1 常用第三方库详解》]()<br>|
 |编译原理|[《知识点1 操作系统&编译原理》]()<br>|
