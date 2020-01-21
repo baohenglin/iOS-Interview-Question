@@ -6,7 +6,7 @@
 算法|[《常见算法题目汇总》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E9%A2%98%E7%9B%AE.md)<br>|
 |OC语言|[《知识点1 OC对象》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/OC%E5%AF%B9%E8%B1%A1.md)<br>[《知识点2 OC反射机制》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/OC%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6.md)<br>[《知识点3 Category&Extension》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Category%26Extension.md)<br>[《知识点4 KVO&KVC》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/KVO%26KVC.md)<br>[《知识点5 关联对象》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1.md)<br>|
 |UI视图|[《知识点1 UI视图》]()<br>[《知识点2 事件传递机制》]()<br>[《知识点3 UI绘制原理》]()<br>[《知识点4 流式页面的性能优化》]()<br>[《知识点5 离屏渲染》]()<br>|
-|内存管理|[《知识点1 内存管理》]()<br>[《知识点2 常用修饰符详解》]()<br>|
+|内存管理|[《知识点1 内存管理》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.md)<br>[《知识点2 常用修饰符详解》]()<br>|
 |Block|[《知识点1 Block详解》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Block%E8%AF%A6%E8%A7%A3.md)<br>|
 |Runtime|[《知识点1 Runtime》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Runtime.md)<br>|
 |RunLoop|[《知识点1 RunLoop》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/RunLoop.md)<br>|
