@@ -19,6 +19,7 @@
 |编译原理|[《知识点1 操作系统&编译原理》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86.md)<br>|
 |Swift|[《知识点1 Swift》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/Swift.md)<br>|
 |逆向安全|[《知识点1 逆向安全》](https://github.com/baohenglin/iOS-Interview-Question/blob/master/Article/%E9%80%86%E5%90%91%E5%AE%89%E5%85%A8.md)<br>|
+|其他|[《其他问题》]()<br>|
 
 
 
