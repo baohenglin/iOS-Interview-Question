@@ -1,5 +1,7 @@
 ## 知识点：Runtime
 
+[Runtime 题目参考](https://www.cnblogs.com/Hakim/p/6549474.html)
+
 **【扩展 1-1】Runtime 如何实现 weak 变量自动置为nil的？**(runtime如何实现 weak 属性的？)
 
 首先要清楚 weak 属性的特点。weak 策略表明该属性定义了一种“非拥有关系”（nonowning relationship）。当为 weak 修饰的属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同 assign 类似。但与 assign 不同的是，weak修饰的属性所指向的对象销毁时，属性值会被清空（置为nil）。
