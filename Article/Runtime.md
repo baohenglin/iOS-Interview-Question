@@ -8,7 +8,7 @@
 
 那么 runtime 是如何实现将 weak 变量自动置为 nil 的呢？
 
-Runtime 对注册的类，会进行布局，会将 weak 对象会入一个 hash 表中。用 weak 指向的对象的内存地址作为 key，当这个对象的引用计数为 0 时会调用对象的 dealloc 方法。假设 weak 指向的对象内存地址是 a，那么就会以 a 作为 key，在这个 weak hash 表中进行搜索，查找到所有以 a 为 key 的 weak 对象，并将查找到的这些 weak 对象都置为 nil。
+Runtime 对注册的类，会进行布局，会将 weak 对象存入一个 hash 表中。用 weak 指向的对象的内存地址作为 key，当这个对象的引用计数为 0 时会调用该对象的 dealloc 方法。假设 weak 指向的对象内存地址是 a，那么就会以 a 作为 key，在这个 weak hash 表中进行搜索，查找到所有以 a 为 key 的 weak 对象，并将查找到的这些 weak 对象都置为 nil。
 
 **【扩展 1-1.1】weak 属性需要在 dealloc 中置为 nil 吗？**
 
