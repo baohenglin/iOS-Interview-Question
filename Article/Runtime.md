@@ -28,7 +28,9 @@ Runtime 对注册的类，会进行布局，会将 weak 对象存入一个 hash 
 
 **【扩展 1-2】OC的消息机制是什么？**
 
-OC的方法调用是指给方法调用者发送消息，也称为**消息机制**。OC的方法调用，本质上都会在运行时被动态地转化为objc_msgSend函数的调用，objc_msgSend(receiver, selector)函数给receiver(方法调用者)发送了一条消息(@selector(方法名))。objc_msgSend函数底层实现可以分为3大阶段。分别是消息发送阶段、动态方法解析阶段和消息转发阶段。
+在Objective-C中，**消息机制**是指方法调用时向方法调用者发送消息的机制。
+
+OC的方法调用，本质上都会在运行时被动态地转化为 objc_msgSend 函数的调用，objc_msgSend(receiver, selector)函数给 receiver (方法调用者)发送了一条消息(@selector(方法名))。objc_msgSend 函数底层实现可以分为3大阶段，这三大阶段分别是消息发送阶段、动态方法解析阶段和消息转发阶段。
 
 
 **【扩展 1-3】OC的消息机制的实现原理是什么？**
