@@ -37,7 +37,7 @@ OC的方法调用，本质上都会在运行时被动态地转化为 objc_msgSen
 
 OC的方法调用是指给方法调用者发送消息，也称为**消息机制**。OC的方法调用，本质上都会在运行时被动态地转化为objc_msgSend函数的调用，objc_msgSend(receiver, selector)函数给receiver(方法调用者)发送了一条消息(@selector(方法名))。objc_msgSend函数底层实现可以分为3大阶段。分别是消息发送阶段、动态方法解析阶段和消息转发阶段。
 
-* （1）**消息发送阶段。**  objc_msgSend(person, @selector(test))，在此阶段会查找test方法是否存在，如果存在，直接调用，如果不存在，再进入动态方法解析阶段。
+* （1）**消息发送阶段。**  objc_msgSend(person, @selector(test))，在消息发送阶段会先查找 test 方法是否存在，如果存在，直接调用，如果不存在，再进入动态方法解析阶段。
 
 ![objc_msgSend执行流程-消息发送阶段示意图.png](https://upload-images.jianshu.io/upload_images/4164292-f7eb12d7a09294a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
