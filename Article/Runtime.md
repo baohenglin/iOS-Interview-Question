@@ -41,9 +41,9 @@ OC的方法调用是指给方法调用者发送消息，也称为**消息机制*
 
 ![objc_msgSend执行流程-消息发送阶段示意图.png](https://upload-images.jianshu.io/upload_images/4164292-f7eb12d7a09294a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-**消息发送阶段详细流程**：首先判断receiver是否为nil，为nil的话，直接retrun。如果receiver不为nil，那么就利用receiver的isa找到receiver的Class对象或Meta-Class对象。接下来，先从receiver自己的Class的cache中查找方法，如果找到了该方法，直接调用，并结束查找。如果没有找到方法，那么就从receiver的Class对象的class_rw_t中methods数组(dispatch table 调度表)里查找方法，如果数组已经排序，采用“二分查找”；如果没有排序，则采用普通遍历查找。如果在methods数组里找到了方法，则调用方法，结束查找并将该方法缓存到receiver的Class的cache中；如果没有找到方法，那么就通过receiver Class的superclass指针找到SuperClass，接下来从SuperClass的cache中查找方法，如果找到了方法，则调用该方法，结束查找，并将该方法缓存到receiver的Class对象的cache中；如果没有找到方法，接着会从SuperClass的class _rw _t 中查找方法，同样地，也存在采用“二分查找”和“遍历查找”的判断，如果找到了方法，则调用方法，结束查找并将该方法缓存到receiver的Class的cache中；如果没有找到方法，此时会判断是否存在更高一级的superClass（父类），如果存在superClass，那么继续从superClass的cache中查找方法，继续上面的所述的在superClass中的查找过程；如果上层不存在superClass了，那么此时就会进入动态方法解析阶段。
+**消息发送阶段详细流程**：首先判断 receiver 是否为 nil，为 nil 的话，直接 retrun。如果 receiver 不为 nil，那么就利用 receiver 的 isa 找到receiver 的 Class 对象或 Meta-Class 对象。接下来，先从 receiver 自己的 Class 对象的 cache 中查找方法，如果找到了该方法，直接调用，并结束查找。如果没有找到方法，那么就从 receiver 的 Class 对象的 class_rw_t 中 methods 数组(dispatch table 调度表)里查找方法，如果数组已经排序，采用“二分查找”；如果没有排序，则采用普通遍历查找。如果在 methods 数组里找到了方法，则调用方法，结束查找并将该方法缓存到 receiver 的 Class 对象的cache 中；如果没有找到方法，那么就通过receiver Class 的 superclass 指针找到 SuperClass，接下来从 SuperClass 的 cache 中查找方法，如果找到了方法，则调用该方法，结束查找，并将该方法缓存到 receiver 的 Class 对象的 cache 中；如果没有找到方法，接着会从 SuperClass 的 class_rw_t 中查找方法，同样地，也存在采用“二分查找”和“遍历查找”的判断，如果找到了方法，则调用方法，结束查找并将该方法缓存到 receiver 的 Class 对象的 cache 中；如果没有找到方法，此时会判断是否存在更高一级的 superClass（父类），如果存在 superClass，那么继续从 superClass 的 cache 中查找方法，继续上面的所述的在 superClass 中的查找过程；如果上层不存在 superClass 了，那么此时就会进入动态方法解析阶段。
 
-【注意】为了保证消息发送与执行效率，系统会将全部的selector和使用过的方法的内存地址缓存起来。每个类都有一个独立的缓存，缓存包含有当前类自己的selector以及继承自父类的selector。查找调度表(dispatch table)前，消息发送系统会首先检查receiver对象的缓存。
+【注意】为了保证消息发送与执行效率，系统会将全部的 selector 和使用过的方法的内存地址缓存起来。每个类都有一个独立的缓存，缓存包含当前类自己的 selector 以及继承自父类的 selector。查找调度表(dispatch table)前，消息发送系统会首先检查 receiver 对象的缓存。
 
 * （2）**动态方法解析阶段。**  此阶段允许开发者利用runtime运行时机制动态添加方法实现。如果在动态方法解析阶段，开发者没有执行任何操作，那么将进入“消息转发”阶段。
 
