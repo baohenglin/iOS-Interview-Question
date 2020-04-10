@@ -76,7 +76,7 @@ OC的方法调用是指给方法调用者发送消息，也称为**消息机制*
 
 ![objc_msgSend的执行流程03-消息转发流程示意图.png](https://upload-images.jianshu.io/upload_images/4164292-9b726d453273809c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-**消息转发阶段的详细流程**：首先调用forwardingTargetForSelector:方法，如果方法返回值不为nil，那么就执行objc_msgSend(返回值,SEL)，如果返回值为nil，则调用methodSignnatureForSelector:方法，如果返回值为nil，则调用doesNotRecognizeSelector:方法并抛出错误"unrecognized selector sent to instance"；如果methodSignnatureForSelector:方法的返回值不为nil，就会调用forwardInvocation:方法，开发者可以在forwardInvocation:方法里自定义任何处理逻辑。
+**消息转发阶段的详细流程**：首先调用 forwardingTargetForSelector: 方法，如果方法返回值不为 nil，那么就执行objc_msgSend(返回值,SEL)，如果返回值为 nil，则调用 methodSignnatureForSelector: 方法，如果该方法返回值为nil，则调用 doesNotRecognizeSelector: 方法并抛出错误"unrecognized selector sent to instance"；如果 methodSignnatureForSelector: 方法的返回值不为 nil，就会调用 forwardInvocation: 方法，开发者可以在forwardInvocation: 方法里自定义任何处理逻辑。
 
 ```
 //消息转发
