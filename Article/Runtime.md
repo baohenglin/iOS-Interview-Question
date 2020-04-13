@@ -126,7 +126,7 @@ int         id        SEL       int        float
 
 如果以上3个阶段都无法完成消息调用，那么将调用 doesNotRecognizeSelector: 方法报错"unrecognized selector sent to instance XXX"。
 
-**【扩展 1-4】什么是 Runtime ？平时项目中用过么( Runtime 应用场景有哪些)？**
+**【扩展 1-4】什么是 Runtime ？平时项目中用过吗( Runtime 应用场景有哪些)？**
 
 OC是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由 Runtime 来支撑的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了Runtime API进行调用。
 
@@ -134,7 +134,7 @@ OC是一门动态性比较强的编程语言，允许很多操作推迟到程序
 
 Runtime应用场景1：**间接动态地给分类(Category)添加成员变量**
 
-Runtime应用场景2：**动态地交换两个方法的实现-Method Swizzling**
+Runtime应用场景2：**动态地交换两个方法的实现(Method Swizzling)**
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
