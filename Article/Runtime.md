@@ -134,7 +134,7 @@ OC是一门动态性比较强的编程语言，允许很多操作推迟到程序
 
 Runtime应用场景1：**间接动态地给分类(Category)添加成员变量**
 
-Runtime应用场景2：**动态地交换两个方法的实现(Method Swizzling)**
+Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
@@ -176,7 +176,7 @@ Runtime应用场景2：**动态地交换两个方法的实现(Method Swizzling)*
 @end
 ```
 
-Runtime应用场景3：**实现NSCoding的自动归档和解档(一键序列化)**
+Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列化)**
 
 实现原理：利用runtime提供的函数遍历自身所有属性，并对属性进行encode和decode操作。
 
@@ -244,7 +244,7 @@ Runtime应用场景4：**实现字典转模型的自动转换**
 
 Runtime应用场景5：**访问私有变量**
 
-OC中没有真正意义上的私有变量和方法，要让成员变量私有，要放在m文件中声明，不对外暴露。如果我们知道这个成员变量的名称，可以通过runtime获取成员变量，再通过getIvar来获取它的值。
+OC中没有真正意义上的私有变量和方法，要让成员变量私有，要放在 .m 文件中声明，不对外暴露。如果我们知道这个成员变量的名称，可以通过runtime获取成员变量，再通过getIvar来获取它的值。
 
 ```
 //获取一个实例变量信息
