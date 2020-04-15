@@ -1,16 +1,16 @@
 ## 知识点 RunLoop
 
-**【扩展 1-1】讲讲RunLoop，项目中用过吗？(RunLoop的应用场景)**
+**【扩展 1-1】讲讲 RunLoop，项目中用过吗？(RunLoop的应用场景)**
 
 * (1)控制线程生命周期（线程保活）
 
-**线程保活的应用场景**：频繁执行一个任务或者多个串行（非并发）任务，可以采用线程保活的方式。线程保活的方式比传统的“创建线程-销毁线程-再创建线程-再销毁...”更节省CPU资源且更高效。比如AFNetworking中后台网络请求就使用了线程保活这种技术。
+**线程保活的应用场景**：频繁执行一个任务或者多个串行（非并发）任务，可以采用线程保活的方式。线程保活的方式比传统的“创建线程-销毁线程-再创建线程-再销毁...”更节省CPU资源且更高效。比如 AFNetworking 中后台网络请求就使用了线程保活这种技术。
 
 [线程保活示例](https://github.com/baohenglin/RunLoopThreadLive)
 
 * (2)解决NSTimer在滑动时停止工作(失效)的问题。
 
-**NSTimer在滑动时失效的原因**是NSTimer默认是工作在NSDefaultRunLoopMode模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式，所有NSTimer失效。
+**NSTimer 在滑动时失效的原因**是 NSTimer 默认是工作在 NSDefaultRunLoopMode 模式下，而当我们滑动时，RunLoop会退出 NSDefaultRunLoopMode 模式，并进入 UITrackingRunLoopMode 模式，所有 NSTimer 失效。
 
 解决方法：
 
