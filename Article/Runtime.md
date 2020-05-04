@@ -465,6 +465,32 @@ void test()
 
 ![局部变量栈中内存布局图.png](https://upload-images.jianshu.io/upload_images/4164292-6c54f6b36d8d3036.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+如果上述程序中的 NSString * test = @"123"; 代码注释掉，[super viewDidLoad]; 代码本质上会转化为：
+
+```
+objc_msgSendSuper({
+  self, 
+  [UIViewController class]
+  }, @selector(viewDidLoad));
+```
+
+也就是：
+
+```
+// 内部会生成一个局部变量类型结构体 superStruct
+struct hlSuperStruct = {
+    self, 
+    [UIViewController class]
+};
+objc_msgSendSuper(hlSuperStruct, sel_registerName("viewDidLoad"));
+```
+
+这种情况下局部变量栈中内存布局图如下：
+
+![superViewDidLoad.png](https://upload-images.jianshu.io/upload_images/4164292-a721447e41b71001.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
 **【扩展 1-11】在运行时创建的方法objc_allocateClassPair的方法名尾部为什么是pair（成对的意思）？**
 
 因为要创建一对类，一个是Class(类)，另一个是meta-class(元类)，类和元类总是成对创建的。每一个类都有自己所属的元类。对象方法存储在类对象中，类方法存储在元类对象中。
