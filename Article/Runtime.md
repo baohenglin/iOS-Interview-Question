@@ -391,7 +391,7 @@ res7=1,res8=1,res9=1,res10=0
 
 **【扩展 1-9】iOS中内省方法有哪些？class方法和objc_getClass方法有什么区别？**
 
-内省是指对象在运行时获取对象详细信息的能力。这些详细信息包括对象在继承树上的位置，对象是否遵循了特定的协议以及对象是否可以相应特定的消息等。
+内省是指对象在运行时获取对象详细信息的能力。这些详细信息包括对象在继承树上的位置，对象是否遵循了特定的协议以及对象是否可以响应特定的消息等。
 
 OC中内省的方法有几个方法：
 
@@ -409,10 +409,10 @@ OC中内省的方法有几个方法：
 
 * -(BOOL)conformsToProtocol:(Protocol *)protocol;
 
-**class方法和objc_getClass方法的区别**
+**class 方法和 objc_getClass 方法的区别**
 
-* objc_getClass方法：该方法用于获取isa指针。
-* class方法：实例对象调用class方法，返回的是类对象，类对象调用class方法，返回的是类对象自身。类对象调用objc_getClass方法，得到的是对应的meta class(元类对象)。
+* objc_getClass方法：用于获取isa指针指向的对象。比如：类对象调用objc_getClass方法，得到的是对应的 meta class(元类对象)。
+* class方法：实例对象调用class方法，返回的是类对象，类对象调用class方法，返回的是类对象自身。
 
 
 
@@ -433,8 +433,8 @@ OC中内省的方法有几个方法：
 @implemetation ViewController
 - (void)viewDidLoad{
 	[super viewDidLoad];
-	
-	NSString *string = @"123";
+
+	NSString *test = @"123";
 	id cls = [HLPerson class];
 	void *obj = &cls;
 	[(__bridge id)obj print];
@@ -443,6 +443,23 @@ OC中内省的方法有几个方法：
 ```
 
 能执行成功。打印结果是“my name is 123”。
+
+两个问题：
+
+* 1.为什么 print 能够调用成功？
+  obj -> cls -> [HLPerson class] 等价于 person -> isa -> [HLPerson class]
+* 2.为什么 self.name 变成了 ViewController或者“123”等其他内容？
+
+```
+// 局部变量存储在栈空间。栈空间分配内容空间时是从高地址到低地址。
+void test() 
+{
+  long long a = 4; // 0x7ffeef615ff8
+  long long b = 5; // 0x7ffeef615ff0
+  long long c = 6; // 0x7ffeef615fe8
+  NSLog(@"%p %p %p", &a, &b, &c);
+}
+```
 
 **【扩展 1-11】在运行时创建的方法objc_allocateClassPair的方法名尾部为什么是pair（成对的意思）？**
 
