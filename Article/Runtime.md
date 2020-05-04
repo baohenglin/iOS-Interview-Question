@@ -461,6 +461,10 @@ void test()
 }
 ```
 
+上述程序中局部变量栈中内存布局图如下：
+
+![局部变量栈中内存布局图.png](https://upload-images.jianshu.io/upload_images/4164292-6c54f6b36d8d3036.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 **【扩展 1-11】在运行时创建的方法objc_allocateClassPair的方法名尾部为什么是pair（成对的意思）？**
 
 因为要创建一对类，一个是Class(类)，另一个是meta-class(元类)，类和元类总是成对创建的。每一个类都有自己所属的元类。对象方法存储在类对象中，类方法存储在元类对象中。
