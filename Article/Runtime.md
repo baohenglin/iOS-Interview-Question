@@ -270,7 +270,7 @@ IMP和SEL关系：SEL(方法编号)最终会通过Dispatch table表(调度表)�
 
 每一个类对象中都有一个对象方法列表（对象方法缓存）；类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）；方法列表中每个方法结构体中记录着方法的名称,方法实现,以及参数类型，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现；当我们给一个实例对象发送消息时，这条消息会在实例对象的类对象方法列表里查找；当我们给一个类对象发送一条消息时，这条消息会在类的Meta Class对象的方法列表里查找。
 
-**【扩展 1-7】下面代码打印结果是什么？**
+**【扩展 1-7】下面代码打印结果是什么？（☆☆☆☆☆）**
 
 ```
 @interface HLPerson : NSObject
@@ -283,17 +283,30 @@ IMP和SEL关系：SEL(方法编号)最终会通过Dispatch table表(调度表)�
 - (instancetype)init
 {
     if (self = [super init]) {
+    	//objc_msgSend(self, @selector(class))，消息接收者receiver(方法调用者) 是 self，即 HLStudent。
         NSLog(@"[self class]=%@",[self class]);//HLStudent
         NSLog(@"[self superclass]=%@",[self superclass]);//HLPerson
         
-        //objc_msgSendSuper((self,[HLPerson Class]), @selector(run));
-        //[super class]的消息接收者receiver仍然是子类，也就是HLStudent,只不过查找方法的时候是从父类中查找
+        //转化为C++底层实现为：objc_msgSendSuper((self,[HLPerson Class]), @selector(run)); 消息接收者receiver 仍然是 self，即 HLStudent。
+        //[super class]的作用是：查找方法的时候是从父类开始查找。
         NSLog(@"[super class]=%@",[super class]);//[super class]=HLStudent
         NSLog(@"[super superclass]=%@",[super superclass]);//[super superclass]=HLPerson
     }
     return self;
 }
 @end 
+//NSObject 中 class 方法的实现
+@implementation NSObject
+- (Class)class 
+{
+   return object_getClass(self);//获取消息接收者自身对应的类。
+}
+// superclass 方法的实现
+- (Class)superclass
+{
+   return class_getSuperclass(object_getClass(self));//获取消息接收者的父类。
+}
+@end
 ```
 
 打印结果如下：
