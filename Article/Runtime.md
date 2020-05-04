@@ -494,7 +494,16 @@ objc_msgSendSuper(hlSuperStruct, sel_registerName("viewDidLoad"));
 所以此时打印的是cls下面的 self 所指的 ViewController。
 
 
+需要注意的是，[super viewDidLoad] 方法最终调用的方法是 objc_msgSendSuper2，而不是利用Clang命令生成的 C++ 代码中的 objc_msgSendSuper。
 
+```
+objc_msgSendSuper2({
+  self, 
+  [ViewController class]
+  }, @selector(viewDidLoad));
+```
+
+结构体的第二个参数是当前类 [ViewController class]，而不是当前类的父类 [UIViewController class]。但是在 objc_msgSendSuper2方法的内部会通过结构体第二个参数（[ViewController class]）的superclass 指针查找当前类的父类。
 
 **【扩展 1-11】在运行时创建的方法objc_allocateClassPair的方法名尾部为什么是pair（成对的意思）？**
 
