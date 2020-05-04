@@ -418,6 +418,8 @@ OC中内省的方法有几个方法：
 
 **【扩展 1-10】以下代码能不能执行成功？如果可以，打印结果是什么？**
 
+本题目考察的知识点：**super调用的底层本质、函数栈空间分配、消息机制、访问成员变量的本质**。
+
 ```
 @interface HLPerson : NSObject
 @property (nonatomic, copy) NSString *name;
@@ -488,6 +490,9 @@ objc_msgSendSuper(hlSuperStruct, sel_registerName("viewDidLoad"));
 这种情况下局部变量栈中内存布局图如下：
 
 ![superViewDidLoad.png](https://upload-images.jianshu.io/upload_images/4164292-a721447e41b71001.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+所以此时打印的是cls下面的 self 所指的 ViewController。
+
 
 
 
