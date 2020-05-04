@@ -356,7 +356,7 @@ res1=1,res2=0,res3=0,res4=0,res5=1,res6=0
 res7=1,res8=1,res9=1,res10=0
 ```
 
-总结：主要考察isKindOfClass、isMemberOfClass这两个方法对应的对象方法和类方法的区别。**需要特别注意的是：NSObject（基类Root class）的superclass 指针指向 NSObject 的类对象(Root class)，也就是基类的 Superclass 指针指向基类的Class对象。这一点非常特殊。这也是 res5 结果为 1 的原因。
+总结：主要考察isKindOfClass、isMemberOfClass这两个方法对应的对象方法和类方法的区别。**需要特别注意的是：NSObject（基类Root class）的superclass 指针指向 NSObject 的类对象(Root class)，也就是基类的 Superclass 指针指向基类的Class对象。这一点非常特殊。这也是 res5 结果为 1 的原因**。
 
 ```
 -(BOOL)isMemberOfClass：判断左边对象是否正好等于右边这种类型
