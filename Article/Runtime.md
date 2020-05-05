@@ -162,7 +162,7 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-    	//类簇：NSString、NSArray、NSDictionary 的真实类型是其他类型(比如：__NSArrayM、__NSDictionaryM).
+    	//类簇：NSMutableArray、NSMutableDictionary、NSDictionary、NSString 的真实类型是其他类型(比如：__NSDictionaryI、__NSArrayM、__NSDictionaryM).
     	Class cls = NSClassFromString(@"__NSDictionaryM");
     	Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
     	Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
@@ -198,7 +198,6 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-    	//类簇：NSString、NSArray、NSDictionary 的真实类型是其他类型(比如：__NSArrayM、__NSDictionaryM).
     	Class cls = NSClassFromString(@"__NSArrayM");
     	Method method1 = class_getInstanceMethod(cls, @selector(insertObject:atIndex:));
     	Method method2 = class_getInstanceMethod(cls, @selector(hl_insertObject:atIndex:));
