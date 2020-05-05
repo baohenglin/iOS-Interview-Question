@@ -134,7 +134,7 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 
 Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
 
-Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**，主要是交换系统自带的方法。
+Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**，主要是交换系统或第三方框架自带的方法。
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
