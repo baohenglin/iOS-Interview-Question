@@ -132,13 +132,15 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 
 **Runtime的应用场景**：
 
-Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
+* Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
 
-Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**，主要是交换系统或第三方框架自带的方法。
+* Runtime应用场景2：**Hook方法。也就是动态交换两个方法的实现(Method Swizzling)**，主要是交换系统或第三方框架自带的方法。
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
-实际项目中，主要是用来替换系统自带的方法实现。举个例子：
+实际项目中，主要是用来替换系统自带的方法实现。
+
+示例1：处理字典中key为nil时的崩溃。
 
 ```
 - (void)viewDidLoad {
@@ -175,8 +177,33 @@ Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**�
 }
 @end
 ```
+示例2：拦截所有按钮的点击事件。
 
-Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列化)**
+```
+#import "UIControl+Extension.h"
+#import <objc/runtime.h>
+
+@implementation UIControl (Extension)
+
++(void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+    	Method method1 = class_getInstanceMethod(self, @selector(sendAction:to:forEvent:));
+    	Method method2 = class_getInstanceMethod(self, @selector(hl_sendAction:to:forEvent:));
+    	method_exchangeImplementations(method1, method2);
+    }); 
+}
+- (void)hl_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
+{
+    NSLog(@"%@-%@-%@", self, target, NSStringFromSelector(action));
+    //调用系统原来的实现。
+    [self hl_sendAction:action to:target forEvent:event];
+}
+@end
+```
+
+* Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列化)**
 
 实现原理：利用 runtime 提供的函数遍历自身所有的属性，并对属性进行 encode 和 decode 操作。
 
@@ -236,7 +263,7 @@ Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列�
 }
 ```
 
-Runtime应用场景4：**实现字典转模型的自动转换**
+* Runtime应用场景4：**实现字典转模型的自动转换**
 
 **实现原理**：使用 runtime 遍历字典中的所有的属性或者成员变量，根据 key 值在字典中取出对应的 value，再利用 KVC 给模型的属性设置对应的值。
 
@@ -272,7 +299,7 @@ Runtime应用场景4：**实现字典转模型的自动转换**
 }
 ```
 
-Runtime应用场景5：**访问私有变量**
+* Runtime应用场景5：**访问私有变量**
 
 OC中没有真正意义上的私有变量和方法，要让成员变量私有，要放在 .m 文件中声明，不对外暴露。如果我们知道这个成员变量的名称，可以通过runtime获取成员变量，再通过getIvar来获取它的值。
 
@@ -286,9 +313,9 @@ NSString *name = object_getIvar(person, nameIvar);
 NSLog(@"name=%@",name);//name=BHL
 ```
 
-Runtime应用场景6：**利用消息转发机制解决因方法找不到而崩溃的问题**
+* Runtime应用场景6：**利用消息转发机制解决因方法找不到而崩溃的问题**
 
-Runtime应用场景7：**weak 的实现**
+* Runtime应用场景7：**weak 的实现**
 
 **【扩展 1-5】runtime中，SEL和IMP的区别？**
 
