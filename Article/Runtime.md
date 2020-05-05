@@ -162,7 +162,7 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-    	//类簇:NSMutableArray、NSString、NSArray的真正类型是其他类型(比如：__NSArrayM).
+    	//类簇：NSString、NSArray、NSDictionary 的真实类型是其他类型(比如：__NSArrayM、__NSDictionaryM).
     	Class cls = NSClassFromString(@"__NSDictionaryM");
     	Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
     	Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
@@ -171,13 +171,49 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 }
 - (void)hl_setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key
 {
-    NSLog(@"111");
     if(key == nil) return;
     [self hl_setObject:obj forKeyedSubscript:key];
 }
 @end
 ```
-示例2：拦截所有按钮的点击事件。
+
+示例2：处理 因NSMutableArray添加元素为nil而崩溃的问题。代码如下：
+
+```
+- (void)viewDidLoad{
+  [super viewDidLoad];
+  
+  NSString *obj = nil;
+  NSMutableArray *array = [NSMutableArray array];
+  [array addObject:@"jack"];
+  [array insertObject:obj atIndex:0];
+  NSLog(@"%@", array);
+}
+
+
+#import "NSMutableArray+Extension.h"
+#import <objc/runtime.h>
+@implementation NSMutableArray (Extention)
++(void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+    	//类簇：NSString、NSArray、NSDictionary 的真实类型是其他类型(比如：__NSArrayM、__NSDictionaryM).
+    	Class cls = NSClassFromString(@"__NSArrayM");
+    	Method method1 = class_getInstanceMethod(cls, @selector(insertObject:atIndex:));
+    	Method method2 = class_getInstanceMethod(cls, @selector(hl_insertObject:atIndex:));
+    	method_exchangeImplementations(method1, method2);
+    }); 
+}
+- (void)hl_insertObject:(id)anObject atIndex:(NSUInteger)index
+{
+    if(anObject == nil) return;
+    [self hl_insertObject:anObject atIndex:index];
+}
+@end
+```
+
+示例3：拦截所有按钮的点击事件。
 
 ```
 #import "UIControl+Extension.h"
