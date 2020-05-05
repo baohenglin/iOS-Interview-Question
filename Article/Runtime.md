@@ -128,13 +128,13 @@ int         id        SEL       int        float
 
 **【扩展 1-4】什么是 Runtime ？平时项目中用过吗( Runtime 应用场景有哪些)？**
 
-OC是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由 Runtime 来支撑的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了Runtime API进行调用。
+OC 是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由 Runtime 来支撑和实现的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了 Runtime API 进行调用。
 
 **Runtime的应用场景**：
 
-Runtime应用场景1：**间接动态地给分类(Category)添加成员变量**
+Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
 
-Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**
+Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**，主要是交换系统自带的方法。
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
@@ -178,7 +178,7 @@ Runtime应用场景2：**动态交换两个方法的实现(Method Swizzling)**
 
 Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列化)**
 
-实现原理：利用runtime提供的函数遍历自身所有属性，并对属性进行encode和decode操作。
+实现原理：利用 runtime 提供的函数遍历自身所有的属性，并对属性进行 encode 和 decode 操作。
 
 ```
 //归档
@@ -285,6 +285,10 @@ object_setIvar(person, nameIvar, @"BHL");
 NSString *name = object_getIvar(person, nameIvar);
 NSLog(@"name=%@",name);//name=BHL
 ```
+
+Runtime应用场景6：**利用消息转发机制解决因方法找不到而崩溃的问题**
+
+Runtime应用场景7：**weak 的实现**
 
 **【扩展 1-5】runtime中，SEL和IMP的区别？**
 
