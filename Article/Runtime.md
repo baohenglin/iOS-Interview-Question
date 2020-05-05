@@ -238,9 +238,39 @@ Runtime应用场景3：**实现 NSCoding 的自动归档和解档(一键序列�
 
 Runtime应用场景4：**实现字典转模型的自动转换**
 
-实现原理是使用runtime遍历出模型中的所有属性，根据模型中属性,去字典中取出对应的value再利用KVC给模型属性设置对应的值。
+**实现原理**：使用 runtime 遍历字典中的所有的属性或者成员变量，根据 key 值在字典中取出对应的 value，再利用 KVC 给模型的属性设置对应的值。
 
 字典转模型第三方库：[MJExtension](https://my.oschina.net/wolx/blog/396925)、JSONModel、Mantle等
+
+字典转模型初步实现（还有很多地方需要完善）如下：
+
+```
+#import "NSObject+Json.h"
+#import <objc/runtime.h>
+
+@implementation NSObject (Json)
+
++ (instancetype)hl_objectWithJson:(NSDictionary *)json
+{
+  id obj = [[self alloc] init];
+  unsigned int count;
+  Ivar *ivars = class_copyIvarList(self, &count);
+  for (int i = 0; i < count; i++) {
+    // 获取成员变量
+    Ivar ivar = ivars[i];
+    NSMutableString *name = [NSMutableString stringWithUTF8String: ivar_getName(ivar)];
+    [name deleteCharactersInRange:NSMakeRange(0, 1)];
+    //赋值
+    id value = json[name];
+    if ([name isEqualToString:@"ID"]) {
+      value = json[@"id"];
+    }
+    [obj setValue:value forKey:name];
+  }
+  free(ivars);
+  return obj;
+}
+```
 
 Runtime应用场景5：**访问私有变量**
 
