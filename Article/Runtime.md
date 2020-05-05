@@ -167,12 +167,22 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
     	Method method1 = class_getInstanceMethod(cls, @selector(setObject:forKeyedSubscript:));
     	Method method2 = class_getInstanceMethod(cls, @selector(hl_setObject:forKeyedSubscript:));
     	method_exchangeImplementations(method1, method2);
+	
+	Class cls2 = NSClassFromString(@"__NSDictionaryI");
+    	Method method3 = class_getInstanceMethod(cls2, @selector(objectForKeyedSubscript:));
+    	Method method4 = class_getInstanceMethod(cls2, @selector(hl_objectForKeyedSubscript:));
+    	method_exchangeImplementations(method3, method4);
     }); 
 }
 - (void)hl_setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key
 {
     if(key == nil) return;
     [self hl_setObject:obj forKeyedSubscript:key];
+}
+- (void)hl_objectForKeyedSubscript:(id)key
+{
+  if (!key) return nil;
+  return [self hl_objectForKeyedSubscript:key];
 }
 @end
 ```
