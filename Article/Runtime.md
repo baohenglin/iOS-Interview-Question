@@ -360,7 +360,7 @@ NSLog(@"name=%@",name);//name=BHL
 
 * Runtime应用场景6：**利用消息转发机制解决因方法找不到而崩溃的问题**
 
-* Runtime应用场景7：**Runtime 将 weak 变量自动置为 nil **
+* Runtime应用场景7：**Runtime 实现 weak 变量自动置为 nil**
 
 **【扩展 1-5】runtime中，SEL和IMP的区别？**
 
