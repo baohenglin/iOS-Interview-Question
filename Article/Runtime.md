@@ -503,23 +503,24 @@ res7=1,res8=1,res9=1,res10=0
 
 **【扩展 1-9】iOS中内省方法有哪些？class方法和objc_getClass方法有什么区别？**
 
-内省是指对象在运行时获取对象详细信息的能力。这些详细信息包括对象在继承树上的位置，对象是否遵循了特定的协议以及对象是否可以响应特定的消息等。
+**内省**是指**对象在运行时获取对象详细信息的能力**。这些详细信息包括对象在继承树上的位置，对象是否遵循了特定的协议以及对象是否可以响应特定的消息等。
 
-OC中内省的方法有几个方法：
+OC中内省的方法有以下几个方法：
 
 (1)判断对象类型：
 
-*  -(BOOL)isKindOfClass: 判断是否是这个类或其子类的实例
-*  -(BOOL)isMemberOfClass: 判断是否是这个类的实例
+*  -(BOOL)isKindOfClass: 判断左边对象是不是右边这种类型或者右边这种类型的子类。
+*  -(BOOL)isMemberOfClass: 判断左边对象是否正好等于右边这种类型
 
-(2)判断对象/类是否有这个方法：
+(2)判断对象/类是否能够响应指定的消息：
 
-*  -(BOOL)respondsToSelector: 这是一个实例方法，用来判断该实例对象是否响应某个方法
-*  +(BOOL)instancesRespondToSelector: 这是一个类方法，用来判断类该类的实例对象是否响应某个方法
+*  -(BOOL)respondsToSelector:(SEL)aSelector;  这是一个实例方法，用来判断该实例对象是否能够响应某个指定的方法
+*  + (BOOL)instancesRespondToSelector:(SEL)aSelector;  这是一个类方法，用来判断该类的实例对象是否响应某个方法
 
 (3)检查对象是否符合某协议
 
-* -(BOOL)conformsToProtocol:(Protocol *)protocol;
+* -(BOOL)conformsToProtocol:(Protocol *)protocol;  判断某个实例对象是否遵守了指定的协议（只要其父类符合就会返回 YES）
+* BOOL class_conformsToProtocol(Class cls, Protocol *protocol);  只检查当前类是否符合协议，和其父类无关。
 
 **class 方法和 objc_getClass 方法的区别**
 
