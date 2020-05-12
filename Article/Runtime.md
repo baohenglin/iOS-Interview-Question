@@ -372,7 +372,19 @@ NSLog(@"name=%@",name);//name=BHL
 
 [SEL和IMP的区别](https://www.jianshu.com/p/02b12e98fc98)
 
-SEL是类成员方法的指针，表示方法名称，类似字符串(可互转);IMP是函数指针，保存了方法的地址。
+**SEL**是类成员方法的指针，表示方法名或函数名，底层结构跟 char* 类似。
+
+获取 SEL 的方法有两种： 可以通过 @selector() 或者 sel_registerName() 获得。
+
+```
+SEL sel1 = sel_registerName("test");
+SEL sel2 = @selector(test);
+
+```
+
+此外，可以通过sel_getName() 或者 NSStringFromSelector() 转成字符串。需要注意的是： **不同类中相同名字的方法，所对应的方法选择器是相同的。但是由于实例对象的类型不同，所以不会导致他们调用方法实现混乱**。
+
+**IMP**是函数指针，保存了方法具体实现的地址。
 
 IMP和SEL关系：SEL(方法编号)最终会通过Dispatch table表(调度表)寻找到对应的IMP(函数指针)，Dispatch table表存放SEL和IMP的对应。
 
