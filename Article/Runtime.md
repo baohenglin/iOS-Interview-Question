@@ -126,11 +126,17 @@ int         id        SEL       int        float
 
 如果以上3个阶段都无法完成消息调用，那么将调用 doesNotRecognizeSelector: 方法报错"unrecognized selector sent to instance XXX"。
 
-**【扩展 1-4】什么是 Runtime ？平时项目中用过吗( Runtime 应用场景有哪些)？**
+**【扩展 1-4】什么是 Runtime ？OC语言为什么需要 Runtime？平时项目中用过吗( Runtime 应用场景有哪些)？**
 
-OC 是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。OC的动态性就是由 Runtime 来支撑和实现的，Runtime是一套C语言的API，封装了很多动态性相关的函数。平时编写的OC代码，底层都是转换成了 Runtime API 进行调用。
+**(1)什么是 Runtime ？**
 
-**Runtime的应用场景**：
+OC 是一门动态性比较强的编程语言，允许很多操作推迟到程序运行时再进行。而 OC 语言的这种动态性恰恰就是由 Runtime 来支撑和实现的。Runtime 又称作运行时，是一套 C 语言的API（有一部分频繁调用的代码是由汇编语言实现的），封装了很多动态性相关的函数。我们平时编写的OC代码，最终都是转换成了底层的 Runtime API 进行调用的。比如 [receiver message:(id)arg...]; 最终会被编译器在运行时转化为 objc_msgSend(receiver, @selector(message), arg1, arg2, ...);
+
+**(2)OC语言为什么需要 Runtime？**
+
+OC 是一门动态性比较强的编程语言，它会将很多操作推迟到程序运行时再处理，而不是编译时处理。也就是说，有一些类和成员变量我们在编译时是不知道的，而是在运行时，我们所编写的代码才会转换为完整且确定的代码。因此仅仅有编译器是不够的，我们还需要一个运行时系统（Runtime system）来处理编译后的代码。
+
+**(3)Runtime的应用场景**：
 
 * Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
 
