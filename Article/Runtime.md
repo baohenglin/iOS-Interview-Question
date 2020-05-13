@@ -755,4 +755,22 @@ OC 是一门动态性比较强的编程语言，允许很多操作推迟到程�
 }
 ```
 
+**【扩展 1-15】objc_msgForward 函数是做什么的？如果直接手动调用它将会发生什么？**
+
+```
+IMP msgForward = _objc_msgForward;
+```
+
+_objc_msgForward 是 IMP 类型，是用来做**消息转发**的。当向一个对象发送一条消息但它并没有实现的时候，_objc_msgForward 会尝试进行消息转发。
+
+如果手动调用 objc_msgForward，将跳过查找 IMP 的过程（即跳过第一大阶段消息发送阶段），而是直接进入第二大阶段动态方法解析阶段。具体流程如下：
+
+* 第一步：+ (BOOL)resolveInstanceMethod:(SEL)sel 实现方法，指定是否动态添加方法。若返回 NO，则进入下一步；若返回 YES，则通过 class_addMethod 函数动态地添加方法，消息得到处理，此流程结束。
+* 第二步：在第一步返回 NO 时，就会进入 - (id)forwardingTargetForSelector:(SEL)aSelector 方法，用于指定哪个对象响应这个 selector。需要注意的是不能指定为 self。若返回 nil，则表示没有响应者，则会进入第三步。若返回某个对象，则会调用该对象的方法。
+* 第三步：若第二步返回的是 nil，则我们首先需要通过 -(NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector 指定方法签名，若返回 nil，则表示不处理。若返回方法签名，则会进入下一步。
+* 第四步：当第三步返回方法签名后，就会调用 -(void)forwardInvocation:(NSInvocation *)anInvocation 方法，我们可以通过 anInvocation 对象做很多处理，比如修改实现方法，修改相应对象等。
+* 第五步：若没有实现 -(void)forwardInvocation:(NSInvocation *)anInvocation 方法，那么会进入 -(void)doesNotRecognizeSelector:(SEL)aSelector 方法。若我们没有实现这个方法，那么就会 crash，然后提示找不到响应的方法。至此，整个动态方法解析和消息转发的流程就结束了。
+
+
+
 
