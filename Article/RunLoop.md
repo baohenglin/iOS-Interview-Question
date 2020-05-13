@@ -116,5 +116,30 @@ NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self
 
 CALayer 内部会创建一个 Backing Store，用来获取图形上下文。接下来会判断这个 layer 是否有 delegate。如果有的话，会调用 [layer.delegate drawLayer:inContext:]，并且会返回给我们 [UIView DrawRect:] 的回调，让我们在系统绘制的基础之上再做一些事情。如果没有 delegate，那么会调用 [CALayer drawInContext:]。以上两个分支，最终 CALayer 都会将位图提交到 Backing Store，最后提交给 GPU。至此绘制的过程结束。
 
+**【扩展 1-15】performSelector:withObject:afterDelay:内部大概是怎么实现的？使用该方法时有什么注意事项？**
+
+```
+[self performSelector:(nonnull SEL) withObject:(nullable id) afterDelay:(NSTimeInterval)]; 
+```
+
+**实现原理**：创建一个定时器，在指定的时候结束后系统会利用 runtime 通过方法名（Selector本质上就是方法名）去方法列表中查找到对应的方法实现并调用。
+
+**使用注意事项**：
+
+* （1）调用 performSelector:withObject:afterDelay: 方法时，需要先判断希望调用的方法是否存在（通过 respondsToSelector: 方法判断）；
+* （2）performSelector:withObject:afterDelay: 方法是异步方法，必须在主线程调用，在子线程调用不会执行。
+
+[参考1](https://www.iteye.com/blog/grayheart-2289984)
+
+[参考2](https://www.jianshu.com/p/7583ff0181c2)
+
+
+
+
+
+
+
+
+
 
 
