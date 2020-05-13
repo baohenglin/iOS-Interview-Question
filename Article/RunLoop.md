@@ -26,6 +26,29 @@ RunLoop和线程的关系如下：
 * RunLoop会在线程结束时销毁。
 * 主线程的RunLoop已经自动获取（创建），子线程默认没有开启 RunLoop，需要手动创建开启。
 
+**【扩展 1-3】如何获取 RunLoop 对象？**
+
+获得**当前线程的 RunLoop 对象**，代码如下：
+
+```
+//方法1：Foundation
+[NSRunLoop currentRunLoop];
+
+//方法2： Core Foundation
+CFRunLoopGetCurrent();
+```
+
+获得**主线程的 RunLoop 对象**，代码如下：
+
+```
+//方法1：Foundation
+[NSRunLoop mainRunLoop];
+
+//方法2： Core Foundation
+CFRunLoopGetMain();
+```
+
+
 **【扩展 1-3】程序中添加每3秒响应一次的NSTimer，当拖动tableView时，timer可能无法响应要怎么解决？**
 
 NSTimer在滑动时失效的原因是NSTimer默认是工作在NSDefaultRunLoopMode模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式，所有NSTimer失效。
