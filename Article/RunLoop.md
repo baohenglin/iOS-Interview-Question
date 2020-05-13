@@ -24,7 +24,7 @@ RunLoop和线程的关系如下：
 * RunLoop保存在一个全局的Dictionary里，线程作为key，RunLoop作为value。
 * 线程刚创建时并没有RunLoop对象，RunLoop会在第一次获取该线程时创建与之对应的RunLoop对象。
 * RunLoop会在线程结束时销毁。
-* 主线程的RunLoop已经自动获取（创建），子线程默认没有开启RunLoop。
+* 主线程的RunLoop已经自动获取（创建），子线程默认没有开启 RunLoop，需要手动创建开启。
 
 **【扩展 1-3】程序中添加每3秒响应一次的NSTimer，当拖动tableView时，timer可能无法响应要怎么解决？**
 
