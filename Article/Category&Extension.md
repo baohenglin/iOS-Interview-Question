@@ -186,6 +186,14 @@ static NSMutableArray *someArray;
 
 ```
 
+**【扩展 1-10】能否向编译后得到的类添加实例变量？能否向运行时创建的类中添加实例变量？为什么？**
+
+不能向编译后得到的类中添加实例变量，可以向运行时创建的类中添加实例变量。
+
+因为编译后的类已经注册到 runtime 中，类结构体中的 objc_ivar_list 实例变量的链表和 instance_size 实例变量的内存大小已经确定，同时 runtime 会调用 class_setIvarLayout 或 class_setWeakIvarLayout 来处理 strong 和 weak 引用，所以不能向编译后得到的类中添加实例变量。
+
+运行时创建的类是可以添加实例变量的。可以通过调用 class_addIvar 函数添加实例变量。但是必须在调用 objc_allocateClassPair 之后，objc_registerClassPair 之前调用 class_addIvar 方法，原因同上。
+
 <br />
 <br />
 <br />
