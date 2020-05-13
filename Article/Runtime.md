@@ -2,7 +2,9 @@
 
 [Runtime 题目参考](https://www.cnblogs.com/Hakim/p/6549474.html)
 
-**【扩展 1-1】Runtime 如何实现 weak 变量自动置为 nil 的？**(runtime如何实现 weak 属性的？)
+**【扩展 1-1】Runtime 如何实现 weak 变量自动置为 nil 的？**(runtime 实现 weak 属性的原理？)
+
+[weak类型指针的实现原理](https://www.jianshu.com/p/ed43b17c8a72)
 
 首先要清楚 weak 属性的特点。weak 策略表明该属性定义了一种“非拥有关系”（nonowning relationship）。当为 weak 修饰的属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同 assign 类似。但与 assign 不同的是，weak属性所指的对象销毁时，属性值会被清空（ nil out ），即置为 nil。
 
@@ -10,11 +12,28 @@
 
 Runtime 对注册的类，会进行布局，会将 weak 对象存入一个 hash 表中。用 weak 指向的对象的内存地址作为 key，当这个对象的引用计数为 0 时会调用该对象的 dealloc 方法。假设 weak 指向的对象内存地址是 a，那么就会以 a 作为 key，在这个 weak hash 表中进行搜索，查找到所有以 a 为 key 的 weak 对象，并将查找到的这些 weak 对象都置为 nil。
 
-**【扩展 1-1.1】weak 属性需要在 dealloc 中置为 nil 吗？**
+**【扩展 1-1.1】如何利用 runtime 来实现 weak 属性？**
+
+通过 runtime 关联对象来实现 weak 属性。
+
+```
+#import <objc/runtime.h>
+static const char *key = "delegateKey";
+@property (nonatomic, weak) id delegate;
+
+- (id)delegate {
+   return objc_getAssociatedObject(self, key);
+}
+- (void)setDelegate:(id)delegate {
+   objc_setAssociatedObject(self, key, delegate, OBJC_ASSOCIATION_ASSIGN);
+}
+```
+
+**【扩展 1-1.2】weak 属性需要在 dealloc 中置为 nil 吗？**
 
 不需要。
 
-因为在 ARC 环境下，无论是强指针还是弱指针都无需在 dealloc 中设置为 nil，因为 ARC 会自动帮我们处理。即便是编译器不帮我们处理，weak 属性也不需要再 dealloc 中置为 nil。因为在属性所指向的对象销毁时，属性值也会清空（置为nil）。
+因为在 ARC 环境下，无论是强指针还是弱指针都无需在 dealloc 中设置为 nil，因为 ARC 会自动帮我们处理。即便是编译器不帮我们处理，weak 属性也不需要在 dealloc 中置为 nil。因为在属性所指向的对象销毁时，属性值也会清空（置为nil）。
 
 ```
 // 模拟 weak 的 setter 方法。 大致如下：
