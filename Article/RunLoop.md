@@ -74,15 +74,15 @@ mode的作用是将不同模式下的Source0/Source1/Timer/Observer隔离开来�
 
 [RunLoop的运行逻辑](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
 
-**【扩展 1-9】RunLoop的概念以及作用是什么？**
+**【扩展 1-9】RunLoop 是什么？RunLoop 的作用是什么？**
 
-RunLoop顾名思义也就是运行循环，在程序运行过程中循环执行某些任务。
+RunLoop 顾名思义也就是**运行循环**，在程序运行过程中循环执行某些任务。RunLoop 内部就是 do-while 循环，在这个循环内部不断地处理各种任务。一个线程对应一个 RunLoop，主线程的 RunLoop 默认已经启动，子线程的 RunLoop 需要手动调用 run 方法启动。RunLoop 只能选择一个 Mode 启动，如果当前 Mode 中没有任何 Source（Source0、Source1）、Timer，那么就直接退出 RunLoop。
 
-**作用：**
+**RunLoop 的作用：**
 
 * 保持程序的持续运行；
-* 处理App中的各种事件（比如触摸事件、定时器事件等）；
-* 节省CPU资源，提高程序性能：有待执行任务时执行任务，不执行任务时休眠。
+* 处理 App 中的各种事件（比如触摸事件、定时器事件等）；
+* 节省 CPU 资源，提高程序性能：有待执行任务时执行任务，不执行任务时休眠。
 
 RunLoop是一种让线程能随时处理事件但不退出的机制。RunLoop实际上是一个对象，这个对象管理者其需要处理的事件和消息，并提供了一个入口函数来执行Event Loop的逻辑。线程执行了这个函数后，就会一直处于这个函数内部“接收消息->等待消息->处理消息”的循环中，直到这个循环结束(比如传入quit消息)，函数返回。RunLoop机制会使线程在没有消息需要处理的时候休眠，在有消息到来时，线程立刻被唤醒。这样有效节约了系统资源。
 
