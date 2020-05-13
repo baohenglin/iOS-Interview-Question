@@ -126,7 +126,7 @@ int         id        SEL       int        float
 
 如果以上3个阶段都无法完成消息调用，那么将调用 doesNotRecognizeSelector: 方法报错"unrecognized selector sent to instance XXX"。
 
-**【扩展 1-4】什么是 Runtime ？OC语言为什么需要 Runtime？平时项目中用过吗( Runtime 应用场景有哪些)？**
+**【扩展 1-4】什么是 Runtime（Runtime 实现的机制是什么）？OC语言为什么需要 Runtime？Runtime 应用场景有哪些(平时在项目中是如何使用的)？**
 
 **(1)什么是 Runtime ？**
 
@@ -643,4 +643,29 @@ objc_msgSendSuper2({
 动态绑定是指在编译阶段无法确定调用哪个方法，只有到了**运行时才能确定去调用哪个方法**。
 
 [深入Objective-C的动态特性](https://onevcat.com/2012/04/objective-c-runtime/)
+
+**【扩展 1-14】Objective-C 如何对已有的方法添加自己的功能代码以实现类似记录日志这样的功能？**
+
+知识点：考察如何利用 runtime 实现方法交换。需要注意的是：需要在分类中添加一个新的方法，而不要重写系统方法，因为会覆盖。
+
+```
+#import <objc/runtime.h>
+
++ (NSString *)myLog
+{
+  //打印行号、方法名、哪个类调用等等
+}
+//加载分类到内存中的时候调用 load 方法
++ (void)load
+{ 
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    Method description = class_getClassMethod(self, @selector(description));
+    Method myLog = class_getClassMethod(self, @selector(myLog));
+    //交换方法地址，即交换方法实现
+    method_exchangeImplementations(description, myLog);
+  });
+}
+```
+
 
