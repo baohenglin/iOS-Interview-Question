@@ -190,7 +190,50 @@ static NSMutableArray *someArray;
 
 不能向编译后得到的类中添加实例变量，可以向运行时创建的类中添加实例变量。
 
-因为编译后的类已经注册到 runtime 中，类结构体中的 objc_ivar_list 实例变量的链表和 instance_size 实例变量的内存大小已经确定，同时 runtime 会调用 class_setIvarLayout 或 class_setWeakIvarLayout 来处理 strong 和 weak 引用，所以不能向编译后得到的类中添加实例变量。
+某个类的**类对象**的底层数据结构如下：
+
+```
+struct objc_class {
+    Class _Nonnull isa  OBJC_ISA_AVAILABILITY; //isa 指针，类对象的 isa 指针指向元类对象（Meta Class）
+
+#if !__OBJC2__
+    Class _Nullable super_class                              OBJC2_UNAVAILABLE; //父类
+    const char * _Nonnull name                               OBJC2_UNAVAILABLE; //类名
+    long version                                             OBJC2_UNAVAILABLE; //类的版本信息，默认为0
+    long info                                                OBJC2_UNAVAILABLE; //该类的类信息，供运行时使用的一些位标识
+    long instance_size                                       OBJC2_UNAVAILABLE; //该类的实例变量大小
+    struct objc_ivar_list * _Nullable ivars                  OBJC2_UNAVAILABLE; //该类的成员变量列表
+    struct objc_method_list * _Nullable * _Nullable methodLists    OBJC2_UNAVAILABLE; //该类的方法列表
+    struct objc_cache * _Nonnull cache                       OBJC2_UNAVAILABLE; //方法缓存
+    struct objc_protocol_list * _Nullable protocols          OBJC2_UNAVAILABLE; //协议列表
+#endif
+
+} OBJC2_UNAVAILABLE;
+
+struct objc_ivar_list {
+    int ivar_count;
+    /* variable length structure */
+    struct objc_ivar ivar_list[1];
+}
+
+struct objc_ivar {
+    char *ivar_name;
+    char *ivar_type;
+    int ivar_offset;
+}
+```
+
+某个类的**实例对象**的底层数据结构如下：
+
+```
+struct objc_object {
+    Class _Nonnull isa  OBJC_ISA_AVAILABILITY;
+};
+/// A pointer to an instance of a class.
+typedef struct objc_object *id;
+```
+
+因为编译后的类已经注册到 runtime 中，类结构体中的 objc_ivar_list 实例变量列表和 instance_size 实例变量的内存大小已经确定，同时 runtime 会调用 class_setIvarLayout 或 class_setWeakIvarLayout 来处理 strong 和 weak 引用，所以不能向编译后得到的类中添加实例变量。
 
 运行时创建的类是可以添加实例变量的。可以通过调用 class_addIvar 函数添加实例变量。但是必须在调用 objc_allocateClassPair 之后，objc_registerClassPair 之前调用 class_addIvar 方法，原因同上。
 
