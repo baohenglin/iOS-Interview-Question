@@ -14,7 +14,7 @@ Runtime 对注册的类，会进行布局，会将 weak 对象存入一个 hash 
 
 **【扩展 1-1.1】如何利用 runtime 来实现 weak 属性？**
 
-通过 runtime 关联对象来实现 weak 属性。
+通过 runtime 的关联对象来实现 weak 属性。
 
 ```
 #import <objc/runtime.h>
