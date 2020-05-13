@@ -140,6 +140,53 @@ OC 是一门动态性比较强的编程语言，它会将很多操作推迟到�
 
 * Runtime应用场景1：**利用关联对象（objc_setAssociatedObject）间接动态地给分类(Category)添加属性**。
 
+例如给HLPerson类的Category分类HLPerson+Test类添加一个_name成员变量和一个_weight成员变量。代码如下：
+
+```
+#import "HLPerson.h"
+@interface HLPerson (Test)
+@property (copy, nonatomic) NSString *name;
+@property (assign, nonatomic) int weight;
+@end
+```
+
+```
+#import "HLPerson+Test.h"
+#import <objc/runtime.h>
+@implementation HLPerson (Test)
+
+//方式2：定义关联的key
+static const char *key = "name";
+
+- (void)setName:(NSString *)name
+{
+    //第一个参数：给哪个对象添加关联
+    //第二个参数：关联的 key，通过这个 key 获取关联的 value
+    //第三个参数：关联的 value
+    //第四个参数：关联的策略 OBJC_ASSOCIATION_COPY_NONATOMIC、OBJC_ASSOCIATION_RETAIN_NONATOMIC等
+    objc_setAssociatedObject(self, @selector(name), name, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    //objc_setAssociatedObject(self, key, name, OBJC_ASSOCIATION_COPY_NONATOMIC);//方式2
+}
+- (NSString *)name
+{
+    // 隐式参数
+    // _cmd == @selector(name)
+    return objc_getAssociatedObject(self, _cmd);
+    //return objc_getAssociatedObject(self, key);//方式2
+}
+
+- (void)setWeight:(int)weight
+{
+    objc_setAssociatedObject(self, @selector(weight), @(weight), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (int)weight
+{
+    // _cmd == @selector(weight)
+    return [objc_getAssociatedObject(self, _cmd) intValue];
+}
+@end
+```
+
 * Runtime应用场景2：**Hook方法。也就是动态交换两个方法的实现(Method Swizzling)**，主要是交换系统或第三方框架自带的方法。
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
