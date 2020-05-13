@@ -191,6 +191,14 @@ static const char *key = "name";
 
 [Method Swizzling](https://nshipster.cn/method-swizzling/)
 
+**Method Swizzling 是指改变一个已存在的选择器对应的实现的过程**。
+
+```
+method_exchangeImplementations：用来交换2个方法的 IMP
+method_replaceMethod：用来修改类
+method_setImplementation：用来设置某个方法的 IMP
+```
+
 实际项目中，主要是用来替换系统自带的方法实现。
 
 示例1：处理字典中key为nil时的崩溃。
