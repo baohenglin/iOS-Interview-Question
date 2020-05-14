@@ -82,7 +82,10 @@ kCFRunLoopExit = (1UL << 7),//即将退出RunLoop
 
 RunLoop常见的mode有2种：kCFRunLoopDefaultMode(NSDefaultRunLoopMode)和UITrackingRunLoopMode。kCFRunLoopDefaultMode是默认模式，通常主线程是在这个模式下运行；UITrackingRunLoopMode用于ScrollView追踪触摸滑动，保证界面滑动时不受其他mode影响。
 
-mode的作用是将不同模式下的Source0/Source1/Timer/Observer隔离开来，互不影响，这样就提高了执行效率和滑动流畅性。
+**mode的作用**是：
+
+* 将不同模式下的Source0/Source1/Timer/Observer隔离开来，互不影响，这样就提高了执行效率和滑动流畅性。
+* 指定事件在运行循环中的优先级。
 
 **【扩展 1-7】timer和RunLoop是怎样的关系？**
 
