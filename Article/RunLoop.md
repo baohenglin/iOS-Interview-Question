@@ -223,7 +223,25 @@ kCFRunLoopExit(128); //退出 runloop 时会自动销毁最后一个创建的 au
 
 [Autorelease底层实现](https://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/)
 
+**【扩展 1-17】使用 NSTimer 时有哪些注意事项？**
 
+* 注意将 timer 添加到 RunLoop 时应该设置为哪种 Mode；
+* 注意 timer 在不需要时，一定要调用 - (void)invalidate; 方法使定时器失效，否则释放不掉，会造成内存泄漏。而且这种内存泄漏使用 Instrument 工具检测不出来。
 
-
+```
+@property (nonatomic, strong) NSTimer *timer;
+// 懒加载的方式创建 timer
+- (NSTimer *)timer {
+    if (_timer == nil) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+    return _timer;
+}
+//销毁 timer
+- (void)invalidate {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+```
 
