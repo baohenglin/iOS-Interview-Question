@@ -200,8 +200,25 @@ performSelector:withObject:afterDelay: 该方法在当前线程的运行循环�
 
 我们知道只有主线程中的 RunLoop 是默认开启的，而子线程刚创建时并没有 RunLoop，如果不主动获取，那么子线程一直不会有 RunLoop。由于 performSelector:withObject:afterDelay: 方法在一个子线程中执行，而且该子线程中并没有开启 RunLoop，所以 performSelector:withObject:afterDelay: 方法会失效，也就不会执行 aSelector 了。
 
+**【扩展 1-16】autorelease对象在什么时机会被释放？(比如在一个vc的viewDidLoad中创建)(阿里)** 
 
+分两种情况：手动干预释放和系统自动释放
 
+* **手动添加 AutoreleasePool 的情况**下，对象会在**当前作用域大括号结束时**立即释放。
+
+* **非手动添加 Autorelease Pool的情况下**，Autorelease 对象是在**当前的 runloop 迭代结束时**释放的(Autorelease对象出了作⽤域之后，会被添加到最近一次创建的自动释放池中，并会在当前的runloop迭代结束时释放)。
+
+如果在一个vc的viewDidLoad中创建一个 Autorelease对象，那么该对象会在 viewDidAppear ⽅法执行前就被销毁了。
+
+```
+kCFRunLoopEntry(1);  //第一次进入会自动创建一个 autorelease
+kCFRunLoopBeforeWaiting(32); //进入休眠状态前会自动销毁一个 autorelease，然后重新创建一个新的 autorelease
+kCFRunLoopExit(128); //退出 runloop 时会自动销毁最后一个创建的 autorelease
+```
+
+[Autorelease实现原理](https://blog.sunnyxx.com/2014/10/15/behind-autorelease/)
+
+[Autorelease底层实现](https://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/)
 
 
 
