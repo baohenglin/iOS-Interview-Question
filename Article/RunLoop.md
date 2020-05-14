@@ -91,7 +91,7 @@ mode的作用是将不同模式下的Source0/Source1/Timer/Observer隔离开来�
 
 [RunLoop的运行逻辑](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BRunLoop%E6%8E%A2%E7%A9%B6.md)
 
-**【扩展 1-9】平时在项目中是如何使用 RunLoop 的？(RunLoop的应用场景)**
+**【扩展 1-9】RunLoop的应用场景有哪些？(平时在项目中是如何使用 RunLoop 的？)**
 
 * (1)控制线程生命周期（线程保活）
 
