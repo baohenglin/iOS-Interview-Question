@@ -157,7 +157,40 @@ CALayer 内部会创建一个 Backing Store，用来获取图形上下文。接�
 [参考2](https://www.jianshu.com/p/7583ff0181c2)
 
 
+**【扩展 1-16】下面的代码打印输出结果是什么？为什么？**
 
+```
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"1");
+        [self performSelector : @selector(printLog)
+                   withObject : nil
+                   afterDelay : 0];
+        NSLog(@"3");
+});
+
+- (void)printLog {
+    NSLog(@"2");
+}
+```
+
+打印结果是：
+
+```
+1 3
+```
+
+原因分析： 
+
+```
+//参数 aSelector：调用的方法
+//参数 anArgument：传递给方法的参数，如果方法没有参数的话传 nil
+//参数 delay：消息发送之前的最小时间。为 0 时，selector 也不一定立即执行，selector 仍然在线程的运行循环 RunLoop 中排队并尽快执行。
+- (void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay;
+```
+
+performSelector:withObject:afterDelay: 该方法在当前线程的运行循环（RunLoop）中设置一个计时器（timer）来执行 aSelector 消息。该计时器 Mode 为 NSDefaultRunLoopMode。当触发计时器时，线程会尝试从 RunLoop 的队列中将该消息出列并执行该 selector。如果 RunLoop 正在运行并且处于 NSDefaultRunLoopMode，则成功；否则，该计时器将等待，直到 RunLoop 处于 NSDefaultRunLoopMode 状态。
+
+我们知道只有主线程中的 RunLoop 是默认开启的，而子线程刚创建时并没有 RunLoop，如果不主动获取，那么子线程一直不会有 RunLoop。由于 performSelector:withObject:afterDelay: 方法在一个子线程中执行，而且该子线程中并没有开启 RunLoop，所以 performSelector:withObject:afterDelay: 方法会失效，也就不会执行 aSelector 了。
 
 
 
