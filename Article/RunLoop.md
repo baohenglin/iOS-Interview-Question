@@ -1,5 +1,7 @@
 ## 知识点 RunLoop
 
+[RunLoop 参考链接1](https://www.jianshu.com/p/ac05ac8428ac)
+
 **【扩展 1-1】RunLoop 是什么？RunLoop 的作用是什么？**
 
 RunLoop 顾名思义也就是**运行循环**，在程序运行过程中循环执行某些任务。
