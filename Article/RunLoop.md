@@ -49,11 +49,11 @@ CFRunLoopGetMain();
 ```
 
 
-**【扩展 1-3】程序中添加每3秒响应一次的NSTimer，当拖动tableView时，timer可能无法响应要怎么解决？**
+**【扩展 1-3】程序中添加每 3 秒响应一次的 NSTimer，当滑动 tableView 时，timer 可能无法响应，这该怎么解决？**
 
-NSTimer在滑动时失效的原因是NSTimer默认是工作在NSDefaultRunLoopMode模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式，所有NSTimer失效。
+NSTimer 在滑动时失效的原因是 NSTimer 默认是工作在 NSDefaultRunLoopMode 模式下，而当我们滑动时，RunLoop 会退出 NSDefaultRunLoopMode 模式，并进入 UITrackingRunLoopMode 模式，所有NSTimer失效。
 
-【注意】[NSTimer scheduledTimerWithTimeInterval: repeats:block:]方法会自动将定时器添加到主线程的NSDefaultRunLoopMode模式下，如果要自定义RunLoop模式的话，可以使用timerWithTimeInterval方法创建定时器对象，并将定时器添加到当前线程的NSRunLoopCommonModes模式下(实际上是将timer定时器添加到了NSRunLoopCommonModes 模式下的CFMutableSetRef _commonModeItems数组中)，这样就能解决timer失效的问题。代码如下：
+【注意】[NSTimer scheduledTimerWithTimeInterval: repeats:block:]方法会自动将定时器添加到主线程的 NSDefaultRunLoopMode 模式下，如果要自定义 RunLoop 模式的话，可以使用 timerWithTimeInterval 方法创建定时器对象，并将定时器添加到当前线程的 NSRunLoopCommonModes 模式下(实际上是将timer 定时器添加到了 NSRunLoopCommonModes 模式下的 CFMutableSetRef _commonModeItems数组中)，这样就能解决timer失效的问题。代码如下：
 
 ```
 NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self selector:@selector(completionDelayTimerFired) userInfo:nil repeats:YES];
