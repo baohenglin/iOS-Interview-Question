@@ -134,25 +134,13 @@ UIImage *downloadedImage = ....;
 
 **【扩展 1-12】RunLoop 的基本概念，它是怎么休眠的？(阿里)**
 
-**【扩展 1-13】程序中添加了每3秒响应一次的NSTimer，当拖动tableView或者scrollView时，timer可能无法响应要怎么解决？**
-
-NSTimer在滑动时失效的原因是NSTimer默认是工作在NSDefaultRunLoopMode(kCFRunLoopDefaultMode)模式下，而当我们滑动时，RunLoop会退出NSDefaultRunLoopMode模式，并进入UITrackingRunLoopMode模式(切换成UITrackingRunLoopMode模式是为了保证滑动的流畅)，导致NSTimer失效。
-
-【注意】[NSTimer scheduledTimerWithTimeInterval: repeats:block:]方法会自动将定时器添加到主线程的NSDefaultRunLoopMode模式下，如果要自定义RunLoop模式的话，可以使用timerWithTimeInterval方法创建定时器对象，并将定时器添加到当前线程的**NSRunLoopCommonModes模式**下(实际上是将timer定时器添加到了NSRunLoopCommonModes 模式下的CFMutableSetRef _commonModeItems数组中)，这样就能解决timer失效的问题。代码如下：
-
-```
-NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self selector:@selector(completionDelayTimerFired) userInfo:nil repeats:YES];
-
-[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-```
-
-**【扩展 1-14】利用 runloop 解释一下页面的渲染过程**
+**【扩展 1-13】利用 runloop 解释一下页面的渲染过程**
 
 当我们调用 [UIView setNeedsDisplay] 时，这时会调用当前 View.layer 的 [view.layer setNeedsDisplay]方法。这等于给当前的 layer 打上了一个脏标记，而此时并没有直接进行绘制工作。而是会到当前的 Runloop 即将休眠，也就是 beforeWaiting 时才会进行绘制工作。紧接着会调用 [CALayer display]，进入到真正绘制的工作。CALayer 层会判断自己的 delegate 有没有实现异步绘制的代理方法 displayer:，这个代理方法是异步绘制的入口，如果没有实现这个方法，那么会继续进行系统绘制的流程，然后绘制结束。
 
 CALayer 内部会创建一个 Backing Store，用来获取图形上下文。接下来会判断这个 layer 是否有 delegate。如果有的话，会调用 [layer.delegate drawLayer:inContext:]，并且会返回给我们 [UIView DrawRect:] 的回调，让我们在系统绘制的基础之上再做一些事情。如果没有 delegate，那么会调用 [CALayer drawInContext:]。以上两个分支，最终 CALayer 都会将位图提交到 Backing Store，最后提交给 GPU。至此绘制的过程结束。
 
-**【扩展 1-15】performSelector:withObject:afterDelay:内部大概是怎么实现的？使用该方法时有什么注意事项？**
+**【扩展 1-14】performSelector:withObject:afterDelay:内部大概是怎么实现的？使用该方法时有什么注意事项？**
 
 ```
 [self performSelector:(nonnull SEL) withObject:(nullable id) afterDelay:(NSTimeInterval)]; 
@@ -170,7 +158,7 @@ CALayer 内部会创建一个 Backing Store，用来获取图形上下文。接�
 [参考2](https://www.jianshu.com/p/7583ff0181c2)
 
 
-**【扩展 1-16】下面的代码打印输出结果是什么？为什么？**
+**【扩展 1-15】下面的代码打印输出结果是什么？为什么？**
 
 ```
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
