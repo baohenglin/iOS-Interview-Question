@@ -118,6 +118,7 @@ NSTimer *timer = [NSTimer timerWithTimeInterval:self.completionDelay target:self
 我们可以利用 RunLoop 的 Mode 特性来实现。RunLoop 有五种 Mode，默认情况下处于 NSDefaultRunLoopMode，当滑动 tableView 时，会退出当前的 NSDefaultRunLoopMode，进入 UITrackingRunLoopMode，为了避免加载图片对页面的流畅性产生负面影响，可以通过 performSelector:whithObject:afterDelay:inModes 方法在主线程的 NSDefaultRunLoopMode 里为 UIImageView 设置图片（加载显示图片）。具体代码如下所示：
 
 ```
+//还没弄清楚这块
 UIImage *downloadedImage = ....;
 [self.myImageView performSelector:@selector(setImage:) withObject:downloadedImage afterDelay:0 inModes:@[NSDefaultRunLoopMode]];
 ```
