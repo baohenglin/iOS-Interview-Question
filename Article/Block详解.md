@@ -274,7 +274,8 @@ self.block();//必须写
 //方法(3)
 __weak typeof(self) weakSelf = self;
 self.block = ^{
-	NSLog(@"%p", weakSelf);
+   __strong typeof(self)strongSelf = weakSelf;
+   NSLog(@"%p", strongSelf);
 };
 ```
 
@@ -285,6 +286,9 @@ ARC环境下，也可以通过__block来解决循环引用。缺点是必须要�
 ARC环境下，可以通过 __weak 修饰符来解决循环引用。__weak是安全的，当指针指向的对象销毁时，会自动将指针置为nil。
 
 综上所述，优先**推荐使用__weak修饰符**来解决循环引用问题。
+
+此外需要注意的是，**在多线程的情况下**，除了在 Block 外使用 __weak 对对象进行弱引用外，我们还需要在 Block 内部对弱引用对象再进行一次强引用（__strong）,这是因为，仅用__weak 修饰的对象，在多线程情况下，可能会被释放，那么这个对象在 Block 执行的过程中就会变为 nil，从而引起崩溃。
+
 
 
 **【扩展 1-13】MRC环境下解决循环引用问题的方法有哪些？**
@@ -349,7 +353,7 @@ HLBlok block = ^{
 
 **【扩展 1-20】使用系统的某些block api（如UIView的block版本写动画时），是否也要考虑循环引用问题？**
 
-系统的某些block api中，UIView的block版本写动画时不需要考虑，但是也有一些api需要考虑循环引用问题。
+系统的某些block api中，UIView的 block 版本写动画时不需要考虑，但是也有一些api需要考虑循环引用问题。
 
 所谓“循环引用”是指双向的强引用。所以那些“单向的强引用”（block强引用self）不会产生循环引用问题。比如：
 
@@ -370,7 +374,7 @@ HLBlok block = ^{
 
 以上三种情况只是block强引用self，即单向强引用，不会产生循环引用问题。
 
-但是如果你使用一些参数中可能含有 ivar 的系统 api ，如 GCD 、 NSNotificationCenter就要⼩心一点:比如GCD 内部如果引⽤了 self，⽽且 GCD 的 其他参数是 ivar，则要考虑到循环引用问题。比如下面两种情况：
+但是如果你使用一些参数中可能含有 ivar 的系统 api ，如 GCD 、 NSNotificationCenter就要⼩心一点:比如GCD 内部如果引⽤了 self，⽽且 GCD 的 其他参数是 ivar，则要考虑到循环引用问题。比如下面两种情况：
 
 ```
 //情况1
