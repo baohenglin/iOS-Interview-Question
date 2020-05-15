@@ -43,7 +43,7 @@ Block是苹果在iOS4开始引入的对C语言的扩展，用来实现匿名函�
 
 1）从捕获外部变量的角度上来看：
 
- * _NSConcreteGlobalBlock **没有访问局部变量（自动变量/auto变量）**或只访问了全局变量、静态变量的block为_NSConcreteGlobalBlock，生命周期从创建到应用程序结束。
+ * _NSConcreteGlobalBlock **没有访问局部变量**（自动变量/auto变量）或只访问了全局变量、静态变量的block为_NSConcreteGlobalBlock，生命周期从创建到应用程序结束。
  * _NSConcreteStackBlock 访问了auto变量，并且没有强指针引用和copy操作的block都是StackBlock，StackBlock的生命周期由系统控制，一旦返回之后，就被系统销毁了；
  * _NSConcreteMallocBlock 有强指针引用或 copy修饰的属性 引用的block会被复制到堆中而成为MallocBlock，没有强指针引用即销毁，生命周期由程序员控制
      
@@ -396,3 +396,42 @@ _observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"testKey"
 ```
 
 检测代码中是否存在循环引用问题，可使⽤ Facebook 开源的一个检测工具 FBRetainCycleDetector 。
+
+
+**【扩展 1-21】使用 block 有什么好处？如何使用 NSTimer 写出一个使用 block 显示（在 UILabel 上）秒表？**
+
+使用 block 的好处：代码紧凑；传值和回调都很方便；相比代理，代码更简洁。
+
+```
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeate:YES callback:^{
+   weakSelf.secondsLabel.text = ...
+}];
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+```
+
+**【扩展 1-22】解释以下代码产生内存泄漏的原因？**
+
+```
+@implementation HLTestViewController
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+   HLTestCell *cell = [tableView dequeueReuseableCellWithIdentifier:@"testCell" forIndexPath:indexPath];
+   [cell setTouchBlock:^(HLTestCell *cell){
+      [self refreshData];
+   }];
+   return cell;
+}
+```
+
+**内存泄漏的原因**：存在循环引用。在给 cell 设置的 touchBlock 中，使用了 __strong 修饰的 self，由于 Block 的底层实现原理，当 touchBlock 从栈复制到堆中时，self 会被一同复制到堆中，retain 一次，此时 self 被 touchBlock 持有（强引用），而 touchBlock 又是被 cell 持有的，cell 又被 tableView 持有，tableView 又被 self 持有，这样一来，self 间接持有 touchBlock，touchBlock 持有 self，两个对象都被彼此强引用，引用计数始终不能变为0，无法释放，因此形成了循环引用。
+
+
+解决方法：
+
+```
+__weak __typeof__(self) weakSelf = self;
+[cell setTouchBlock:^(HLTestCell *cell){
+      [weakSelf refreshData];
+   }];
+```
+
