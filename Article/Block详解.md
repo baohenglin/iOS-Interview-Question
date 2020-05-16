@@ -435,3 +435,48 @@ __weak __typeof__(self) weakSelf = self;
    }];
 ```
 
+**【扩展1-23】Block的应用场景有哪些？**
+
+**应用场景1：Block传值**。在控制器间传值可以使用代理或者 block，使用 block 更简洁。
+
+在前一个控制器的 touchesBegan: 方法内实现如下代码：
+
+```
+ModalViewController *modalVc = [[ModalViewController alloc]init];
+modalVc.valueBlock = ^(NSString *str) {
+    NSLog(@"ViewController 接收到了后一个控制器回传过来的值 %@",str);
+};
+[self presentViewController:modalVc animated:YES completion:nil];
+```
+
+在 ModalViewController 的.h文件中声明一个 block 属性，并在 .m 文件中实现方法。
+
+```
+//.h
+@property(nonatomic, strong) void(^valueBlock)(NSString *str);
+
+//.m
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent(UIEvent *)event
+{
+   //调用 block 传值
+   if(_valueBlock) {
+      _valueBlock(@"123");
+   }
+}
+```
+
+这样在 ModalViewController 回到上一个控制器时，上一个控制器就会接收到回传过去的值。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
