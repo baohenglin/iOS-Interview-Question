@@ -2,7 +2,9 @@
 
 **【1-1】iOS是如何实现对一个对象的KVO的？（KVO的本质或原理是什么？）**
 
-本质上是利用Runtime和isa混写（isa-swizzling）机制实现的。当某个类(比如HLPerson)的属性对象第一次被观察时，系统会在运行期动态地创建该类的一个子类(NSKVONotifying_HLPerson)，并且让instance对象的isa指向这个全新的子类，并且这个全新的子类重写了setter方法、class方法、dealloc方法、_isKVOA方法。当修改instance对象的属性值时，重写的setter方法会调用Foundation的_NSSetXXXValueAndNotify函数，在_NSSetXXXValueAndNotify函数内部会先调用willChangeValueForKey:方法，然后调用父类原来的setter方法，最后调用didChangeValueForKey:方法，并在didChangeValueForKey方法内部触发监听器（Oberser）的监听方法（observeValueForKeyPath:ofObject:change:context:）。
+KVO是键值观察机制，它提供了观察某一属性变化的方法。
+
+本质上是利用 Runtime 和 isa混写（isa-swizzling）机制实现的。当一个对象(比如person 对象，person对象的类是 HLPerson)的属性（假设 person 的 age）第一次被观察时，系统会在运行期动态地创建该类的一个子类(继承自HLPerson 的 NSKVONotifying_HLPerson)，并且让 instance对象（实例对象）的 isa 指针指向这个全新的子类，并且这个全新的子类重写了setter方法、class方法、dealloc方法、_isKVOA方法。当修改instance对象的属性值 age 的时候，重写的setter 方法会调用 Foundation 的_NSSetXXXValueAndNotify 函数，在_NSSetXXXValueAndNotify 函数内部会先调用 willChangeValueForKey: 方法，然后调用父类原来的setter方法，最后调用 didChangeValueForKey: 方法，并在 didChangeValueForKey 方法内部触发监听器（Oberser）的监听方法（observeValueForKeyPath:ofObject:change:context:）。
 
 **【1-2】如何手动触发KVO？**
 
@@ -82,9 +84,26 @@ HLPerson.m文件中代码如下：
 
 [KVO监听数组元素的变化](https://www.jianshu.com/p/31fd5c8fe595)
 
+**【1-11】KVO 的优点和缺点分别是什么？**
+
+KVO 是一个对象能够观察另一个对象的属性的值，并且能够发现值的变化。KVO 适合任何类型的对象监听另外一个任意对象的改变。这是一个对象与另一个对象保持同步的一种方法，即当另外一种对象的状态发生变化时，观察对象马上做出反应。它只能用来对属性做出反应，而不会用来对方法做出反应。
+
+**KVO 优点**：
+
+* 能够提供一种简单的方法实现两个对象间的同步。例如 model 和 view 之间同步；
+* 能够对非我们创建的对象，即内部对象的状态改变做出响应，而且不需要改变内部对象的实现；
+* 能够提供观察的属性的最新值以及先前值；
+* 用 key paths 来观察属性，因此也可以观察嵌套对象；
+
+**KVO 缺点**：
+
+* 我们观察的属性必须使用 string 来定义。因此在编译期不会检查，不会出现警告；
+* 对属性重构将导致我们的观察代码不再可用；
+* 当释放观察者时需要移除观察者。
+
 ## 知识点2：KVC
 
-KVC的全称是Key-Value Coding，俗称“键值编码”，它是一种可以直接通过字符串的名字(key)来访问类的某个属性的机制。KVC支持类对象和内建基本数据类型。
+KVC 的全称是 Key-Value Coding，俗称“键值编码”，它是一种可以直接通过字符串的名字(key)来访问类的某个属性的机制。KVC支持类对象和内置的基本数据类型。
 
 **【2-1】KVC常用的API有哪几个？**
 
