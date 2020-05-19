@@ -1,6 +1,6 @@
 ## 知识点1：KVO
 
-**【1-1】iOS是如何实现对一个对象的KVO的？（KVO的本质或原理是什么？）**
+**【1-1】iOS是如何实现对一个对象的KVO的？（KVO的本质或原理是什么？重点）**
 
 KVO是键值观察机制，它提供了观察某一属性变化的方法。
 
@@ -12,7 +12,7 @@ KVO是键值观察机制，它提供了观察某一属性变化的方法。
 
 **【1-3】直接修改成员变量会触发KVO吗？**
 
-直接修改成员变量不会触发KVO(因为直接修改成员变量不会调用该属性的setter方法)。
+直接修改成员变量不会触发KVO(因为直接修改成员变量不会调用该属性的 setter 方法)。
 
 KVO的实现原理是利用Runtime和isa混写（isa-swizzling）机制动态地生成一个子类，并且让instance对象的isa指向这个全新的子类，并且这个全新的子类重写了setter方法、class方法、dealloc方法、_isKVOA方法。当修改instance对象的属性值时，重写的setter方法会调用Foundation的_NSSetXXXValueAndNotify函数，在_NSSetXXXValueAndNotify函数内部会先调用willChangeValueForKey:方法，然后调用父类原来的setter方法，最后调用didChangeValueForKey:方法，并在didChangeValueForKey方法内部触发监听器（Oberser）的监听方法（observeValueForKeyPath:ofObject:change:context:）。由于直接修改成员变量不会调用该属性的setter方法，所以不会触发KVO。
 
@@ -72,9 +72,11 @@ HLPerson.m文件中代码如下：
 
 
 
-**【1-8】KVO、NSNotification、delegate和block的区别？**
+**【1-8】简述 KVO、NSNotification、Delegate和 Block 并说明它们之间的区别？（重点）**
 
 [KVO，NSNotification，delegate及block区别](https://www.jianshu.com/p/59e34b91f0a8)
+
+[参考链接2](https://www.cnblogs.com/oc-bowen/p/8652492.html)
 
 **【1-9】iOS使用KVO设置键值观察依赖键的具体用法是什么？**
 
