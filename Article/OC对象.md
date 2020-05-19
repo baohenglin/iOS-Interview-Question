@@ -84,6 +84,7 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 
 method 是一个结构体，包含了方法名、方法字符串编码和方法实现；selector 是一个方法的名称。
 
+```
 struct method_t {
     SEL name;//函数名
     const char *types;//字符串编码，里面存放着返回值类型、参数类型。
@@ -98,6 +99,7 @@ struct method_t {
         { return lhs.name < rhs.name; }
     };
 };
+```
 
 **【1-16】Core Foundation 的内存管理**
 
@@ -118,6 +120,28 @@ struct method_t {
 * new 是 C++ 中的操作符，malloc 是 C 语言中的一个函数；
 * 内存泄漏对于 malloc 和 new 都可以检查出来，区别在于 new 可以指明是哪个文件的哪一行，而 malloc 没有这些信息；
 
+**【1-18】什么是 SEL？如何声明一个 SEL？通过哪些方法能够调用 SEL 包装起来的方法？**
 
+**SEL概念**：
+
+SEL 是方法名或函数名，也称作方法选择器。在内存中每个类的对象方法都存储类对象中，每个方法底层结构体重都有一个与之对应的 SEL 类型的 name（方法名），根据这个方法名就可以找到对应的存储着方法实现的 IMP imp，进而调用该方法。
+
+**声明 SEL**：
+
+```
+SEL s1 = @selector(test1); //将 test1方法封装成 SEL 对象
+SEL s2 = NSSelectorFromString(@"test1"); //将一个字符串方法转换成 SEL 对象
+```
+
+**SEL 类型方法的调用**：
+
+```
+//方式1：直接通过方法名来调用
+[person text1]; 
+
+//方式2：间接地通过 SEL 数据来调用
+SEL methodA = @selector(test);
+[person performSelector:methodA];
+```
 
 
