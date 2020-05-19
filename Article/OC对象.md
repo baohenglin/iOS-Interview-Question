@@ -99,4 +99,9 @@ struct method_t {
     };
 };
 
+**【1-16】Core Foundation 的内存管理**
+
+凡是由带有 Create、Copy、Retain 等关键字的函数创建出来的对象，都需要在最后做一次 release 操作。比如 CFRunLoopObserverCreate 对象的 release 函数：CFRelease(对象);
+
+
 
