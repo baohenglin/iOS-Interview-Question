@@ -199,12 +199,53 @@ import 与 @class 二者的区别：
 * 如果在类的实现里面需要用到这个引用类内部的实例变量和方法，就需要使用 #import 来引入头文件；
 * 如果存在循环依赖关系，如 A->B，B->A这样的相互依赖关系，如果使用 #import 来互相包含，那么就会出现编译错误，如果使用 @class，则不会报编译错误。
 
+**【1-26】什么是谓词？如何使用？**
 
+谓词就是通过 NSPredicate 给定的逻辑条件作为约束条件来完成对数据的过滤筛选。
 
+* (1)但条件过滤：
 
+```
+//定义谓词对象，谓词对象中包含了过滤条件
+NSPredicate *predicate = [NSPredicate predicateWithFormat:@"age<%d",30];
+//使用谓词条件过滤数据中的元素，过滤之后返回查询的结果
+NSArray *array = [personArr filteredArrayUsingPredicate:predicate];
+```
 
+* (2)可以使用 && 进行多条件过滤：
 
+```
+NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name='l' && age>40"];
+//使用谓词条件过滤数据中的元素，过滤之后返回查询的结果
+NSArray *array = [personArr filteredArrayUsingPredicate:predicate];
+```
 
+* (3)包含语句的使用
+
+```
+NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.name IN {'1','2','4'} || self.age IN {30, 40}"];
+```
+
+* (4)筛选字符开头和字符结尾包含指定的字符的数据
+
+```
+//name 以 a 开头的
+predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH 'a'"];
+
+//name 以 ba 结尾的
+predicate = [NSPredicate predicateWithFormat:@"name ENDSWITH 'ba'"];
+```
+
+* (5)其他
+
+```
+//name中包含字符 a 的
+predicate = [NSPredicate predicateWithFormat:@"name CONTAINS 'a'"];
+//name 中只要有 s 字符就满足条件
+predicate = [NSPredicate predicateWithFormat:@"name like 's'"];
+//?代表一个字符，下面的查询条件是：name 中第二个字符是 s 的
+predicate = [NSPredicate predicateWithFormat:@"name like '?s'"];
+```
 
 
 
