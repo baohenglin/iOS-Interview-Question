@@ -80,6 +80,8 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 
 [多态特性](https://www.cnblogs.com/wendingding/p/3705428.html)
 
+**【1-15】方法和选择器有什么不同？**
 
+method 是一个结构体，包含了方法名、方法字符串编码和方法实现；selector 是一个方法的名称。
 
 
