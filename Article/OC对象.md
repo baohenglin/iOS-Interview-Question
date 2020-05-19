@@ -271,6 +271,17 @@ OC 常见的数据类型有 NSInteger、CGFloat、NSString、NSArray、NSData。
 * CGFloat 根据 32 位或者 64 位系统决定本身是 float 还是 double；
 * NSString、NSNumber、NSArray、NSData 都是指针类型的对象，在堆中分配内存，C 语言中的 char int 等都是在栈中分配空间。
 
+**【1-28】向一个 nil 对象发送消息会发生什么？**
+
+* 向 nil 发送消息是完全有效的。只是在运行时不会有任何作用。
+* 如果一个方法返回值是一个对象，那么发送给 nil 的消息将返回 0（nil）；
+* 如果方法返回值为指针类型，其指针大小为小于或等于 sizeof(void *)，float，double，long double 或者 long long 的整型标量，发送给 nil 的消息将返回 0；
+* 如果方法返回值为结构体，发送给 nil 的消息将返回 0
+
+
+
+
+
 
 
 
