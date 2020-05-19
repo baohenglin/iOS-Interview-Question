@@ -292,7 +292,16 @@ OC 常见的数据类型有 NSInteger、CGFloat、NSString、NSArray、NSData。
 
 [参考链接1](https://blog.csdn.net/dayuqi/article/details/8101099?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase)
 
+**【1-31】@property 的本质是什么？ivar、getter、setter 是如何生成并添加到这个类中的？**
 
+**@property 的本质**：@property = ivar（实例变量）+ getter（取方法）+ setter（存方法）
+
+**ivar、getter、setter 是如何生成并添加到这个类中的**：这是编译器自动合成的，通过 @synthesize 关键字指定，若不指定，默认为 @synthesize propertyName = _propertyName; 若手动实现了 getter/setter 方法，则不会自动合成。
+
+**【1-32】这个写法会有什么问题：@property(copy) NSMutableArray *array;**
+
+* (1)没有指明为 nonatomic，因此就是 atomic 即原子操作，会影响性能。该属性使用了同步锁，会在创建时生成一些额外的代码用于帮助编写多线程程序，这会带来性能问题。通过声明 nonatomic 可以节省这些虽然很小但是不必要的额外开销。在我们的应用程序中，几乎都是使用 nonatomic 来修饰的，因为使用 atomic 并不能保证绝对的线程安全，如果要绝对保证线程安全，还需要使用更高级的方式来处理，比如 NSSpinLock 等。
+* (2)因为使用的是 copy，所得到的实际是 NSArray 类型，它是不可变的，若在使用中使用了“增、删、改”等操作，则会 crash。
 
 
 
