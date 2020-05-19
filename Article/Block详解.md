@@ -184,7 +184,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),di
 
 block本身可以像对象那样被retain，和release。但是，block在创建的时候，它的内存是分配在栈(stack)上，而不是在堆(heap)上。他本身的作于域是属于创建时候的作用域，一旦在创建时候的作用域之外调用block将导致程序崩溃。使用retain也可以，但是block的retain行为默认是用copy的行为实现的，因为block变量默认是声明为栈变量的，为了能够在block的声明域之外使用，就必须要把block从栈(stack)拷贝（copy）到堆(heap)，所以说为了block属性声明和实际的操作一致，最好声明为copy。此外，通过copy操作来保证block被拷贝到堆上也是为了开发者可以控制block的生命周期，并对该block进行内存管理。
 
-**【扩展 1-9】Block与代理的联系和区别？**
+**【扩展 1-9】Block与代理的联系和区别？（重点）**
 
 Block和代理的**共同点**：
 
