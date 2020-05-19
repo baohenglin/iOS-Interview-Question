@@ -84,4 +84,19 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 
 method 是一个结构体，包含了方法名、方法字符串编码和方法实现；selector 是一个方法的名称。
 
+struct method_t {
+    SEL name;//函数名
+    const char *types;//字符串编码，里面存放着返回值类型、参数类型。
+    IMP imp;//指向函数的指针（函数地址）
+
+    struct SortBySELAddress :
+        public std::binary_function<const method_t&,
+                                    const method_t&, bool>
+    {
+        bool operator() (const method_t& lhs,
+                         const method_t& rhs)
+        { return lhs.name < rhs.name; }
+    };
+};
+
 
