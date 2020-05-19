@@ -59,7 +59,7 @@
 
 **【1-11】id和 NSObject * 的区别是什么？**
 
-id是一个 objc_object结构体指针，定义是 typedef struct objc_object * id。id可以理解为指向对象的指针。所有的OC对象都可以使用id来指向它们，而且编译器不会做类型检查，id调用任何存在的方法都不会在编译阶段报错。如果id指向的对象没有这个方法，则会崩溃。
+id是一个 objc_object结构体指针，定义是 typedef struct objc_object * id。id 类型的指针可以理解为**指向任何OC对象的指针**。所有的OC对象都可以使用id来指向它们，而且编译器不会做类型检查，id调用任何存在的方法都不会在编译阶段报错。如果id指向的对象没有这个方法，则会崩溃。
 
 NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject里面的方法，否则要做强制类型转换。此外，需要注意的是，不是所有的OC对象都是NSObject的子类，还有一些继承自NSProxy。因此NSObject * 可指向的类型是id可指向类型的子集。
 
@@ -70,11 +70,27 @@ NSObject * 指向的必须是NSObject的子类，调用的也只能是NSObject�
 不同点：NSProxy一般用来作为消息转发的代理类(因为NSProxy是一个抽象类，自身能够处理的方法极少(仅<NSObject>接口中定义的部分方法))。
         
 
-**【1-13】nil、Nil、null、NSNull的区别？**
+**【1-13】nil、NULL、Nil、NSNull的区别？（重点）**
 
 [nil、Nil、null、NSNull的区别](https://blog.csdn.net/wzzvictory/article/details/18413519)
 
 [nil、Nil、null、NSNull的区别](https://www.jianshu.com/p/2b44e1c346e7)
+
+* nil：表示 OC 对象的指针(引用)为空。在 Objective-C 中，nil 对象调用任何方法表示什么也不执行，也不会崩溃。
+* NULL：表示 C 语言中指向基础数据类型的指针为空。对于 Objective-C 来说，NULL就表示 ((void *)0)。在非 ARC 中，nil 和 NULL 可以互换，但是在 ARC 中，普通指针和对象引用被严格限制，不能互换。
+* Nil：用于表示空类。比如 Class myClass = Nil; Nil对于我们 Objective-C开发来说，Nil 也代表 ((void *)0)。
+* NSNull：NSNull 是继承于 NSObject 的类型。它是很特殊的类。它表示空，什么也不存储，但是它却是对象，只是一个占位对象。使用场景是：当服务端接口中在 key 为空时，传空，
+
+```
+NSDictionary (parametersDic = @{@"arg1":@"value1",@"arg2":arg.isEmpty ? [NSNull null] : arg2};
+```
+
+nil、NULL、Nil 这三者对于 Objective-C 来说，值都是一样的，都是 (void *)0，那么为什么还要区分呢？它们又和 NSNull 有什么区别呢？
+
+* NULL 是宏，是对于 C 语言指针而使用的，表示空指针；
+* nil 是宏，是对于 Objective-C 中的**对象**而使用的，表示对象的指针指向空（对象的引用为空）；
+* Nil 是宏，是对于 Objective-C 中的**类**而使用的，表示**类指向空**；
+* NSNull：是类类型，是用于表示空的占位对象，与 JS 或者服务端的 null 类似。
 
 **【1-14】OC的多态特性**
 
@@ -247,7 +263,13 @@ predicate = [NSPredicate predicateWithFormat:@"name like 's'"];
 predicate = [NSPredicate predicateWithFormat:@"name like '?s'"];
 ```
 
+**【1-27】常见的 OC 数据类型有哪些？和 C 的基本类型有什么区别？**
 
+OC 常见的数据类型有 NSInteger、CGFloat、NSString、NSArray、NSData。
+
+* NSInteger 根据 32 位或者 64 位系统决定本身是 int 还是 long；
+* CGFloat 根据 32 位或者 64 位系统决定本身是 float 还是 double；
+* NSString、NSNumber、NSArray、NSData 都是指针类型的对象，在堆中分配内存，C 语言中的 char int 等都是在栈中分配空间。
 
 
 
