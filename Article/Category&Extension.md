@@ -30,24 +30,24 @@ Category编译之后的底层结构是struct_category_t类型的的结构体，�
 [分类(category)的实现原理详解](https://github.com/baohenglin/HLBlog/blob/master/Articles/iOS%E5%BC%80%E5%8F%91%E4%B9%8BCategory%E6%8E%A2%E7%A9%B6.md)
 
 
-**【扩展 1-3】分类(Category)和类扩展(Class Extension)有什么区别？**
+**【扩展 1-3】分类(Category)和类扩展(Class Extension)有什么区别？（重点）**
 
-分类(Category)是Objective-C 2.0之后增加的语言特性，Category的主要作用是为已经存在的类添加方法。
+分类(Category)是Objective-C 2.0之后增加的语言特性，Category的主要作用是**在不改变已经存在的类的代码的情况下，为该类添加方法**。
 
 类扩展（Extension）是category的一个特例，也称为匿名分类（类扩展与分类相比只少了分类的名称）。类扩展的作用是为一个类添加一些额外的私有属性、成员变量和私有方法。
 
 **不同点：**
 
 * (1)Class Extension是在编译期决定，Category由运行时决定。也就是说Class extension在编译的时候，它的数据就已经包含在类信息中；而Category（分类）是在运行时，才会将分类数据合并到类信息中（类对象、元类对象中） 
-* (2)类扩展即可以添加方法又可以添加成员变量；分类(Category)中只能添加方法，不能直接添加成员变量、属性(属性仅仅是声明，并没有真正实现)
+* (2)类扩展即可以添加方法又可以添加成员变量；分类(Category)中只能添加方法，不能直接添加成员变量、属性(属性仅仅是声明，并没有真正实现)。如果分类和原来类中的方法名冲突，那么分类将覆盖原来的方法（因为分类具有更高的优先级）。
 * (3)**在类扩展(Extension)中添加的新方法一定要实现**，而分类(category)中没有这种限制
 * (4)类扩展中声明的方法没被实现，编译器会报警告，但是分类(Category)中的方法没被实现编译器是不会有任何警告的（因为类扩展是在编译阶段被添加到类中，而类别是在运行时添加到类中）
 * (5)分类有名字，类扩展没有分类名字，即匿名分类，类扩展使一种特殊的分类。
 
-【注意】继承可以增加、修改和删除方法，且可以添加属性。
+【注意】与分类（Category）不同的是，继承可以增加、修改和删除方法，且可以添加属性。
 
 
-**【扩展 1-4】Category能否给类添加成员变量？如果可以,如何给Category添加成员变量？**
+**【扩展 1-4】Category能否给类添加成员变量？如果可以,如何给Category添加成员变量？（重点）**
 
 默认情况下，由于分类底层结构的限制，不能直接给Category添加成员变量,但是可以间接实现。通过“关联对象”的方式来间接给Category添加成员变量。也就是通过“<objc/runtime.h>”中提供的关联对象的API来实现。“<objc/runtime.h>”中提供的关联对象的API有以下3个：
 
@@ -107,7 +107,7 @@ void objc_removeAssociatedObjects(id object)
 @end
 ```
 
-**【扩展 1-5】Category中有load方法吗？load方法是什么时候调用的？load方法能继承吗？**
+**【扩展 1-5】Category中有load方法吗？load方法是什么时候调用的？load方法能继承吗？（重点）**
 
 Category中有+load方法。load方法在runtime（运行时）加载类、分类的时候调用。+load方法能继承。而且+load方法一般都由系统自动调用，不手动调用。
 
@@ -236,6 +236,14 @@ typedef struct objc_object *id;
 因为编译后的类已经注册到 runtime 中，类结构体中的 objc_ivar_list 实例变量列表和 instance_size 实例变量的内存大小已经确定，同时 runtime 会调用 class_setIvarLayout 或 class_setWeakIvarLayout 来处理 strong 和 weak 引用，所以不能向编译后得到的类中添加实例变量。
 
 运行时创建的类是可以添加实例变量的。可以通过调用 class_addIvar 函数添加实例变量。但是必须在调用 objc_allocateClassPair 之后，objc_registerClassPair 之前调用 class_addIvar 方法，原因同上。
+
+**【1-11】OC有多继承吗？如果没有的话，可以用什么方法替代？（重点）**
+
+多继承是指**一个子类可以有多个父类，它继承了多个父类的特性**。
+
+Objective-C 的类不支持多继承，只支持单继承。如果要实现多继承，可以通过**类别**和**协议**的方式来实现。protocol（协议）可以实现多个接口，通过实现多个接口可以实现多继承；通过 Category（类别）去重写类的方法（仅对本 Category 有效，不会影响到其他类和原有类的关系），也可以实现多继承。
+
+
 
 <br />
 <br />
