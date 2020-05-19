@@ -161,7 +161,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(1.0 * NSEC_PER_SEC)),di
 
 * (5)手动调用copy
              
-**【扩展 1-5】在Block中修饰词__block和__weak的区别？**
+**【扩展 1-5】在Block中修饰词__block和__weak的区别？（重点）**
 
 二者区别如下：
 
