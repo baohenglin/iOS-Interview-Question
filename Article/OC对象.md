@@ -288,6 +288,10 @@ OC 常见的数据类型有 NSInteger、CGFloat、NSString、NSArray、NSData。
 * 类方法不能访问成员变量，实例方法可以访问成员变量；
 * 类方法不能直接调用对象方法，实例方法可以直接调用类方法。
 
+**【1-30】写一个 NSString 类的实现（重点 没看明白）**
+
+[参考链接1](https://blog.csdn.net/dayuqi/article/details/8101099?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase)
+
 
 
 
