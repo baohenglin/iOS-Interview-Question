@@ -303,7 +303,33 @@ OC 常见的数据类型有 NSInteger、CGFloat、NSString、NSArray、NSData。
 * (1)没有指明为 nonatomic，因此就是 atomic 即原子操作，会影响性能。该属性使用了同步锁，会在创建时生成一些额外的代码用于帮助编写多线程程序，这会带来性能问题。通过声明 nonatomic 可以节省这些虽然很小但是不必要的额外开销。在我们的应用程序中，几乎都是使用 nonatomic 来修饰的，因为使用 atomic 并不能保证绝对的线程安全，如果要绝对保证线程安全，还需要使用更高级的方式来处理，比如 NSSpinLock 等。
 * (2)因为使用的是 copy，所得到的实际是 NSArray 类型，它是不可变的，若在使用中使用了“增、删、改”等操作，则会 crash。
 
+**【1-33】@property 中有哪些属性关键字？**
 
+1. 是否原子性：
+
+```
+nonatomic
+atomic
+```
+
+2. 读写权限：
+
+```
+readwrite
+readonly
+```
+
+3. 内存管理：
+
+```
+assign
+strong
+weak
+unsafe_unretained
+copy
+```
+
+4. getter、setter
 
 
 
