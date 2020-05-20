@@ -498,11 +498,97 @@ student.arg3 = str;
 }
 ```
 
+**【1-42】若一个类有实例变量 NSString * _foo，调用 setValue:forKey: 时，可以以 foo 还是以 _foo 作为key？**
 
+foo 和 _foo 都可以。
 
+**setValue:forKey:底层实现原理如下**：
 
+（1）首先会按照顺序依次查找setKey:方法和_setKey:方法，只要找到这两个方法当中的任何一个就直接传递参数，调用方法；
 
+（2）如果没有找到setKey:和_setKey:方法，那么这个时候会查看 + (BOOL)accessInstanceVariablesDirectly 方法的返回值是 YES 还是 NO，默认返回 YES，如果返回的是NO（也就是不允许直接访问成员变量），那么会调用setValue:forUndefineKey:方法，并抛出异常“NSUnknownKeyException”；
 
+（3）如果accessInstanceVariablesDirectly方法返回的是YES，也就是说可以访问其成员变量，那么就会按照顺序依次查找 **_key、_isKey、key、isKey** 这四个成员变量，如果查找到了，就直接赋值；如果依然没有查到，那么会调用setValue:forUndefineKey:方法，并抛出异常“NSUnknownKeyException”。
+
+**【1-43】类 NSObject 的哪些方法经常被使用？**
+
+NSObject 是 Objective-C 的基类，其由 NSObject 类及一系列协议构成。其中常用的类方法包括 alloc、class、description；对象方法包括 init、dealloc、performSelector:withObject:afterDelay:
+
+**【1-44】什么是简便构造方法？**
+
+简便构造方法一般由 CocoaTouch 框架提供，如 NSNumber 的 下列方法：
+
+```
++ (NSNumber *)numberWithBool:(BOOL)value;
++ (NSNumber *)numberWithChar:(char)value;
++ (NSNumber *)numberWithInt:(int)value;
++ (NSNumber *)numberWithFloat:(float)value;
++ (NSNumber *)numberWithDouble:(double)value;
+```
+
+Foundation 框架下大部分类均有简便构造方法，我们可以通过简便构造方法，获得系统给我们创建好的对象，并且不需要手动释放。
+
+**【1-45】什么是构造方法，使用构造方法有什么注意点？**
+
+构造方法是对象初始化一个实例的方法。**构造方法的作用**：一般在构造方法里，对类进行一些初始化操作。
+
+注意点：方法开头必须以 init 开头，接下来名称要大写，比如 initWithName，initLayout。
+
+**【1-46】创建一个对象需要经过哪些步骤？**
+
+* (1)开辟内存空间
+* (2)初始化参数
+* (3)返回内存地址值
+
+**【1-47】Get 方法的作用是什么？Set 方法的作用是什么？使用 Set 方法的好处是什么？**
+
+Get 方法的作用是为调用者返回对象内部的成员变量。
+
+Set 方法的作用：为外界提供一个设置成员变量值的方法。Set 方法的好处：不让数据暴露在外，保证了数据的安全性。
+
+**【1-48】id 类型是什么？instancetype 是什么？二者有什么区别？**
+
+id类型：万能指针，能作为参数、方法的返回类型；
+
+instancetype：只能作为方法的返回类型，并且返回的类型是当前定义类的类类型。
+
+**【1-49】截取字符串“20|http://www.baidu.com” 中，“|”字符前面和后面的数据，分别输出它们。（重点 手写代码）**
+
+```
+NSString *str = @"20|http://www.baidu.com";
+NSArray *array = [str componentsSeparatedByString:@"|"];
+for (int i = 0; i < [array count]; i++) {
+  NSLog(@"%d=%@",i,[array objectAtIndex:i]);
+}
+```
+
+**【1-50】编写一个函数，实现递归删除指定路径下的所有文件**
+
+```
++ (void)deleteFiles:(NSString *)path {
+   //1. 判断是文件还是目录
+   NSFileManager *fileManager = [NSFileManager defaultManager];
+   BOOL isDir = NO;
+   BOOL isExist = [fileManager fileExistsAtPath:path isDirectory: &isDir];
+   if (isExist) {
+      //2. 判断是不是目录
+      if (isDir) {
+        NSArray *dirArray = [fileManager contentsOfDirectoryAtPath:path error: nil];
+        NSString *subPath = nil;
+        for (NSString *str in dirArray) {
+          subPath = [path stringByAppendingPathComponent:str];
+          BOOL issubDir = NO;
+          [fileManager fileExistsAtPath:subPath isDirectory: &issubDir];
+          [self deleteFiles:subPath];
+        }
+      } else {
+        [manager removeItemAtPath:filePath error:nil];
+      }
+   } else {
+     NSLog(@“目录不存在”)；
+   }
+}
+```
 
 
 
