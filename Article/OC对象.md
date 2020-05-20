@@ -409,5 +409,100 @@ class_func = @selector(add:int);
 [对象　performSelector:SEL变量　withObject:参数1　withObject:参数2];
 ```
 
+**【1-38】对于语句 NSString *obj = [[NSData alloc] init];，编译时和运行时 obj 分别是什么类型？**
+
+编译时是 NSString 类型，运行时是 NSData 类型。
+
+**分析**：
+
+首先，声明 NSString * obj 是告诉编译器，obj 是一个指向某个 Objective-C 对象的指针。因为不管指向的是什么类型的指针，一个指针所占的内存空间都是固定的，所以这里声明成任何类型的对象，最终生成的可执行代码都是一样的。实际上编译的时候 NSString * obj 等同于 id obj，编译器都会在栈空间分配一个 id 类型的数据。id 数据实际上就是一个 struct objc_object 结构体指针：
+
+```
+/// Represents an instance of a class.
+struct objc_object {
+Class isa OBJC_ISA_AVAILABILITY;
+};
+
+/// A pointer to an instance of a class.
+typedef struct objc_object *id;
+```
+
+这里限定了 NSString 只不过是告诉编译器，要把 obj 当做一个 NSString 类型来检查，如果后面调用了非 NSString 的方法，会产生警告。
+
+接着创建了一个 NSData 对象，然后把这个对象所在的内存地址保存在 obj 变量里，那么在运行时，obj 变量指向的内存空间就是一个 NSData 对象，可以把 obj 当做一个 NSData 对象来用。
+
+**【1-39】@synthesize 和 @dynamic 分别有什么用？**
+
+* @property 有两个对应的词：@synthesize 和 @dynamic。如果 @synthesize 和 @dynamic 都没写，那么默认的就是 @synthesize var = _var;
+* @synthesize 的语义是如果你没有手动实现 setter 方法和 getter 方法，那么编译器会自动为你加上这两个方法的实现。
+* @dynamic 的语义是告知编译器，属性的 setter 方法和 getter 方法由用户自己实现，不要自动生成。假如一个属性被声明为 @dynamic var，然后你没有提供 setter 方法和 getter 方法，编译的时候没问题，但是当程序运行到 instance.var = someVar，由于缺少 setter 方法会导致程序崩溃；或者当运行到 someVar = var 时，由于缺少 getter 方法同样会导致崩溃。编译时没有问题，运行时才执行相应的方法，这就是所谓的动态绑定。
+
+**【1-40】把字符串“2020-05-20”格式化日期转为 NSDate 类型**
+
+```
+NSString *timeStr = @"2020-05-20";
+NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+formatter.dateFormat = @"yyyy-MM-dd";
+formatter.timeZone = [NSTimeZone defaultTimeZone];
+NSDate *date = [formatter dateFromString:timeStr];
+```
+
+**【1-41】怎样使用 performSelector 传入 3 个以上参数，其中一个为结构体？**
+
+系统提供的方法包括：
+
+```
+- (id)performSelector:(SEL)aSelector;
+- (id)performSelector:(SEL)aSelector withObject:(id)object;
+- (id)performSelector:(SEL)aSelector withObject:(id)object1 withObject:(id)object2;
+```
+
+系统提供的 performSelector 的 api 中，并没有提供三个参数的，那么我们能不能传数组或者字典呢？由于数组和字典只能存入对象类型，而结构体并不是对象类型。故不能使用数组或字典。因此我们只能通过把对象放入结构体作为属性来传递了。
+
+```
+typedef struct HLStudent {
+   int a;
+   int b;
+} *my_struct;
+
+@interface HLStudent : NSObject
+
+@property (nonatomic, assign) my_struct arg3;
+@property (nonatomic, assign) NSString *arg1;
+@property (nonatomic, assign) NSString *arg2;
+@end
+
+@implementation HLStudent
+
+//在堆上分配的内存，需要手动释放
+- (void)dealloc {
+   free(self.arg3);
+}
+@end
+```
+
+测试：
+
+```
+my_struct str = (my_struct)(malloc(sizeof(my_struct)));
+str->a = 1;
+str->b = 2;
+HLStudent *student = [[HLStudent alloc] init];
+student.arg1 = @"arg1";
+student.arg2 = @"arg2";
+student.arg3 = str;
+[self performSelector:@selector(call:) withObject:student];
+
+- (void)call:(HLStudent *)obj {
+  NSLog(@"%d %d",obj.arg3->a,obj.arg3->b);
+}
+```
+
+
+
+
+
+
+
 
 
