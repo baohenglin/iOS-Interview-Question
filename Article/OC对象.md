@@ -331,6 +331,83 @@ copy
 
 4. getter、setter
 
+**【1-34】isa 指针**
+
+isa 是一个 Class 类型的指针，每个实例对象都有一个 isa 指针，该指针指向该实例对象的类对象，此外 Class 里面也有一个 isa 指针，指向 metaClass（元类）。元类保存了类方法的列表。需要注意的是，元类（meta class）也是类，也有 isa 指针，它的 isa 指针最终指向的是一个根元类（root meta class），根元类的 isa 指针指向本身。
+
+**【1-35】如何访问并修改一个类的私有属性？（重点）**
+
+方式1：通过 KVC 获取
+
+```
+HLPerson *person = [[HLPerson alloc]init];
+[person setValue:@"FQY" forKeyPath:@"name"]; //使用 KVC 方式访问，可以修改，前提是必须知道变量名。
+```
+
+方式2：通过 runtime 访问并修改私有属性，代码如下：
+
+```
+#import <objc/runtime.h>
+HLPerson *person = [[HLPerson alloc]init];
+
+/*** 方法1：知道变量名时 ***/
+//获取一个实例变量信息
+Ivar nameIvar = class_getInstanceVariable([HLPerson class], "_name");
+//设置成员变量的值
+object_setIvar(person, nameIvar, @"BHL");
+//获取成员变量的值
+NSString *name = object_getIvar(person, nameIvar);
+NSLog(@"name=%@",name);//name=BHL
+
+/*** 方法2：不知道变量名时,通过遍历获取并打印所有变量，来确定要修改的是哪个私有变量 ***/
+unsigned int count;
+Ivar *ivars = class_copyIvarList([HLPerson class], &count);
+for (int i = 0; i < count; i++) {
+  // 获取成员变量
+  Ivar ivar = ivars[i];
+  NSMutableString *name = [NSMutableString stringWithUTF8String: ivar_getName(ivar)];
+  //需要通过打印来确定要获取的 变量名 是ivars 数组中的第几个元素
+  NSLog(@"使用 runtime：%@", name);
+}
+Ivar name = ivars[0];
+object_setIvar(person, name, @"FQY666");
+//获取成员变量的值
+NSString *name = object_getIvar(person, ivars[0]);
+NSLog(@"name=%@",name);//name=BHL
+```
+
+**【1-36】如何为 Class 定义一个对外只读对内可读写的属性？**
+
+在头文件中将属性定义为 readonly，在 .m 文件中将属性重新定义为 readwrite。
+
+**【1-37】Objective-C 的 class 是如何实现的？Selector 是如何转化为 C 语言的函数调用的？（重点 待优化）**
+
+**Objective-C 的 class 是如何实现的**？
+
+当一个类被正确的编译后，在这个编译成功的类里面，存在一个变量用于保存这个类的信息。我们可以通过 [NSClassFromString ] 或 [obj class] 方法来获取该类。这样的机制允许我们在运行时可以获取该实例对象的类对象，也可以在动态地生成一个在编译阶段无法确定的一个对象。
+
+**Selector 是如何转化为 C 语言的函数调用的？**
+
+@selector()基本可以等同于 C 语言的中函数指针,只不过 C 语言中，可以把函数名直接赋给一个函数指针，而 Objective-C 的类不能直接应用函数指针，这样只能做一个 @selector 语法来获取.
+
+```
+@interface foo
+-(int)add:int val;
+@end
+
+SEL class_func ; //定义一个类方法指针
+class_func = @selector(add:int);
+```
+
+* @selector是查找当前类的方法，而[object @selector(方法名:方法参数..) ] ;是或取 object 对应类的相应方法；
+* 查找类方法时，除了方法名,方法参数也查询条件之一；
+* 可以用字符串来找方法 SEL　变量名　=　NSSelectorFromString(方法名字的字符串);
+* 可以在运行时用 SEL 变量反向查出方法名字符串。NSString　*变量名　=　NSStringFromSelector(SEL参数);
+* 获取到 selector 的值以后，执行seletor。通过 performSelecor 方法来执行 SEL
+
+```
+[对象　performSelector:SEL变量　withObject:参数1　withObject:参数2];
+```
 
 
 
