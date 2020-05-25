@@ -179,6 +179,41 @@ Swift 是一门类型安全的语言，Optionals（可选项）就是代表。Sw
 
 用“!”定义的可选变量必须保证转换能够成功，否则报错，但定义的变量可以直接使用，不会封装在 option 里；而用“？”定义的可选变量即使转换不成功本身也不会出错，变量值为 nil，如果转换成功，要使用该变量进行计算时变量名后需要加“!”。
 
-**【1-15】Swift **
+**【1-15】Swift 中的泛型使什么？它们又解决了什么问题？**
+
+泛型是用来使代码能安全工作的。在 Swift 中，泛型可以在函数数据类型和普通数据类型中使用，例如类、结构体或枚举。
+
+泛型解决了**代码复用**的问题。有一种常见的情况，你有一个方法，需要一个类型的参数，你为了适应零一种类型的参数还得重新再写一遍这个方法：
+
+```
+func areInEqual(x: Int, _ y: Int) -> Bool {
+  return x == y
+}
+func areStringEqual(x: String, _ y: String) -> Bool {
+  return x == y
+}
+areStringEqual("ray", "ray") //true
+areInEqual(1, 1) //true
+```
+
+一个 Objective-C 开发者可能会**采用 NSObject** 来解决问题：
+
+```
+func areTheyEuaul(x: NSObject, _ y: NSObject) -> Bool {
+  return x == y
+}
+```
+
+这段代码能达到目的，但是编译的时候并不安全。因为它允许一个字符串和一个整型数据进行比较。程序可能不会崩溃，但是允许一个字符串和一个整型数据进行比较可能不会得到预期的结果。
+
+使用**泛型**来解决：通过泛型将上面两个方法合并为一个，同时也保证了数据类型的安全。
+
+```
+func areTheyEqual<T: Equatable>(x: T, _ y: T) -> Bool {
+  return x == y
+}
+areStringEqual("ray", "ray") //true
+areInEqual(1, 1) //true
+```
 
 
