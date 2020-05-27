@@ -590,5 +590,25 @@ for (int i = 0; i < [array count]; i++) {
 }
 ```
 
+**【1-51】Objective-C 与 C、C++ 之间的联系和区别是什么？**
+
+ **联系**：Objective-C 和 C++ 都是 C 的面向对象的超集。
+ 
+**Objective-C 与 C++ 的区别**主要是：
+
+* Objective-C 是完全动态的，支持在运行时动态类型决议（dynamic typing），动态绑定（dynamic binding）和动态装载（dynamic loading）；而 C++ 是部分动态的，编译时静态绑定，通过嵌入类（多重继承）和虚函数（虚表）来模拟实现。
+* Objective-C 在语言层次上支持动态消息转发，其消息发送语法为 [object function]; 而 C++ 为 object->function()。两者的语义也不同，在 Objective-C 中表示向对象发送一条消息，可能会经过消息发送阶段，动态方法解析阶段和消息转发阶段这三大阶段；而在 C++ 里表示对象进行了某个操作，如果对象没有这个操作的话，要么编译会报错（静态绑定时），要么程序会 crash（动态绑定时）。
+
+**【1-52】谈谈对目标-动作机制（target-Action）的理解**
+
+目标-动作机制中，目标是动作消息的接收者，动作是控件发送给目标的消息。程序需要通过某些机制来进行事件和指令的翻译，这种机制就是目标-动作机制。目标-动作机制的优点在于可以减少模块之间代码的耦合性，并增强模块内代码之间的内聚性。
+
+```
+UIBarButtonItem *saveBtn = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(saveClick:)];
+```
+
+在这里，按钮按下以后会调用 target(也就是 self)上的 saveClick: 方法，按照 Objective-C 的习惯来说就是当 click 事件发生后，会给 self 对象发送一条 message，进而 self 对象上的 saveClick 方法被调用。
+
+Target-Action 主要用于 MVC 设计模式中 V 和 C 之间进行通信。V只负责向 target 发送相应的 action，并不关心 target 具体做了什么。这降低了模块之间的耦合性。
 
 
