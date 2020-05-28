@@ -21,7 +21,7 @@
 在触发离屏渲染的时候，会增加GPU的工作量，而增加GPU的工作量很可能会导致GPU和CPU的工作总耗时超出了16.7ms,即屏幕的FPS小于60，从而导致UI的掉帧或卡顿，所以要避免离屏渲染。
 
 
-**【扩展 1-2】说说你对 OC 中 load 方法和 initialize 方法的异同。——主要说一下执行时间，各自用途，没实现子类的方法会不会调用父类的？**
+**【扩展 1-2】说说你对 OC 中 load 方法和 initialize 方法的异同。——主要说一下执行时间，各自用途，没实现子类的方法会不会调用父类的？（重点）**
 
 **+load方法的特点：**
 
@@ -99,7 +99,7 @@ UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控�
 [iOS9 UIStackView 简介](https://swift.gg/2016/03/31/ios9-uistackview-guide-swift/)
 
 
-**【扩展 1-6】UIView和CALayer是什么关系？**
+**【扩展 1-6】UIView 和 CALayer 是什么关系？**
 
 [UIView和CALayer的区别和联系](https://blog.csdn.net/liushuo19920327/article/details/77851062)
 
@@ -108,7 +108,9 @@ UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控�
 [UIView 生命周期](https://blog.csdn.net/Bolted_snail/article/details/98960564#UIView_95)
 
 ```
-//构造方法,初始化时调用,不会调用init方法
+//创建对象，分配空间
++ (instancetype)alloc;
+//构造方法,初始化对象时调用,不会调用init方法
 - (instancetype)initWithFrame:(CGRect)frame;
 //添加子控件时调用。添加视图调用addSubview方法会触发didAddSubview
 - (void)didAddSubview:(UIView *)subview ;
@@ -116,7 +118,7 @@ UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控�
 - (instancetype)init;
 //xib归档初始化视图后调用,如果xib中添加了子控件会在didAddSubview方法调用后调用。xib归档创建视图会触发initWithCoder和awakeFromNib方法,不再调用init和initWithFrame方法;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder;
-//唤醒xib,可以布局子控件
+//唤醒 xib,可以布局子控件
 - (void)awakeFromNib;
 //父视图将要更改为指定的父视图,当前视图被添加到父视图时调用
 - (void)willMoveToSuperview:(UIView *)newSuperview;
@@ -132,13 +134,13 @@ UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控�
 - (void)drawRect:(CGRect)rect;
 //从父控件中移除
 - (void)removeFromSuperview;
-//销毁
+//视图被销毁时调用。此处需要对你在 init 和 viewDidLoad 中创建的对象进行释放。
 - (void)dealloc;
 //将要移除子控件
 - (void)willRemoveSubview:(UIView *)subview;
 ```
 
-**【扩展 1-8】UIViewController 的生命周期**
+**【扩展 1-8】UIViewController 的生命周期（重点）**
 
 [UIViewController 生命周期](https://blog.csdn.net/Bolted_snail/article/details/98960564#UIView_95)
 
@@ -167,11 +169,11 @@ updateViewConstraints：
 -(void)viewWillLayoutSubviews;
 //视图控制器的view 已经布局子视图。
 -(void)viewDidLayoutSubviews;
-//视图控制器的view已经显示在window上。实现该方法时确保调用[super viewDidAppear:]
+//视图控制器的 view 已经显示在 window 上时调用。实现该方法时确保调用[super viewDidAppear:]
 -(void)viewDidAppear:(BOOL)animated;
 //视图控制器的view将要从window上消失。
 -(void)viewWillDisappear:(BOOL)animated;
-//视图控制器的view已经从window上消失。
+//视图控制器的view已经从 window 上消失时调用。
 -(void)viewDidDisappear:(BOOL)animated;
 //接收到内存警告时会被调用
 - (void)didReceiveMemoryWarning;
@@ -306,5 +308,39 @@ Auto Layout在iOS 12得到了优化。优化后的性能已经基本和手写布
 实际上，iOS 12 之前，很多约束变化时都会重新创建一个计算引擎 NSISEnginer 将约束关系重新添加进来，然后重新计算。这样，当涉及的约束关系变多时，就会导致新的计算引擎需要重新计算，从而计算量呈指数级增加。总的来说，iOS12的 Auto Layout 更多地利用了 Cassowary 算法的界面更新策略，使其真正完成了高效的界面线性策略计算。
 
 iOS12使得 Auto Layout具有了和手写布局几乎相同的高性能后，我们就可以放心的使用 Auto Layout了。使用 Auto Layout一定要注意多使用 Compression Resistance Priority 和 Hugging Priority，利用优先级的设置，让布局更加灵活，代码更少，更易于维护。
+
+**【1-22】什么是 key window？**
+
+如果一个窗口当前能接收键盘和非触摸事件（触摸事件会被传递到触摸发生的那个窗口），那么这个窗口就是主窗口（key window）。同一时刻只能有一个主窗口。在 iOS 开发中，我们可以通过设置 UIWindowLevel 的数值来设置最前端的窗口为哪个，Level 数值越高的窗口越靠前，如果两个窗口的 Level 等级相同，则我们可以通过 makeKeyAndVisible 来显示 KeyWindow。
+
+**【1-23】项目中，你是怎么封装 View 的？**
+
+[自定义 View 封装](https://www.jianshu.com/p/91ad5a343622)
+
+思路：如果一个 view 内部的子控件比较多，一般会考虑自定义一个 view，把它内部的子控件创建封装起来。外界可以传入相应的数据模型给自定义的 view，view 获取到模型数据后给内部的子控件设置对应的数据。
+
+具体做法：
+
+* 新建一个继承 UIView 的类；
+* 在 initWithFrame: 方法中添加子控件（也可以使用懒加载）；
+* 重写属性的 setter 方法，在 setter 方法中设置属性值并添加到子控件上；
+* 在 - (void)layoutSubViews 方法中设置子控件的 frame（一定要调用 [super layoutSubviews]）
+
+【注意】哪些情况会触发 layoutSubviews 方法：
+
+```
+(1)init 不会触发 layoutSubviews
+(2)addSubview 会触发 layoutSubviews
+(3)设置 view 的 Frame 会触发 layoutSubviews，当然前提是 frame 的值设置前后发生了变化
+(4)滑动一个 UIScrollView 会触发 layoutSubviews
+(5)旋转 Screen 会触发父 UIView 上的 layoutSubviews；
+(6)改变一个 UIView 大小的时候会触发父 UIView 上的 layoutSubviews
+```
+
+
+
+
+
+
 
 
