@@ -337,7 +337,37 @@ iOS12使得 Auto Layout具有了和手写布局几乎相同的高性能后，我
 (6)改变一个 UIView 大小的时候会触发父 UIView 上的 layoutSubviews
 ```
 
+**【1-24】简单说一下 App 的启动过程，从 main 文件开始说起**
 
+程序启动分为两类：有 storyboard 和没有 storyboard。
+
+有 storyboard 的情况：
+
+```
+1. main 函数
+2. UIApplicationMain：创建 UIApplication 对象，创建 UIApplication 的 delegate 对象
+3. 根据 Info.plist 获得 Main.storyboard 的文件名，加载 Main.storyboard（有 storyboard）
+4. 创建 UIWindow
+5. 创建和设置 UIWindow 的 rootViewController
+6. 显示窗口
+```
+
+没有 storyboard 的情况：
+
+```
+1. main 函数
+2. UIApplicationMain：创建 UIApplication 对象，创建 UIApplication 的 delegate 对象
+3. delegate 对象开始处理（监听）系统事件（没有 storyboard），程序启动完毕的时候，就会调用代理的 application:didFinishLauchingWithOptions: 方法
+4. 在 application:didFinishLauchingWithOptions:中创建 UIWindow
+5. 创建和设置 UIWindow 的 rootViewController
+6. 显示窗口
+```
+
+**【1-25】UIButton 和 UITableView 的继承体系是怎样的？**
+
+UIButton：UIButton -> UIControl -> UIView -> UIResponder -> NSObject
+
+UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 
 
 
