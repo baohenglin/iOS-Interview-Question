@@ -369,6 +369,8 @@ UIButton：UIButton -> UIControl -> UIView -> UIResponder -> NSObject
 
 UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 
+**【1-26】设置 scrollView 的 contenSize 能在 Viewdidload里设置吗？为什么？**
+
 
 
 
