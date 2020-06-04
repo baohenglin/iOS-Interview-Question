@@ -388,6 +388,21 @@ UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 
 UIViewController：每个视图控制器都有一个自带的视图，并且负责这个视图相关的一切事务。方便管理视图中的子视图，负责 model 与 view 的通信；检测设备旋转以及内存警告；UIViewController 定义了控制器的基本功能。
 
+**【1-28】frame 和 bounds 的区别（重点）**
+
+* frame：frame指的是当前视图在父视图坐标系统中的位置和大小（参考点是父视图的坐标系统）；
+* bounds：bounds 指的是当前视图在本身坐标系统中的位置和大小（参考点是本身坐标系统，始终以 (0,0) 为起点），修改 bounds 会影响子视图的位置；
+* center：该 view 的中心点在父视图坐标系统中的位置和大小（参考点是父视图的坐标系统）
+
+```
+-(CGRect)frame{
+    return CGRectMake(self.frame.origin.x,self.frame.origin.y,self.frame.size.width,self.frame.size.height);
+}
+-(CGRect)bounds{
+    return CGRectMake(0,0,self.frame.size.width,self.frame.size.height);
+}
+```
+
 
 
 
