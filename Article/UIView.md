@@ -378,6 +378,16 @@ UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 * 去除 autoLayout 选项，自己手动设置 contentsize；
 * 如果使用 AutoLayout，需要在 viewDidAppear 里面手动设置 contentsize。
 
+**【1-27】简述对 UIView、UIwindow 和 CALayer 的理解**
+
+* UIView：属于 UIKit.framework 框架，负责渲染指定矩形区域的内容，可以为矩形区域添加动画，响应该指定区域的触摸事件以及布局和管理一个或多个子视图等。
+* UIWindow：属于 UIKit.framework 框架，是一种特殊的 UIView，通常在一个程序中只会有一个 UIWindow，但可以手动创建多个 UIWindow，同时添加到程序中。UIWindow 在程序中主要作用有：（1）作为容器包含 App 所要显示的所有视图；（2）传递触摸信息到程序中的 view 和其他对象；（3）与 UIViewController 协同工作，方便完成设备方向旋转的支持。
+* CALayer：属于 QuartzCore.framework，是用来绘制内容的，如果对内容进行动画处理的话依赖于 UIView 来进行显示，不能处理用户事件。
+
+**UIView 和 CALayer 的关系**：UIView 和 CALayer 是相互依赖的，UIView 依赖 CALayer 提供视图内容，CALayer 依赖 UIView 的容器显示“所绘制的视图内容”。最主要区别是 UIView 可以处理触摸事件，而 CALayer 不能处理触摸事件。
+
+UIViewController：每个视图控制器都有一个自带的视图，并且负责这个视图相关的一切事务。方便管理视图中的子视图，负责 model 与 view 的通信；检测设备旋转以及内存警告；UIViewController 定义了控制器的基本功能。
+
 
 
 
