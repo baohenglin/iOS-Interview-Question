@@ -403,6 +403,60 @@ UIViewController：每个视图控制器都有一个自带的视图，并且负�
 }
 ```
 
+**【1-29】页面间传值方式有哪些？其中的代理和通知分别在什么情况下使用？它们的区别是什么？各自优缺点是什么（重点）**
+
+* (1)属性传值：从前一页面向后一页面传值
+* (2)委托代理传值（delegate）：在 B 页面定义 delegate，并且设置 delegate 属性，在 A 页面实现 delegate 协议；
+* (3)通知 Notification 传值：在 B 页面中发送通知，在 A 页面注册观察者并且在不用的时候移除观察者。
+
+```
+//B 页面发送通知
+[[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeNameNotification" object:self userInfo:@{@"name":self.nameTextField.text}];
+[self dismissViewControllerAnimated:YES completion:nil];
+
+//A 页面注册观察者
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNameNotification:) name:@"ChangeNameNotification" object:nil];
+
+//观察到通知时候的处理方法
+- (void)changeNameNotification:(NSNotification *)notification {
+   NSDictionary *nameDic = [notification userInfo];
+   self.nameLabel.text = [nameDic objectForKey:@"name"];
+}
+// 通知不使用时候移除观察者
+[[NSNotificationCenter defaultCenter] removeObserver:self];
+```
+* (4)block 传值：在 B 页面定义一个 block 类型的变量，在 B 页面跳转 A 的时候调用这个 block。在 A 页面跳转到 B 页面的时候对 B 页面的 block 赋值。
+
+```
+//B 页面定义 block，并设置 block 类型的变量
+typedef void (^ablock)(NSString *str);
+@property(nonatomic, copy) ablock block;
+//B 页面跳转到 A 页面调用这个 block
+self.block(self.nameTextField.text);
+[self dismissViewControllerAnimated:YES completion:nil];
+//A 页面跳转到 B 页面时对 B 页面的 block 赋值，这样在 B 页面跳转的时候就会回调这个 block 函数。
+[self presentViewController: second animated: YES completion:nil];
+second.block = ^(NSString *str) {
+   self.nameLabel.text = str;
+}
+```
+
+* (5)KVO 传值：在 A 页面设置 B 页面的变量 second，并且对这个变量进行观察(-(void)addObserver:(NSObject * _Nonnull)anObserver forKeyPath:(NSString * _Nonnull)keyPath options:(NSKeyValueObservingOptions)options context:(void * _Nullable)context)，并在 A 页面实现 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context 方法。然后在 B 页面对变量keyPath 进行设置，在 A 页面就会观察到。
+
+```
+@property (nonatomic, strong) SecondViewController *second;
+//在 A 视图跳转到 B 视图的地方添加如下代码：
+self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewController" bundle:nil];
+[self.second addObserver:self forKeyPath:@"userName" options:NSKeyValueObservingOptionNew context:nil];
+[self presentViewController:self.second animated:YES completion:nil];
+//实现这个观察对象的方法
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+
+}
+//在 B 页面对 userName 进行设置，在 A 页面就可以监听到。
+```
+
+* (6)单例模式传值：通过全局的方式保存。 
 
 
 
