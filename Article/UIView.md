@@ -369,7 +369,14 @@ UIButton：UIButton -> UIControl -> UIView -> UIResponder -> NSObject
 
 UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 
-**【1-26】设置 scrollView 的 contenSize 能在 Viewdidload里设置吗？为什么？**
+**【1-26】设置 scrollView 的 contentSize 能在 Viewdidload里设置吗？为什么？**
+
+一般情况下可以设置在 viewDidLoad 中，但是在 autoLayout 下，系统会在 viewDidAppear 之前根据 subview 的 constraint 重新计算 scrollview 的 contentsize。这就是在 viewDidLoad 中设置 contentsize 不起作用的原因。
+
+解决方法：
+
+* 去除 autoLayout 选项，自己手动设置 contentsize；
+* 如果使用 AutoLayout，需要在 viewDidAppear 里面手动设置 contentsize。
 
 
 
