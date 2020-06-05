@@ -53,7 +53,7 @@ A页面跳转到B页面有2个方法,push和present。
 **push**：先执行A页面的viewWillDisappear和viewDidDisappear,然后执行B页面的viewWillAppear和viewDidAppear.
 **present**：先执行A页面的viewWillDisappear,随后执行B页面的viewWillAppear和viewDidAppear,最后执行A页面的viewDidDisappear.
 
-**⭐️⭐️⭐️⭐️⭐️【扩展 1-4】细致地讲一下事件传递流程**
+**【扩展 1-4】细致地讲一下事件传递流程（重点⭐️⭐️⭐️⭐️⭐️）**
 
 **事件传递流程**如下：
 
