@@ -159,13 +159,14 @@ UIApplication –> UIWindow –> 递归找到最合适处理触摸事件的控�
 -(void)awakeFromNib;
 //视图控制器开始加载view属性时调用此方法。当访问UIViewController的view属性时，view如果此时是nil，那么VC会自动调用loadView方法来初始化一个UIView并赋值给view属性。此方法用在初始化关键view，需要注意的是，在view初始化之前，不能先调用view的getter方法，否则将导致死循环（除非先调用了[super loadView];）如果没有重载loadView方法，则UIViewController会从nib或StoryBoard中查找默认的loadView，默认的loadView会返回一个空白的UIView对象。
 -(void)loadView;
-//视图控制器的view被加载完成
+//视图控制器的view被加载完成，该方法只会被调用一次。
 - (void)viewDidLoad;
 //视图控制器的view即将显示在window上。在view即将添加到视图层级中（显示给用户）且任意显示动画切换之前调用,此时self.view.superview为nil.这个方法中完成任何与视图显示相关的任务，例如改变视图方向、状态栏方向、视图显示样式等。实现该方法时确保调用[super viewWillAppear:]
+// 该方法可以多次调用
 -(void)viewWillAppear:(BOOL)animated;
 //视图控制器的view开始更新AutoLayout约束。
 updateViewConstraints：
-//视图控制器的view 将要布局子视图。
+//视图控制器的view 将要布局子视图。在布局变化前后，调用 viewWill/DidLayoutSubviews 处理相关信息。
 -(void)viewWillLayoutSubviews;
 //视图控制器的view 已经布局子视图。
 -(void)viewDidLayoutSubviews;
