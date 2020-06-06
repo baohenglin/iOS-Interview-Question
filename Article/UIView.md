@@ -599,11 +599,30 @@ CGFloat viewY = (index / col) * (viewH + 10);
 
 **【41】实现图片轮播图（代码实践）**
 
+**【42】UIScrollView 大概是如何实现的？它是如何捕捉、响应手势的？**
 
+[参考链接](https://www.jianshu.com/p/7a62228447f5)
 
+**【43】+[UIView animateWithDuration:animations:completion:] 内部大概是如何实现的？**
 
+**【44】什么是隐式动画？什么时候触发隐式动画？**
 
+[参考](https://www.jianshu.com/p/90415eb764bf)
 
+**【45】如何把一张大图缩小为 1/4 大小的缩略图？（重点）**
+
+```
+imgData = UIImageJPEGRepresentation(image, 0.6f);
+```
+
+**【46】当 TableView 的 Cell 该表时，如何让这些改变以动画的形式呈现？**
+
+```
+[tableView deselectRowAtIndexPath:indexPath animated:YES];
+//重点是这两句代码
+[tableView beginUpdates];
+[tableView endUpdates];
+```
 
 
 
