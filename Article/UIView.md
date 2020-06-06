@@ -459,6 +459,24 @@ self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewControll
 
 * (6)单例模式传值：通过全局的方式保存。 
 
+**【30】谈谈 UITableView 的重用机制？如何在一个 view 上显示多个 tableView？tableView 要求不同的数据源以及不同的样式（要求自定义 cell），如何组织各个 tableView 的 delegate 和 dataSource？（重点）**
+
+查看 UITableView 的头文件，会找到 NSMutableArray visiableCells 和 NSMutableArray reusableTableCells 这两个可变数组。其中的 visiableCells 保存当前显示的 cells，reusableTableCells 保存着可重用的 cells。
+
+在 TableView 显示之初，reusableTableCells 为空，那么 [tableView dequeueReusableCellWithIdentifier:CellIdentifier] 返回 nil。开始的 cell 都是通过 [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] 来创建的，而且 cellForRowAtIndexPath 只会调用最大显示 cell 数的次数。比如总共有 100 条数据，而设备一屏最多显示 10 个 cell。
+
+此时，会调用 [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] 方法创建 10 个 cell，并给 cell 指定同样的重用标识（可以为不同类型的 cell 指定不同的标识），并且 10 个 cell 全部都加入到 visiableCells 数组中，这时候 reusableTableCells 为空。
+
+向下拖动 tableView，当 cell1 完全移出屏幕，并且 cell11（它也是 alloc 出来的，原因同上）完全显示出来的时候，cell11 加入到 visiableCells 中，cell1 移出 visiableCells，cell1 加入到 reusableTableCells 中。
+
+继续向下拖动 tableView，因为 reusableTableCells 中已经存有 cell1，所以当需要显示新的 cell，cellForRowAtIndexPath 再次被调用的时候，[tableView dequeueReusableCellWithIdentifier:CellIdentifier]，返回 cell1，cell1 加入到 visiableCells，并从 reusableTableCells 中移出，与此同时，cell2 移出 visiableCells，加入到 reusableTableCells，以此类推，即可达到 cell 重用的目的。
+
+需要特别注意的是，**配置 cell 时，一定要对取出的重用 Cell 重新赋值，以覆盖之前的原有数据**。
+
+
+
+
+
 
 
 
