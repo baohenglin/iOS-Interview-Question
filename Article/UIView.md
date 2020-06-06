@@ -493,6 +493,9 @@ self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewControll
 }
 ```
 
+**【32】tableView 的 cell 里如何嵌套 collectionView？**
+
+用自定义的继承自 UITableViewCell 的类，在 initWithFrame 的构造方法中，初始化自定义的继承自 UICollectionView 的类。
 
 
 
