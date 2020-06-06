@@ -31,10 +31,13 @@
 **+load方法的调用顺序：**
 
 1.先调用类的+load方法
-	*	按照编译的先后顺序调用（先编译，先调用）；
-	*	调用子类的+load方法之前会先调用父类的+load。
+
+* 按照编译的先后顺序调用（先编译，先调用）；
+* 调用子类的+load方法之前会先调用父类的+load。
+	
 2.再调用分类的+load方法
-	*	按照编译先后顺序调用（先编译，先调用）
+
+* 按照编译先后顺序调用（先编译，先调用）
   
   
 **+initialize方法的特点：**+initialize方法会在类第一次接收到消息的时候调用。
@@ -43,8 +46,8 @@
 
 **+initialize和+load的最大区别**是+initialize是通过objc_msgSend进行调用的，而+load方法是通过函数指针直接调用+load方法。正因为+initialize是通过objc_msgSend进行调用的，所以+initialize有以下特点：
 
-*	如果子类没有实现+initialize，会调用父类的+initialize（所以父类的+initialize可能会被调用多次）；
-*	如果分类实现了+initialize，就覆盖类本身的+initialize调用。
+* 如果子类没有实现+initialize，会调用父类的+initialize（所以父类的+initialize可能会被调用多次）；
+* 如果分类实现了+initialize，就覆盖类本身的+initialize调用。
 
 **【扩展 1-3】如果页面 A 跳转到 页面 B，A 的 viewDidDisappear 方法和 B 的 viewDidAppear 方法哪个先调用？**
 
