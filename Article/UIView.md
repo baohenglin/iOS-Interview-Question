@@ -190,6 +190,28 @@ updateViewConstraints：
 
 [App的生命周期](https://www.jianshu.com/p/ecd4917ce407)
 
+**【扩展】应用的生命周期**
+
+[应用的生命周期](https://blog.csdn.net/totogo2010/article/details/8048652/)
+
+```
+//通知代理进程启动但还没进入状态保存
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {}
+//通知代理进程启动完成程序准备开始运行
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {}
+//当应用程序将要进入非活动状态时调用。在此期间，应用程序不再接收消息或事件了。比如来电话
+- (void)applicationWillResignActive:(UIApplication *)application {}
+//当应用程序将要进入后台时调用
+- (void)applicationWillEnterForeground:(UIApplication *)application {}
+//当应用程序进入后台时调用
+- (void)applicationDidEnterBackground:(UIApplication *)application {}
+//当应用程序进入活动状态时执行
+- (void)applicationDidBecomeActive:(UIApplication *)application {}
+//当程序从后台将要重新回到前台时调用
+- (void)applicationWillEnterForeground:(UIApplication *)application {}
+//当程序将要退出时调用。通常用来保存数据和一些退出前的清理工作。
+- (void)applicationWillTerminate:(UIApplication *)application {}
+```
 
 **【扩展 1-9】UITableView和UICollection的异同**
 
@@ -379,15 +401,15 @@ UITableView：UITableView ->UIScrollView -> UIView -> UIResponder -> NSObject
 * 去除 autoLayout 选项，自己手动设置 contentsize；
 * 如果使用 AutoLayout，需要在 viewDidAppear 里面手动设置 contentsize。
 
-**【1-27】简述对 UIView、UIwindow 和 CALayer 的理解**
+**【1-27】简述对 UIView、UIwindow 和 CALayer 的理解（重点）**
 
-* UIView：属于 UIKit.framework 框架，负责渲染指定矩形区域的内容，可以为矩形区域添加动画，响应该指定区域的触摸事件以及布局和管理一个或多个子视图等。
-* UIWindow：属于 UIKit.framework 框架，是一种特殊的 UIView，通常在一个程序中只会有一个 UIWindow，但可以手动创建多个 UIWindow，同时添加到程序中。UIWindow 在程序中主要作用有：（1）作为容器包含 App 所要显示的所有视图；（2）传递触摸信息到程序中的 view 和其他对象；（3）与 UIViewController 协同工作，方便完成设备方向旋转的支持。
+* UIView：UIView 是视图的基类，属于 UIKit.framework 框架。UIView 继承自 UIResponder（UIResponder 表示一个可以在屏幕上响应触摸事件的对象）。UIView 负责渲染指定矩形区域的内容，可以为矩形区域添加动画，响应该指定区域的触摸事件以及布局和管理一个或多个子视图等。
+* UIWindow：UIWindow 是 UIView 的子类，属于 UIKit.framework 框架，是一种特殊的 UIView，通常在一个程序中只会有一个 UIWindow，但可以手动创建多个 UIWindow，同时添加到程序中。UIWindow 在程序中主要作用有：（1）作为容器提供一个区域来显示App 所要显示的所有视图；（2）将触摸事件分发传递给程序中的 UIView 和其他对象；（3）与 UIViewController 协同工作，方便完成设备方向旋转的支持。
 * CALayer：属于 QuartzCore.framework，是用来绘制内容的，如果对内容进行动画处理的话依赖于 UIView 来进行显示，不能处理用户事件。
 
-**UIView 和 CALayer 的关系**：UIView 和 CALayer 是相互依赖的，UIView 依赖 CALayer 提供视图内容，CALayer 依赖 UIView 的容器显示“所绘制的视图内容”。最主要区别是 UIView 可以处理触摸事件，而 CALayer 不能处理触摸事件。
+**UIView 和 CALayer 的关系**：UIView 和 CALayer 是相互依赖的，UIView 依赖 CALayer 提供视图内容，CALayer 依赖 UIView 的容器显示“所绘制的视图内容”。UIView 真正的绘图部分是由一个 CALayer 类来管理。UIView 本身更像是一个 CALayer的管理器。一个 UIView上可以有 n 个 CALayer。**二者最主要区别是 UIView 可以处理触摸事件，而 CALayer 不能处理触摸事件**。UIView 和 CALayer 都可以显示屏幕效果，如果需要用户交互就使用 UIView，如果不需要处理触摸事件，可以选用 CALayer，CALayer 占用的资源更少。
 
-UIViewController：每个视图控制器都有一个自带的视图，并且负责这个视图相关的一切事务。方便管理视图中的子视图，负责 model 与 view 的通信；检测设备旋转以及内存警告；UIViewController 定义了控制器的基本功能。
+UIViewController：UIViewController 是视图控制器的基类。每个视图控制器都有一个自带的视图，并且负责这个视图相关的一切事务。方便管理视图中的子视图，负责 model 与 view 的通信；检测设备旋转以及内存警告；UIViewController 定义了控制器的基本功能。
 
 **【1-28】frame 和 bounds 的区别（重点）**
 
@@ -500,6 +522,86 @@ self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewControll
 **【33】下拉刷新和上拉加载更多的实现原理？（重点 参考 MJRefresh 源码并动手实践）**
 
 [下拉刷新和上拉加载更多的实现原理](https://www.cnblogs.com/ldnh/p/5313374.html)
+
+**【34】awakeFromNib 与 viewDidLoad 的区别是什么？（重点）**
+
+* awakeFromNib：当 .nib 文件被加载的时候，会发送一个 awakeFromNib 消息到 .nib 文件中的每个对象，每个对象都可以定义自己的 awakeFromNib 方法来响应这个消息来执行必要操作。也就是说**通过 .nib 文件创建 view 对象执行 awakeFromNib**。
+* viewDidLoad：当 view 对象被加载到内存就会执行 viewDidLoad，不管是通过 nib 还是代码形式，创建对象就会执行 viewDidLoad。
+
+**【35】layoutSubViews 何时调用？（重点）**
+
+layoutSubViews 在以下情况下会被调用(视图位置变化时触发)：
+
+* 1. init初始化**不会**触发 layoutSubViews
+* 2. addSubView 会触发 layoutSubViews
+* 3. 设置 view 的 Frame 会触发 layoutSubviews,当然前提是 frame 的值设置前后发生了变化。
+* 4. 滚动 UIScrollView 会触发 layoutSubviews。
+* 5. 旋转 UIScreen 会触发父视图上的 layoutSubviews 事件。
+* 6. 改变一个 UIView 大小的时候也会触发父 View 上的 layoutSubviews 事件。
+* 7. 直接调用 setLayoutSubviews 方法会触发layoutSubViews。
+
+**【36】ViewController 的 didReceiveMemoryWaring 在什么时候调用？默认操作是什么？**
+
+当应用程序收到来自系统的内存警告时，会调用 didReceiveMemoryWaring 方法。
+
+默认操作：控制器上的 view 不再窗口上显示时，调用 viewWillUnload，直接销毁 view，并调用 viewDidUnload。
+
+**【37】UIScrollView 的属性（重点）**
+
+* contentSize：内容视图的尺寸，也就是 UIScrollView 可以滚动的区域；
+* contentOffse：UIScrollView 的内容视图的当前位置（顶点）相对于 frame 顶点的偏移量；
+* contentInset：内容视图相对于滚动视图的边距，与 CSS 中的 padding 属性类似。
+
+**【38】如何实现瀑布流流水布局以及栅格布局？（重点 代码实践）**
+
+思路：
+
+* 使用 UICollectionView；
+* 使用自定义的 FlowLayout；
+* 需要在 layoutAttributesForElementsInRect 中设置自定义的布局（item 的 frame）；
+* 在 prepareLayout 中计算布局；
+* 遍历数据内容，根据索引取出对应的 attributes（使用 layoutAttributesForCellWithIndexPath），根据九宫格算法设置布局。
+* 细节1：实时布局，重写 手里的InvalidateLayoutForBoundsChange（bounds 改变重新布局，scrollView 的 contentOffset > bounds）；
+* 细节2：计算设置 itemSize（保证内容显示完整，UICollectionView 的 contentSize 是根据 itemSize 计算的），根据列最大高度/对应列数量求出，最大高度累加得到。
+* 细节3：追加 item 到最短列，避免底部参差不齐。
+
+[瀑布流之流水布局实现](https://www.jianshu.com/p/13898c30e8a9)
+
+[瀑布流之栅格布局实现](https://www.jianshu.com/p/f40bbe437265)
+
+**【39】UIImage 有哪几种加载方式？（重点）**
+
+* imageNamed 方式：优点是速度快，性能高。缺点是占用内存越来越大（不是直接从文件中获取，而是从缓存中获得）
+
+```
+UIImage *image = [UIImage imageNamed:@"One.png"];
+```
+
+* initWithContentsOfFile 方式：优点是不会占用很大内存。缺点是加载速度慢。
+
+```
+NSString *pathImage = [NSBoundle mainBoundle]pathForResourece@"one.png"ofType:nil];
+UIImage *newIMage = [[UIImage alloc]initWithContentsOfFile:pathImage];
+```
+
+**【40】描述九宫格算法（重点 代码实践）**
+
+```
+NSInteger col = x; //定义列数
+NSInteger index = self.shopsView.subviews.count; //获取下标
+CGFloat margin = (self.shopsView.frame.size.width - col * viewW)/(col - 1); //定义间隔
+CGFloat viewX = (index % col) * (viewW + margin);
+CGFloat viewY = (index / col) * (viewH + 10);
+```
+
+**【41】实现图片轮播图（代码实践）**
+
+
+
+
+
+
+
 
 
 
