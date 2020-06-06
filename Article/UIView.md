@@ -459,7 +459,7 @@ self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewControll
 
 * (6)单例模式传值：通过全局的方式保存。 
 
-**【30】谈谈 UITableView 的重用机制？如何在一个 view 上显示多个 tableView？tableView 要求不同的数据源以及不同的样式（要求自定义 cell），如何组织各个 tableView 的 delegate 和 dataSource？（重点）**
+**【30】谈谈 UITableView 的重用机制?（重点）**
 
 查看 UITableView 的头文件，会找到 NSMutableArray visiableCells 和 NSMutableArray reusableTableCells 这两个可变数组。其中的 visiableCells 保存当前显示的 cells，reusableTableCells 保存着可重用的 cells。
 
@@ -472,6 +472,26 @@ self.second = [[SecondViewController alloc] initWithNibName:@"SecondViewControll
 继续向下拖动 tableView，因为 reusableTableCells 中已经存有 cell1，所以当需要显示新的 cell，cellForRowAtIndexPath 再次被调用的时候，[tableView dequeueReusableCellWithIdentifier:CellIdentifier]，返回 cell1，cell1 加入到 visiableCells，并从 reusableTableCells 中移出，与此同时，cell2 移出 visiableCells，加入到 reusableTableCells，以此类推，即可达到 cell 重用的目的。
 
 需要特别注意的是，**配置 cell 时，一定要对取出的重用 Cell 重新赋值，以覆盖之前的原有数据**。
+
+**【31】在一个 tableView 中需要自定义多种样式的 cell（两种或三种），如何实现？**
+
+通过 [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] 初始化方法创建不同 identifier 的 Cell。
+
+```
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  UITableViewCell *cell = nil;
+  if (indexPath.section == 0) {
+    cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
+    CustomCell *newcell = (CustomCell *)cell;
+    newcell.label.text = @"00000";
+  }else if (indexPath.section == 1){
+     cell = [tableView dequeueReusableCellWithIdentifier:@"cellID1"];
+  }else {
+     cell = [tableView dequeueReusableCellWithIdentifier:@"cellID2"];
+  }
+  return cell; 
+}
+```
 
 
 
