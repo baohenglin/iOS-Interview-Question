@@ -624,6 +624,10 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 [tableView endUpdates];
 ```
 
+**【47】为什么当 Core Animation 完成时，layer 又恢复到原先的状态？（不太明白）**
+
+因为这些产生的动画只是假象，并没有对 layer 进行改变。图层里的呈现树实际上是模型图层的复制，但是它的属性值表示了当前外观效果，动画的过程实际上只是修改了呈现树，并没有对图层的属性进行改变，所以在动画结束以后图层会恢复到原先状态。
+
 
 
 
