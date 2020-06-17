@@ -628,6 +628,39 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 
 因为这些产生的动画只是假象，并没有对 layer 进行改变。图层里的呈现树实际上是模型图层的复制，但是它的属性值表示了当前外观效果，动画的过程实际上只是修改了呈现树，并没有对图层的属性进行改变，所以在动画结束以后图层会恢复到原先状态。
 
+**【48】设计一个进度条（重点）**
+
+* 自定义一个 UIView 的子类，并定义一个下载进度的属性 progress。
+
+```
+//提供一个成员属性，接收下载进度值
+@property (nonatomic, assign) CGFloat progress;
+```
+
+* 重写成员属性 progress 的 setter 方法。
+
+```
+//每次改变属性 progress 的值，都会调用它的 setter 方法
+- (void)setProgress:(CGFloat)progress 
+{
+   _progress = progress;
+   //当下载进度改变时，手动调用重绘方法
+   [self setNeedsDisplay];
+}
+```
+
+* 重写 drawRect 方法
+
+```
+//核心方法
+- (void)drawRect:(CGRect)rect;
+- (void)drawRect:(CGRect)rect 
+{
+   //设置圆弧的半径
+   CGFloat radius = rect.size.width * 0.5;
+}
+```
+
 
 
 
