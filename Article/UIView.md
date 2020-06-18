@@ -671,6 +671,9 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 }
 ```
 
+**【49】如何播放 GIF 图片，有什么优化方案吗？**
+
+
 
 
 
