@@ -658,6 +658,16 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 {
    //设置圆弧的半径
    CGFloat radius = rect.size.width * 0.5;
+   //设置圆弧的圆心
+   CGPoint center = CGPointMake(radius, radius);
+   //设置圆弧的开始的角度（弧度制）
+   CGFloat startAngle = - M_PI_2;
+   //设置圆弧的终止角度
+   CGFloat endAngle = - M_PI_2 + 2 * M_PI * self.progress;
+   //使用 UIBezierPath 类绘制圆弧
+   UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius - 5 startAngle:startAngle endAngle:endAngle clockwise:YES];
+   //将绘制的圆弧渲染到图层上（即显示出来）
+  [path stroke]; 
 }
 ```
 
