@@ -683,6 +683,14 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 
 * 第三方库
 
+**【50】有哪几种方式可以对图片进行缩放？使用 CoreGraphics 缩放时有什么注意事项？**
+
+* UIImageView 整体拉伸；
+* UIImageView 局部拉伸；
+* UIImage 修改大小；
+* 通过 images.xcassets 实现。在 Xcode 中选中图片，然后点击右下角的 Show Slicing，设置 Xcode 中 Asset Catalog 的 slice 和 dice。
+* 图形上下文等比例缩放。
+
 
 
 
