@@ -691,6 +691,8 @@ imgData = UIImageJPEGRepresentation(image, 0.6f);
 * 通过 images.xcassets 实现。在 Xcode 中选中图片，然后点击右下角的 Show Slicing，设置 Xcode 中 Asset Catalog 的 slice 和 dice。
 * 图形上下文等比例缩放。
 
+**【50】有哪几种方式可以对图片进行缩放？使用 Core Graphics 缩放时有什么注意事项？**
+
 
 
 
