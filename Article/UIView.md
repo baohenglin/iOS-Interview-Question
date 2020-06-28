@@ -701,7 +701,18 @@ Xib缺点：需求变动时，需要修改 Xib 很大，有时候甚至需要重
 
 Storyboard 缺点：需求变动时，需要修改 Storyboard 上对应的界面约束，与 Xib 一样可能要重新添加约束，或者添加约束会造成大量的冲突，尤其是多团队开发。对于复杂逻辑控制不同显示内容时，比较困难。当多人团队或者多团队开发时，大家会同时修改一个 Storyboard，导致大量冲突，解决起来相当困难。
 
+**【扩展51-1】iOS 中 nib、xib 及 storyboard的区别？**
 
+* nib是一个文件夹，其中有两个后缀为 NIB 的文件（designable.nib 和 keyedobjects.nib），designable.nib 是一个 XML 文档，keyedobjects.nib 是一个二进制文件。
+* Interface Builder 3.0 之后，引入了新的文档格式：Xib。它是单一的 XML 文档，也就是一个纯文本文件。xib 是一个基于 xml 的描述文件，可以实现可视化编程。无论 nib 也好，xib 也好，最终在执行 UIViewController 生命周期函数 loadView 之前，都会转化成可执行的 nib 文件。
+* storyboad 是
+
+
+**【52】xib 文件的构成分为哪3个图标？都具有什么功能？**
+
+* File's Owner：表示从磁盘加载 nib 文件的对象。
+* First Responder：是用户当前正在与之交互的对象。
+* View：显示用户界面；完成用户交互；是 UIView 类或其子类。
 
 
 
