@@ -714,7 +714,11 @@ Storyboard 缺点：需求变动时，需要修改 Storyboard 上对应的界面
 * First Responder：是用户当前正在与之交互的对象。
 * View：显示用户界面；完成用户交互；是 UIView 类或其子类。
 
+**【53】控制器的 View 的加载过程是什么？（重点）**
 
+* (1)当程序访问了控制器的 View 属性时会先判断控制器的 View 是否存在，如果存在就直接返回已经存在的 View；
+* (2)如果不存在，就会先调用 loadView 方法，如果控制器的 loadView 方法实现了，就会按照 loadView 方法加载自定义的 View； 
+* (3)如果控制器的 loadView 方法没有实现就会判断 Storyboard 是否存在，如果 Storyboard 存在就会按照 Storyboard 加载控制器的 View；如果 Storyboard 不存在，就会创建一个空视图返回。
 
 
 
