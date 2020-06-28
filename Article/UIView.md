@@ -705,7 +705,7 @@ Storyboard 缺点：需求变动时，需要修改 Storyboard 上对应的界面
 
 * nib是一个文件夹，其中有两个后缀为 NIB 的文件（designable.nib 和 keyedobjects.nib），designable.nib 是一个 XML 文档，keyedobjects.nib 是一个二进制文件。
 * Interface Builder 3.0 之后，引入了新的文档格式：Xib。它是单一的 XML 文档，也就是一个纯文本文件。xib 是一个基于 xml 的描述文件，可以实现可视化编程。无论 nib 也好，xib 也好，最终在执行 UIViewController 生命周期函数 loadView 之前，都会转化成可执行的 nib 文件。
-* storyboad 是
+* storyboad 是多个 xib 文件集合的描述文件，也采用 xml 格式。storyboard 与 xib 的区别在于：一个工程中可以有多个 xib 文件，一个 xib 文件对应着一个视图控制器和多个视图。而使用 Storyboard时，一个工程只需要一个主 Storyboard 文件就可以了。因此在包含多个视图控制器的情况下，采用 Storyboard 管理比较方便，而且 Storyboard 还可以描述界面之间的导航关系。
 
 
 **【52】xib 文件的构成分为哪3个图标？都具有什么功能？**
