@@ -720,5 +720,38 @@ Storyboard 缺点：需求变动时，需要修改 Storyboard 上对应的界面
 * (2)如果不存在，就会先调用 loadView 方法，如果控制器的 loadView 方法实现了，就会按照 loadView 方法加载自定义的 View； 
 * (3)如果控制器的 loadView 方法没有实现就会判断 Storyboard 是否存在，如果 Storyboard 存在就会按照 Storyboard 加载控制器的 View；如果 Storyboard 不存在，就会创建一个空视图返回。
 
+**【54】给 UIImageView 添加圆角的方案有哪些？哪个比较好？**
 
+* 方案一：最直接的方式就是使用如下属性设置
 
+```
+imgView.layer.cornerRadius = 10;
+imgView.clipsToBounds = YES;//这一行代码是很消耗性能的。
+```
+
+以上设置圆角的好处是使用简单，操作方便。坏处是离屏渲染（off-screen-rendering）需要消耗性能。对于图片比较多的视图，不建议使用这种方法来设置圆角。通常来说，计算机系统中 CPU、GPU、显示器是协同工作的。CPU计算好显示内容提交到 GPU，GPU 渲染完成后将渲染结果放入帧缓存冲区。简单来说，离屏渲染导致本该 GPU 完成的任务结果交给了 CPU 来完成，而 CPU 又不擅长执行 GPU 的任务，于是拖慢了 UI 层的 FPS（帧率），并且离屏需要创建新的缓冲区和上下文切换，因此消耗较大的性能。
+
+* 方案二：给 UIImage 添加生成圆角图片的扩展 API
+
+```
+- (UIImage *)hl_imageWithCornerRadius:(CGFloat)radius {
+  CGRect rect = (CGRect){0.f, 0.f, self.size};
+  UIGraphicsBeginImageContextWithOptions(self.size, NO, UIScreen.mainScreen,scale);
+  CGContextAddPath(UIGraphicsGetCurrentContext(), [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius].CGPath);
+  CGContextClip(UIGraphicsGetCurrentContext());
+  [self drawInRect:rect];
+  UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  return image;
+}
+//在绘制之前通过 UIBezierPath 添加裁剪
+- (void)drawRect:(CGRect)rect {
+  CGRect bounds = self.bounds;
+  [[UIBezierPath bezierPathWithRounderRect:rect cornerRadius: 8.0] addClip];
+  [self.image drawInRect: bounds];
+}
+//然后调用时就直接传一个圆角来处理：
+imgView.image = [[UIImage imageNamed:@"test"]hl_imageWithCornerRadius:4];
+```
+
+* 方案三：通过 mask 遮罩实现。
