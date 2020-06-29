@@ -762,3 +762,20 @@ drawRect 方法依赖 Core Graphics 框架来进行自定义的绘制，但这�
 
 **【56】viewWillLayoutSubView**
 
+controller layout 触发的时候，开发者有机会去重新 layout 自己的各个 subview。横竖屏切换的时候，系统会响应一些函数，包括 viewWillLayoutSubviews 和 viewDidLayoutSubviews。需要注意的是viewWillLayoutSubviews 只能用在 ViewController 里面，在 view 里面没有响应。
+
+```
+- (void)viewWillLayoutSubviews {
+  [self hl_shouldRotateToOrientation:(UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation];
+}
+- (void)hl_shouldRotateToOrientation:(UIDeviceOrientation)orientation {
+  if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+    //竖屏
+  } else {
+    //横屏
+  }
+}
+```
+
+
+
