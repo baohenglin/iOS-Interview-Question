@@ -755,3 +755,10 @@ imgView.image = [[UIImage imageNamed:@"test"]hl_imageWithCornerRadius:4];
 ```
 
 * 方案三：通过 mask 遮罩实现。
+
+**【55】使用 drawRect 有什么影响？**
+
+drawRect 方法依赖 Core Graphics 框架来进行自定义的绘制，但这种方法主要的缺点就是它处理 touch 事件的方式：每次按钮被点击后，都会调用 setNeedsDisplay 进行强制重绘，而且不止一次，每次单点事件触发两次执行。从性能的角度来说，对 CPU 和内存来说都是欠佳的，特别是如果我们的界面上有多个这样的 UIButton 实例。
+
+**【56】viewWillLayoutSubView**
+
