@@ -785,6 +785,74 @@ controller layout 触发的时候，开发者有机会去重新 layout 自己的
 
 实现原理：通过数据模型的 id 作为 key，以确保唯一。那么如何保证复用 cell 时不会出现混乱呢？在配置完数据后，通过更新约束，得到最后一个控件的 frame，就只可以判断 cell 实际需要的高度，并且缓存下来，下次再获取时，判断是否存在，若存在则直接返回。因此，只会计算一遍。
 
+**【58】UITableView 是如何计算内容高度的？为什么初始化配置数据时，获取行高的代理方法会调用数据条数次？**
+
+UITableView 是继承于 UIScrollView 的，因此也有 contentSize。要得到 tableView 的 contentsize，就需要得到所有 cell 的高度，从而计算出总高度，才能得到 contentsize。因此，在 reloadData 时，就会调用该代理方法数据条数次。
+
+**【59】说出一个委托方法的实例，并且说出 UITableView 的 Data Source 方法。**
+
+CocoaTouch 框架中用到了大量委托，其中 UITableViewDelegate 就是委托机制的典型应用，是一个典型的使用委托来实现适配器模式，其中 UITableViewDelegate 协议是目标，tableView 是适配器，实现 UITableViewDelegate 协议，并将自身设置为 TableView 的 delegate 的对象，是被适配器，一般情况下该对象是 UITableViewController。
+
+UITableView 的 Data Source 方法有
+
+```
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+```
+
+**【60】cocoa touch 框架**
+
+```
+UIKit
+Foundation
+图形和动画：Core Animation、OpenGL ES、Quartz 2D
+音频和视频：Core Audio，AV Foundation
+数据管理：Core Data，SQLite
+网络：Bonjour，WebKit，BSD Sockets
+用户应用：Address Book，Core Location，Map Kit，Store Kit
+```
+
+**【61】简述应用程序按 Home 键进入后台时的生命周期，和从后台回到前台时的生命周期？**
+
+```
+application:willFinishLaunchingWithOptions:
+application:didFinishLaunchingWithOptions:
+applicationDidBecomeActive
+```
+
+```
+// 退到后台
+applicationWillResignActive
+applicationDidEnterBackground
+```
+
+```
+//回到前台
+applicationWillEnterForeground:
+applicationDidBecomeActive:
+```
+
+```
+//加载页面
+viewDidLoad
+viewWillAppear
+viewWillLayoutSubviews
+viewDidLayoutSubviews
+viewDidAppear
+
+//退出当前页面
+viewWillDisappear
+viewDidDisappear
+
+//返回之前页面：
+viewWillAppear
+viewWillLayoutSubviews
+viewDidLayoutSubviews
+viewDidAppear
+```
+
+
+
 
 
 
