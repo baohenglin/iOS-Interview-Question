@@ -851,6 +851,31 @@ viewDidLayoutSubviews
 viewDidAppear
 ```
 
+**【62】是否使用过 Core Text 或 Core Image？**
+
+Core Text 可以用来随意修改文本的样式；图文混排（纯C语言）；
+
+Core Image 可以用来做滤镜处理；能调节图片的各种属性（对比度、色温、色差等）
+
+**【63】分析一下使用手机获取验证码注册账号的实现逻辑（给一个示例图），发送到手机的验证码超过 60 秒钟后重新发送**
+
+定义一个 label 属性，赋值为 60 秒，再定义一个 count，设置一个 timer 定时器，每次减少 1 秒，再把 count 的值拼接到 label 上，当 count == 0 的时候，再显示重新发送。
+
+**【64】在开发过程中，在 view 和 view 之间有哪些传值方式？**
+
+block、target-action、代理、属性
+
+**【65】有哪几种手势通知方法？写出方法名**
+
+```
+- (void)touchesBegan:(NSSet)touchedWithEvent:(UIEvent)event;
+- (void)touchesMoved:(NSSet)touchedWithEvent:(UIEvent)event;
+- (void)touchesEnded:(NSSet)touchedWithEvent:(UIEvent)event;
+- (void)touchesCanceled:(NSSet)touchedWithEvent:(UIEvent)event;
+```
+
+
+
 
 
 
